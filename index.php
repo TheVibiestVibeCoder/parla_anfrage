@@ -4,9 +4,33 @@
 // Single Purpose: Track NGO-related parliamentary inquiries
 // ==========================================
 
-ini_set('display_errors', 0);
+// COMPREHENSIVE ERROR LOGGING
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 ini_set('memory_limit', '256M');
+ini_set('log_errors', 1);
+ini_set('error_log', __DIR__ . '/php_errors.log');
+
+// Custom error handler to log to console and file
+set_error_handler(function($errno, $errstr, $errfile, $errline) {
+    $error = date('[Y-m-d H:i:s] ') . "Error [$errno]: $errstr in $errfile on line $errline\n";
+    error_log($error);
+    echo "<script>console.error(" . json_encode($error) . ");</script>";
+    return false;
+});
+
+// Exception handler
+set_exception_handler(function($exception) {
+    $error = date('[Y-m-d H:i:s] ') . "Exception: " . $exception->getMessage() .
+             " in " . $exception->getFile() . " on line " . $exception->getLine() . "\n";
+    error_log($error);
+    echo "<script>console.error(" . json_encode($error) . ");</script>";
+    echo "<div style='background: #ff0000; color: #fff; padding: 20px; margin: 20px;'>";
+    echo "<h2>FEHLER!</h2>";
+    echo "<pre>" . htmlspecialchars($error) . "</pre>";
+    echo "</div>";
+});
 
 define('PARL_API_URL', 'https://www.parlament.gv.at/Filter/api/filter/data/101?js=eval&showAll=true');
 
@@ -25,6 +49,32 @@ define('NGO_KEYWORDS', [
     'nonprofit',
     'non-profit',
     'ehrenamtlich'
+]);
+
+// German stopwords - Füllwörter die wir NICHT in den Kampfbegriffen haben wollen
+define('STOPWORDS', [
+    // Artikel
+    'der', 'die', 'das', 'den', 'dem', 'des', 'ein', 'eine', 'einer', 'eines', 'einem', 'einen',
+    // Präpositionen
+    'für', 'von', 'mit', 'bei', 'aus', 'nach', 'vor', 'über', 'unter', 'durch', 'ohne', 'gegen',
+    // Konjunktionen
+    'und', 'oder', 'aber', 'sondern', 'denn', 'sowie', 'bzw', 'bzw.',
+    // Pronomen
+    'ich', 'du', 'er', 'sie', 'es', 'wir', 'ihr', 'diese', 'dieser', 'dieses', 'jene', 'jener',
+    // Hilfsverben & häufige Verben
+    'ist', 'sind', 'war', 'waren', 'wird', 'werden', 'wurde', 'wurden', 'sein', 'haben', 'hat', 'hatte',
+    // Parlamentarische Standardwörter
+    'beantwortet', 'beantwortung', 'anfrage', 'anfragen', 'frist', 'offen', 'erledigt',
+    // Datum/Zeit
+    'januar', 'februar', 'märz', 'april', 'mai', 'juni', 'juli', 'august', 'september', 'oktober', 'november', 'dezember',
+    // Zahlen & Währung (als Wörter)
+    'euro', 'cent', 'prozent',
+    // Administrative Begriffe
+    'öffentliche', 'öffentlichen', 'öffentlicher', 'gelder', 'geld',
+    // Sonstiges
+    'mehr', 'weniger', 'sehr', 'auch', 'nicht', 'nur', 'noch', 'schon', 'alle', 'jede', 'jeden', 'jedes',
+    'welche', 'welcher', 'welches', 'deren', 'dessen', 'wie', 'was', 'wer', 'wann', 'wo', 'warum',
+    'bzw', 'etc', 'usw', 'dass', 'daß', 'damit', 'dazu', 'davon'
 ]);
 
 // ==========================================
@@ -183,11 +233,17 @@ if (isset($apiResponse['rows'])) {
         }
         $monthlyData[$monthKey]['count']++;
 
-        // Word frequency for word cloud
+        // Word frequency - ONLY meaningful keywords (no stopwords!)
         $words = preg_split('/\s+/', mb_strtolower($rowTitle));
         foreach ($words as $word) {
-            $word = preg_replace('/[^\p{L}\p{N}]/u', '', $word);
-            if (mb_strlen($word) > 4) { // Only words longer than 4 chars
+            $word = preg_replace('/[^\p{L}\p{N}\-]/u', '', $word); // Keep hyphens for compound words
+            $word = trim($word, '-'); // Remove leading/trailing hyphens
+
+            // Filter: min length 5, not a stopword, not a number
+            if (mb_strlen($word) >= 5 &&
+                !in_array($word, STOPWORDS) &&
+                !is_numeric($word)) {
+
                 if (!isset($wordFrequency[$word])) {
                     $wordFrequency[$word] = 0;
                 }
@@ -262,13 +318,19 @@ foreach (['S', 'V', 'F', 'G', 'N', 'OTHER'] as $party) {
     }
 }
 
-// 2. IMPROVED WORD CLOUD: Keyword ownership by party
+// 2. KAMPFBEGRIFFE: Keyword ownership by party (NO stopwords!)
 $keywordPartyUsage = [];
 foreach ($allNGOResults as $result) {
     $words = preg_split('/\s+/', mb_strtolower($result['title']));
     foreach ($words as $word) {
-        $word = preg_replace('/[^\p{L}\p{N}]/u', '', $word);
-        if (mb_strlen($word) > 4) {
+        $word = preg_replace('/[^\p{L}\p{N}\-]/u', '', $word);
+        $word = trim($word, '-');
+
+        // Same filter as above
+        if (mb_strlen($word) >= 5 &&
+            !in_array($word, STOPWORDS) &&
+            !is_numeric($word)) {
+
             if (!isset($keywordPartyUsage[$word])) {
                 $keywordPartyUsage[$word] = ['S' => 0, 'V' => 0, 'F' => 0, 'G' => 0, 'N' => 0, 'OTHER' => 0];
             }
@@ -277,13 +339,13 @@ foreach ($allNGOResults as $result) {
     }
 }
 
-// Enhanced word cloud data with party dominance
-$wordCloudWithParty = [];
+// Build Kampfbegriffe list with party dominance
+$kampfbegriffeData = [];
 foreach ($wordFrequency as $word => $count) {
     if (isset($keywordPartyUsage[$word])) {
         $partyUsage = $keywordPartyUsage[$word];
         $maxParty = array_keys($partyUsage, max($partyUsage))[0];
-        $wordCloudWithParty[] = [
+        $kampfbegriffeData[] = [
             'word' => $word,
             'count' => $count,
             'party' => $maxParty,
@@ -292,8 +354,13 @@ foreach ($wordFrequency as $word => $count) {
     }
 }
 
-// Top Kampfbegriffe with full party breakdown
-$topKampfbegriffe = array_slice($wordCloudWithParty, 0, 15, true);
+// Top Kampfbegriffe with full party breakdown - show top 20
+$topKampfbegriffe = array_slice($kampfbegriffeData, 0, 20, true);
+
+// Debug logging
+error_log("Total words in frequency: " . count($wordFrequency));
+error_log("Total kampfbegriffe: " . count($kampfbegriffeData));
+error_log("Top 5 words: " . json_encode(array_slice(array_keys($wordFrequency), 0, 5)));
 
 // 3. SPAM CALENDAR: Daily intensity heatmap
 $spamCalendarData = [];
@@ -346,7 +413,6 @@ $partyMap = [
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/wordcloud@1.2.2/src/wordcloud2.min.js"></script>
     
     <style>
         :root {
@@ -558,26 +624,13 @@ $partyMap = [
             </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-8">
-            <div class="mono-box">
-                <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-2xl text-white">Zeitlicher Verlauf</h3>
-                    <div class="h-px bg-white w-10"></div>
-                </div>
-                <div style="height: 300px; width: 100%;">
-                    <canvas id="timelineChart"></canvas>
-                </div>
+        <div class="mono-box mb-8">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl text-white">Zeitlicher Verlauf</h3>
+                <div class="h-px bg-white w-10"></div>
             </div>
-
-            <div class="mono-box">
-                <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-2xl text-white">Kampfbegriffe – Wer nutzt was?</h3>
-                    <div class="h-px bg-white w-10"></div>
-                </div>
-                <div class="text-sm text-gray-400 mb-4 font-mono">
-                    Die häufigsten Begriffe in Anfragetiteln, farblich nach dominierender Partei
-                </div>
-                <canvas id="wordCloud" class="w-full" style="height: 400px;"></canvas>
+            <div style="height: 300px; width: 100%;">
+                <canvas id="timelineChart"></canvas>
             </div>
         </div>
 
@@ -587,7 +640,7 @@ $partyMap = [
                 <div class="h-px bg-white w-10"></div>
             </div>
             <div class="text-sm text-gray-400 mb-6 font-mono">
-                Welche Partei verwendet welche Begriffe? Zeigt die Top 15 häufigsten Wörter.
+                Die häufigsten INHALTLICHEN Begriffe aus Anfragetiteln (ohne Füllwörter). Zeigt welche Partei welche Begriffe nutzt.
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 <?php foreach ($topKampfbegriffe as $item): ?>
@@ -738,23 +791,42 @@ $partyMap = [
     </div>
 
     <script>
+        // Error logging to console
+        console.log('=== NGO TRACKER DEBUG START ===');
+        console.log('Page loaded successfully');
+
+        // Check if Chart.js is loaded
+        if (typeof Chart === 'undefined') {
+            console.error('ERROR: Chart.js not loaded!');
+        } else {
+            console.log('Chart.js loaded successfully');
+        }
+
         // --- CHART CONFIG ---
         Chart.defaults.color = '#666';
         Chart.defaults.borderColor = 'rgba(255,255,255,0.05)';
         Chart.defaults.font.family = "'Manrope', sans-serif";
 
         // Timeline Chart
-        const monthLabels = <?php echo json_encode(array_values(array_map(fn($m) => $m['label'], $monthlyData))); ?>;
-        const monthCounts = <?php echo json_encode(array_values(array_map(fn($m) => $m['count'], $monthlyData))); ?>;
+        try {
+            console.log('Initializing Timeline Chart...');
+            const monthLabels = <?php echo json_encode(array_values(array_map(fn($m) => $m['label'], $monthlyData))); ?>;
+            const monthCounts = <?php echo json_encode(array_values(array_map(fn($m) => $m['count'], $monthlyData))); ?>;
 
-        const ctx = document.getElementById('timelineChart').getContext('2d');
-        
-        // Create Gradient
-        const gradient = ctx.createLinearGradient(0, 0, 0, 300);
-        gradient.addColorStop(0, 'rgba(255, 255, 255, 0.2)');
-        gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+            console.log('Month labels:', monthLabels);
+            console.log('Month counts:', monthCounts);
 
-        new Chart(ctx, {
+            const ctx = document.getElementById('timelineChart');
+            if (!ctx) {
+                throw new Error('Timeline chart canvas not found!');
+            }
+
+            // Create Gradient
+            const gradient = ctx.getContext('2d').createLinearGradient(0, 0, 0, 300);
+            gradient.addColorStop(0, 'rgba(255, 255, 255, 0.2)');
+            gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+
+            new Chart(ctx, {
             type: 'line',
             data: {
                 labels: monthLabels,
@@ -798,44 +870,15 @@ $partyMap = [
                         ticks: { font: { family: 'JetBrains Mono', size: 10 } }
                     }
                 }
-            }
-        });
-
-        // Enhanced Word Cloud with Party Colors
-        const wordCloudData = <?php echo json_encode($wordCloudWithParty); ?>;
-
-        // Build word list with party colors
-        const wordList = wordCloudData.map(item => [item.word, item.count]);
-
-        // Create color mapping based on party
-        const wordColorMap = {};
-        wordCloudData.forEach(item => {
-            wordColorMap[item.word] = partyColors[item.party];
-        });
-
-        if (wordList.length > 0) {
-            WordCloud(document.getElementById('wordCloud'), {
-                list: wordList,
-                gridSize: 8,
-                weightFactor: function(size) {
-                    return Math.pow(size, 0.7) * 2.5;
-                },
-                fontFamily: 'Bebas Neue, sans-serif',
-                color: function(word) {
-                    // Return party color for this word
-                    return wordColorMap[word] || '#ffffff';
-                },
-                rotateRatio: 0, // All horizontal for cleaner look
-                backgroundColor: 'transparent',
-                drawOutOfBound: false,
-                minSize: 10,
-                shuffle: true,
-                shrinkToFit: true
             });
+            console.log('Timeline Chart initialized successfully');
+        } catch (error) {
+            console.error('ERROR initializing Timeline Chart:', error);
+            alert('FEHLER beim Laden des Timeline Charts: ' + error.message);
         }
 
         // ==========================================
-        // NEW VISUALIZATIONS
+        // VISUALIZATIONS
         // ==========================================
 
         // Party color mapping
@@ -858,11 +901,20 @@ $partyMap = [
         };
 
         // 1. FLOOD WALL CHART (Cumulative Line Chart with Step Interpolation)
-        const floodWallData = <?php echo json_encode($floodWallData); ?>;
-        const dateLabels = <?php echo json_encode(array_values(array_map(fn($d) => $d->format('d.m.Y'), $allDates))); ?>;
+        try {
+            console.log('Initializing Flood Wall Chart...');
+            const floodWallData = <?php echo json_encode($floodWallData); ?>;
+            const dateLabels = <?php echo json_encode(array_values(array_map(fn($d) => $d->format('d.m.Y'), $allDates))); ?>;
 
-        const floodWallCtx = document.getElementById('floodWallChart').getContext('2d');
-        new Chart(floodWallCtx, {
+            console.log('Flood wall data:', floodWallData);
+            console.log('Date labels count:', dateLabels.length);
+
+            const floodWallCtx = document.getElementById('floodWallChart');
+            if (!floodWallCtx) {
+                throw new Error('Flood Wall chart canvas not found!');
+            }
+
+            new Chart(floodWallCtx, {
             type: 'line',
             data: {
                 labels: dateLabels,
@@ -934,43 +986,59 @@ $partyMap = [
                         }
                     }
                 }
-            }
-        });
+            });
+            console.log('Flood Wall Chart initialized successfully');
+        } catch (error) {
+            console.error('ERROR initializing Flood Wall Chart:', error);
+            alert('FEHLER beim Laden des Flood Wall Charts: ' + error.message);
+        }
 
         // 2. SPAM CALENDAR (Matrix Heatmap)
-        const spamCalendarData = <?php echo json_encode($spamCalendarData); ?>;
-        const allDatesForCalendar = <?php echo json_encode(array_keys($allDates)); ?>;
+        try {
+            console.log('Initializing Spam Calendar Chart...');
+            const spamCalendarData = <?php echo json_encode($spamCalendarData); ?>;
+            const allDatesForCalendar = <?php echo json_encode(array_keys($allDates)); ?>;
 
-        // Build matrix data
-        const matrixData = [];
-        const partyOrder = ['S', 'V', 'F', 'G', 'N', 'OTHER'];
+            console.log('Spam calendar data:', spamCalendarData);
+            console.log('Calendar dates count:', allDatesForCalendar.length);
 
-        partyOrder.forEach((party, partyIndex) => {
-            const partyData = spamCalendarData[party] || [];
-            const dateMap = {};
-            partyData.forEach(item => {
-                dateMap[item.date] = item.count;
+            // Build matrix data
+            const matrixData = [];
+            const partyOrder = ['S', 'V', 'F', 'G', 'N', 'OTHER'];
+
+            partyOrder.forEach((party, partyIndex) => {
+                const partyData = spamCalendarData[party] || [];
+                const dateMap = {};
+                partyData.forEach(item => {
+                    dateMap[item.date] = item.count;
+                });
+
+                allDatesForCalendar.forEach((date, dateIndex) => {
+                    const count = dateMap[date] || 0;
+                    if (count > 0) { // Only plot active days
+                        matrixData.push({
+                            x: dateIndex,
+                            y: partyIndex,
+                            v: count,
+                            party: party,
+                            date: date
+                        });
+                    }
+                });
             });
 
-            allDatesForCalendar.forEach((date, dateIndex) => {
-                const count = dateMap[date] || 0;
-                if (count > 0) { // Only plot active days
-                    matrixData.push({
-                        x: dateIndex,
-                        y: partyIndex,
-                        v: count,
-                        party: party,
-                        date: date
-                    });
-                }
-            });
-        });
+            console.log('Matrix data points:', matrixData.length);
 
-        // Find max count for normalization
-        const maxCount = Math.max(...matrixData.map(d => d.v), 1);
+            // Find max count for normalization
+            const maxCount = Math.max(...matrixData.map(d => d.v), 1);
+            console.log('Max count:', maxCount);
 
-        const spamCalendarCtx = document.getElementById('spamCalendarChart').getContext('2d');
-        new Chart(spamCalendarCtx, {
+            const spamCalendarCtx = document.getElementById('spamCalendarChart');
+            if (!spamCalendarCtx) {
+                throw new Error('Spam Calendar chart canvas not found!');
+            }
+
+            new Chart(spamCalendarCtx, {
             type: 'scatter',
             data: {
                 datasets: [{
@@ -1059,8 +1127,14 @@ $partyMap = [
                         }
                     }
                 }
-            }
-        });
+            });
+            console.log('Spam Calendar Chart initialized successfully');
+        } catch (error) {
+            console.error('ERROR initializing Spam Calendar Chart:', error);
+            alert('FEHLER beim Laden des Spam Calendar Charts: ' + error.message);
+        }
+
+        console.log('=== NGO TRACKER DEBUG END ===');
     </script>
 </body>
 </html>

@@ -5,7 +5,7 @@ User-agent: *
 Allow: /
 
 # Sitemap location
-Sitemap: https://www.example.com/sitemap.xml
+Sitemap: https://ngo-business.com/sitemap.xml
 
 # Crawl-delay for polite crawling (optional, adjust based on server capacity)
 Crawl-delay: 1

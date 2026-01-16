@@ -1,0 +1,295 @@
+# .htaccess for NGO Business Tracker
+# Comprehensive SEO, Performance, and Security Configuration
+
+# ====================
+# CORE SETTINGS
+# ====================
+Options +FollowSymLinks -MultiViews -Indexes
+RewriteEngine On
+RewriteBase /
+
+# ====================
+# FORCE HTTPS (SSL)
+# ====================
+# Redirect all HTTP traffic to HTTPS for security and SEO
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# ====================
+# WWW REDIRECT (Choose one based on your preference)
+# ====================
+# Option 1: Redirect www to non-www (recommended for consistency)
+RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
+RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
+
+# Option 2: Redirect non-www to www (uncomment if you prefer www)
+# RewriteCond %{HTTP_HOST} !^www\. [NC]
+# RewriteCond %{HTTP_HOST} !^localhost [NC]
+# RewriteRule ^(.*)$ https://www.%{HTTP_HOST}/$1 [R=301,L]
+
+# ====================
+# SEO-FRIENDLY URL REWRITES
+# ====================
+
+# Sitemap routing - route sitemap.xml to sitemap.php
+RewriteRule ^sitemap\.xml$ sitemap.php [L]
+
+# Clean URLs for time ranges (optional - makes URLs prettier)
+# /ngo-anfragen/12-monate/ -> /index.php?range=12months
+RewriteRule ^ngo-anfragen/1-woche/?$ index.php?range=1week [L,QSA]
+RewriteRule ^ngo-anfragen/1-monat/?$ index.php?range=1month [L,QSA]
+RewriteRule ^ngo-anfragen/3-monate/?$ index.php?range=3months [L,QSA]
+RewriteRule ^ngo-anfragen/6-monate/?$ index.php?range=6months [L,QSA]
+RewriteRule ^ngo-anfragen/12-monate/?$ index.php?range=12months [L,QSA]
+RewriteRule ^ngo-anfragen/1-jahr/?$ index.php?range=1year [L,QSA]
+RewriteRule ^ngo-anfragen/3-jahre/?$ index.php?range=3years [L,QSA]
+RewriteRule ^ngo-anfragen/5-jahre/?$ index.php?range=5years [L,QSA]
+
+# Default directory index
+DirectoryIndex index.php index.html
+
+# ====================
+# COMPRESSION (GZIP)
+# ====================
+<IfModule mod_deflate.c>
+    # Compress HTML, CSS, JavaScript, Text, XML and fonts
+    AddOutputFilterByType DEFLATE application/javascript
+    AddOutputFilterByType DEFLATE application/rss+xml
+    AddOutputFilterByType DEFLATE application/vnd.ms-fontobject
+    AddOutputFilterByType DEFLATE application/x-font
+    AddOutputFilterByType DEFLATE application/x-font-opentype
+    AddOutputFilterByType DEFLATE application/x-font-otf
+    AddOutputFilterByType DEFLATE application/x-font-truetype
+    AddOutputFilterByType DEFLATE application/x-font-ttf
+    AddOutputFilterByType DEFLATE application/x-javascript
+    AddOutputFilterByType DEFLATE application/xhtml+xml
+    AddOutputFilterByType DEFLATE application/xml
+    AddOutputFilterByType DEFLATE font/opentype
+    AddOutputFilterByType DEFLATE font/otf
+    AddOutputFilterByType DEFLATE font/ttf
+    AddOutputFilterByType DEFLATE image/svg+xml
+    AddOutputFilterByType DEFLATE image/x-icon
+    AddOutputFilterByType DEFLATE text/css
+    AddOutputFilterByType DEFLATE text/html
+    AddOutputFilterByType DEFLATE text/javascript
+    AddOutputFilterByType DEFLATE text/plain
+    AddOutputFilterByType DEFLATE text/xml
+
+    # Remove browser bugs (only needed for really old browsers)
+    BrowserMatch ^Mozilla/4 gzip-only-text/html
+    BrowserMatch ^Mozilla/4\.0[678] no-gzip
+    BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
+    Header append Vary User-Agent
+</IfModule>
+
+# ====================
+# BROWSER CACHING
+# ====================
+<IfModule mod_expires.c>
+    ExpiresActive On
+
+    # Default expiration: 1 hour
+    ExpiresDefault "access plus 1 hour"
+
+    # Specific file types
+    # HTML - 0 seconds (always check for updates - important for dynamic content)
+    ExpiresByType text/html "access plus 0 seconds"
+
+    # Data - 0 seconds
+    ExpiresByType text/xml "access plus 0 seconds"
+    ExpiresByType application/xml "access plus 0 seconds"
+    ExpiresByType application/json "access plus 0 seconds"
+
+    # CSS - 1 week
+    ExpiresByType text/css "access plus 1 week"
+
+    # JavaScript - 1 week
+    ExpiresByType text/javascript "access plus 1 week"
+    ExpiresByType application/javascript "access plus 1 week"
+    ExpiresByType application/x-javascript "access plus 1 week"
+
+    # Favicon - 1 month
+    ExpiresByType image/x-icon "access plus 1 month"
+
+    # Images - 1 month
+    ExpiresByType image/gif "access plus 1 month"
+    ExpiresByType image/png "access plus 1 month"
+    ExpiresByType image/jpg "access plus 1 month"
+    ExpiresByType image/jpeg "access plus 1 month"
+    ExpiresByType image/webp "access plus 1 month"
+    ExpiresByType image/svg+xml "access plus 1 month"
+
+    # Fonts - 1 year
+    ExpiresByType application/vnd.ms-fontobject "access plus 1 year"
+    ExpiresByType application/x-font-ttf "access plus 1 year"
+    ExpiresByType application/x-font-opentype "access plus 1 year"
+    ExpiresByType application/x-font-woff "access plus 1 year"
+    ExpiresByType font/woff2 "access plus 1 year"
+    ExpiresByType image/svg+xml "access plus 1 year"
+</IfModule>
+
+# Cache-Control Headers
+<IfModule mod_headers.c>
+    # HTML - no cache
+    <FilesMatch "\.(html|htm|php)$">
+        Header set Cache-Control "no-cache, no-store, must-revalidate"
+        Header set Pragma "no-cache"
+        Header set Expires 0
+    </FilesMatch>
+
+    # CSS and JavaScript - 1 week
+    <FilesMatch "\.(css|js)$">
+        Header set Cache-Control "public, max-age=604800, immutable"
+    </FilesMatch>
+
+    # Images - 1 month
+    <FilesMatch "\.(jpg|jpeg|png|gif|ico|webp|svg)$">
+        Header set Cache-Control "public, max-age=2592000, immutable"
+    </FilesMatch>
+
+    # Fonts - 1 year
+    <FilesMatch "\.(ttf|ttc|otf|eot|woff|woff2)$">
+        Header set Cache-Control "public, max-age=31536000, immutable"
+    </FilesMatch>
+</IfModule>
+
+# ====================
+# SECURITY HEADERS
+# ====================
+<IfModule mod_headers.c>
+    # X-Frame-Options: Prevent clickjacking
+    Header always set X-Frame-Options "SAMEORIGIN"
+
+    # X-Content-Type-Options: Prevent MIME sniffing
+    Header always set X-Content-Type-Options "nosniff"
+
+    # X-XSS-Protection: Enable XSS filtering
+    Header always set X-XSS-Protection "1; mode=block"
+
+    # Referrer Policy
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+
+    # Permissions Policy (formerly Feature Policy)
+    Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+
+    # Content Security Policy (CSP) - adjust as needed
+    # Note: This is a permissive policy for development. Tighten for production.
+    Header always set Content-Security-Policy "default-src 'self' https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.tailwindcss.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.tailwindcss.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://www.parlament.gv.at"
+</IfModule>
+
+# ====================
+# ETags (for caching)
+# ====================
+<IfModule mod_headers.c>
+    Header unset ETag
+</IfModule>
+FileETag None
+
+# ====================
+# CHARACTER ENCODING
+# ====================
+AddDefaultCharset UTF-8
+<IfModule mod_mime.c>
+    AddCharset UTF-8 .html .css .js .xml .json .rss .atom
+</IfModule>
+
+# ====================
+# MIME TYPES
+# ====================
+<IfModule mod_mime.c>
+    # JavaScript
+    AddType application/javascript js jsonp
+    AddType application/json json
+
+    # Fonts
+    AddType font/woff2 woff2
+    AddType application/vnd.ms-fontobject eot
+    AddType application/x-font-ttf ttf ttc
+    AddType font/opentype otf
+    AddType application/x-font-woff woff
+
+    # Images
+    AddType image/webp webp
+    AddType image/svg+xml svg svgz
+    AddEncoding gzip svgz
+
+    # Other
+    AddType application/xml xml
+    AddType text/xml xml
+</IfModule>
+
+# ====================
+# ERROR PAGES
+# ====================
+# ErrorDocument 404 /404.html
+# ErrorDocument 500 /500.html
+
+# ====================
+# PROTECT SENSITIVE FILES
+# ====================
+<FilesMatch "(^#.*#|\.(bak|config|dist|fla|inc|ini|log|psd|sh|sql|swp)|~)$">
+    # Apache 2.4
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    # Apache 2.2
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+# Protect .htaccess and .htpasswd
+<Files ~ "^\.ht">
+    # Apache 2.4
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    # Apache 2.2
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</Files>
+
+# ====================
+# PHP SETTINGS (if allowed)
+# ====================
+<IfModule mod_php.c>
+    php_value upload_max_filesize 10M
+    php_value post_max_size 10M
+    php_value max_execution_time 60
+    php_value max_input_time 60
+    php_flag display_errors Off
+    php_flag log_errors On
+</IfModule>
+
+# ====================
+# REMOVE SERVER SIGNATURE
+# ====================
+ServerSignature Off
+
+# ====================
+# TRAILING SLASH REDIRECT
+# ====================
+# Add trailing slash to directories
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_URI} !(.*)/$
+RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1/ [L,R=301]
+
+# ====================
+# PREVENT DIRECTORY BROWSING
+# ====================
+Options -Indexes
+
+# ====================
+# PREVENT IMAGE HOTLINKING (Optional)
+# ====================
+# Uncomment to prevent other sites from hotlinking your images
+# RewriteCond %{HTTP_REFERER} !^$
+# RewriteCond %{HTTP_REFERER} !^https?://(www\.)?yourdomain\.com [NC]
+# RewriteRule \.(jpg|jpeg|png|gif|webp)$ - [F,NC]
+
+# ====================
+# END OF .htaccess
+# ====================

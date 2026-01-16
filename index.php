@@ -417,18 +417,175 @@ $partyMap = [
 ?>
 
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de" prefix="og: https://ogp.me/ns#">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NGO WATCH | DATA INTELLIGENCE</title>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <?php
+    // SEO-Optimized Dynamic Title
+    $seoTitle = "NGO Business Tracker Österreich | " . $rangeLabel . " | Parlamentarische Anfragen Live";
+    $seoDescription = "NGO Business Anfragen im österreichischen Parlament live verfolgen. Echtzeit-Tracking von NGO-bezogenen parlamentarischen Anfragen, Visualisierungen und Analysen. Transparenz über NGO Business Aktivitäten von SPÖ, ÖVP, FPÖ, GRÜNE und NEOS.";
+    $seoKeywords = "ngo business, ngo business österreich, ngo anfragen, parlamentarische anfragen ngo, ngo business tracker, parlament österreich ngo, ngo transparenz, ngo business anfragen, nicht-regierungsorganisationen österreich, ngo watch, ngo-business tracking, parlamentsanfragen ngo, ngo monitoring österreich";
+    $currentUrl = "https://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+    $canonicalUrl = "https://" . $_SERVER['HTTP_HOST'] . strtok($_SERVER["REQUEST_URI"], '?');
+    ?>
+
+    <title><?php echo htmlspecialchars($seoTitle); ?></title>
+
+    <!-- Primary Meta Tags -->
+    <meta name="title" content="<?php echo htmlspecialchars($seoTitle); ?>">
+    <meta name="description" content="<?php echo htmlspecialchars($seoDescription); ?>">
+    <meta name="keywords" content="<?php echo htmlspecialchars($seoKeywords); ?>">
+    <meta name="author" content="NGO Watch - Data Intelligence System">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="language" content="German">
+    <meta name="revisit-after" content="1 days">
+    <meta name="distribution" content="global">
+    <meta name="rating" content="general">
+    <meta name="geo.region" content="AT">
+    <meta name="geo.placename" content="Österreich">
+    <meta name="geo.position" content="47.516231;14.550072">
+    <meta name="ICBM" content="47.516231, 14.550072">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="<?php echo htmlspecialchars($canonicalUrl); ?>">
+
+    <!-- Open Graph / Facebook Meta Tags -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="NGO Watch - Data Intelligence">
+    <meta property="og:url" content="<?php echo htmlspecialchars($currentUrl); ?>">
+    <meta property="og:title" content="<?php echo htmlspecialchars($seoTitle); ?>">
+    <meta property="og:description" content="<?php echo htmlspecialchars($seoDescription); ?>">
+    <meta property="og:locale" content="de_AT">
+    <meta property="og:updated_time" content="<?php echo date('c'); ?>">
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="<?php echo htmlspecialchars($currentUrl); ?>">
+    <meta name="twitter:title" content="<?php echo htmlspecialchars($seoTitle); ?>">
+    <meta name="twitter:description" content="<?php echo htmlspecialchars($seoDescription); ?>">
+
+    <!-- Additional SEO Meta Tags -->
+    <meta name="theme-color" content="#050505">
+    <meta name="msapplication-TileColor" content="#050505">
+    <meta name="application-name" content="NGO Watch">
+    <meta name="apple-mobile-web-app-title" content="NGO Watch">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <!-- hreflang Tags (if you add English version later) -->
+    <link rel="alternate" hreflang="de-at" href="<?php echo htmlspecialchars($currentUrl); ?>">
+    <link rel="alternate" hreflang="de" href="<?php echo htmlspecialchars($currentUrl); ?>">
+    <link rel="alternate" hreflang="x-default" href="<?php echo htmlspecialchars($canonicalUrl); ?>">
+
+    <!-- Performance Optimization: DNS Prefetch & Preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="dns-prefetch" href="https://www.parlament.gv.at">
+
+    <!-- Fonts with display=swap for better performance -->
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@300;400;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-    
+
+    <!-- Scripts -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+    <!-- JSON-LD Structured Data for SEO -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "Organization",
+                "name": "NGO Watch - Data Intelligence System",
+                "url": "<?php echo htmlspecialchars($canonicalUrl); ?>",
+                "logo": "<?php echo htmlspecialchars($canonicalUrl); ?>",
+                "description": "Echtzeit-Tracking und Analyse von NGO-bezogenen parlamentarischen Anfragen im österreichischen Parlament",
+                "areaServed": {
+                    "@type": "Country",
+                    "name": "Österreich"
+                },
+                "knowsAbout": ["NGO Business", "Parlamentarische Anfragen", "Transparenz", "Politisches Monitoring", "NGO Tracking"],
+                "keywords": "ngo business, ngo business österreich, parlamentarische anfragen, ngo transparenz"
+            },
+            {
+                "@type": "WebSite",
+                "name": "NGO Watch",
+                "url": "<?php echo htmlspecialchars($canonicalUrl); ?>",
+                "description": "<?php echo htmlspecialchars($seoDescription); ?>",
+                "inLanguage": "de-AT",
+                "isAccessibleForFree": true,
+                "keywords": "<?php echo htmlspecialchars($seoKeywords); ?>"
+            },
+            {
+                "@type": "WebPage",
+                "name": "<?php echo htmlspecialchars($seoTitle); ?>",
+                "url": "<?php echo htmlspecialchars($currentUrl); ?>",
+                "description": "<?php echo htmlspecialchars($seoDescription); ?>",
+                "inLanguage": "de-AT",
+                "isPartOf": {
+                    "@type": "WebSite",
+                    "url": "<?php echo htmlspecialchars($canonicalUrl); ?>"
+                },
+                "about": {
+                    "@type": "Thing",
+                    "name": "NGO Business Tracking",
+                    "description": "Monitoring und Analyse von NGO-bezogenen parlamentarischen Anfragen in Österreich"
+                },
+                "datePublished": "<?php echo date('c', strtotime('-1 year')); ?>",
+                "dateModified": "<?php echo date('c'); ?>",
+                "keywords": "<?php echo htmlspecialchars($seoKeywords); ?>"
+            },
+            {
+                "@type": "Dataset",
+                "name": "NGO Business Parlamentarische Anfragen <?php echo $rangeLabel; ?>",
+                "description": "Echtzeit-Datensatz von <?php echo $totalCount; ?> NGO-bezogenen parlamentarischen Anfragen aus dem österreichischen Parlament (<?php echo $rangeLabel; ?>)",
+                "url": "<?php echo htmlspecialchars($currentUrl); ?>",
+                "keywords": "<?php echo htmlspecialchars($seoKeywords); ?>",
+                "creator": {
+                    "@type": "Organization",
+                    "name": "NGO Watch"
+                },
+                "datePublished": "<?php echo date('c', strtotime('-1 year')); ?>",
+                "dateModified": "<?php echo date('c'); ?>",
+                "temporalCoverage": "<?php echo $cutoffDate->format('Y-m-d'); ?>/<?php echo $now->format('Y-m-d'); ?>",
+                "distribution": {
+                    "@type": "DataDownload",
+                    "contentUrl": "<?php echo htmlspecialchars($currentUrl); ?>",
+                    "encodingFormat": "text/html"
+                },
+                "includedInDataCatalog": {
+                    "@type": "DataCatalog",
+                    "name": "Parlament Österreich Daten"
+                },
+                "spatialCoverage": {
+                    "@type": "Place",
+                    "name": "Österreich"
+                }
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Home",
+                        "item": "<?php echo htmlspecialchars($canonicalUrl); ?>"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "NGO Business Anfragen <?php echo $rangeLabel; ?>",
+                        "item": "<?php echo htmlspecialchars($currentUrl); ?>"
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
     
     <style>
         :root {
@@ -528,6 +685,19 @@ $partyMap = [
         ::-webkit-scrollbar-thumb { background: #333; }
         ::-webkit-scrollbar-thumb:hover { background: #555; }
 
+        /* Screen Reader Only - Accessibility for SEO */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+
         /* PAGINATION */
         .pag-btn {
             border: 1px solid var(--grid-line);
@@ -590,11 +760,42 @@ $partyMap = [
     </header>
 
     <div class="container-custom">
-        
+
+        <!-- SEO-Optimized Introduction Section -->
+        <article class="mono-box mb-8" itemscope itemtype="https://schema.org/Article">
+            <header>
+                <h1 class="text-3xl md:text-4xl font-bold mb-4" style="font-family: var(--font-head); letter-spacing: 1px;" itemprop="headline">
+                    NGO Business Tracker Österreich: Parlamentarische Anfragen Live
+                </h1>
+            </header>
+            <div class="text-base md:text-lg text-gray-300 space-y-3 leading-relaxed" itemprop="articleBody">
+                <p>
+                    Willkommen beim führenden <strong>NGO Business Tracker</strong> für Österreich. Unser System ermöglicht Ihnen das Echtzeit-Tracking aller <strong>NGO-bezogenen parlamentarischen Anfragen</strong> im österreichischen Parlament. Mit unserem innovativen NGO Business Monitoring erhalten Sie vollständige Transparenz über alle <strong>ngo business</strong> Aktivitäten der Parlamentsparteien.
+                </p>
+                <p>
+                    <strong>NGO Business Anfragen</strong> sind parlamentarische Anfragen, die sich mit Nicht-Regierungsorganisationen, NGO-Finanzierung, NGO-Transparenz und verwandten Themen befassen. Unsere Plattform aggregiert und visualisiert alle relevanten Daten aus dem österreichischen Parlament in Echtzeit, um Ihnen einen umfassenden Überblick über die <strong>NGO Business</strong> Landschaft zu geben.
+                </p>
+                <section class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+                    <div class="bg-black bg-opacity-40 p-4 border border-gray-800">
+                        <h3 class="text-sm font-bold font-mono text-white mb-2 uppercase">🔍 Echtzeit NGO Business Tracking</h3>
+                        <p class="text-xs text-gray-400">Live-Daten zu allen NGO-bezogenen Anfragen von SPÖ, ÖVP, FPÖ, GRÜNE und NEOS</p>
+                    </div>
+                    <div class="bg-black bg-opacity-40 p-4 border border-gray-800">
+                        <h3 class="text-sm font-bold font-mono text-white mb-2 uppercase">📊 Datenvisualisierung</h3>
+                        <p class="text-xs text-gray-400">Interaktive Charts zeigen Trends, Kampfbegriffe und Parteivergleiche im NGO Business</p>
+                    </div>
+                    <div class="bg-black bg-opacity-40 p-4 border border-gray-800">
+                        <h3 class="text-sm font-bold font-mono text-white mb-2 uppercase">💡 Transparenz & Analyse</h3>
+                        <p class="text-xs text-gray-400">Vollständige Transparenz über NGO-bezogene parlamentarische Aktivitäten</p>
+                    </div>
+                </section>
+            </div>
+        </article>
+
         <header class="flex flex-col md:flex-row justify-between items-end border-b border-[rgba(255,255,255,0.1)] pb-6 mb-10">
             <div>
                 <div class="text-xs font-mono text-gray-500 mb-2">SYSTEM: PARLAMENT_WATCH // TRACKING: NGO_INTERACTIONS</div>
-                <h1 class="text-5xl md:text-7xl text-white leading-none">Anfragen<br><span style="color: #666;">Tracker</span></h1>
+                <h2 class="text-5xl md:text-7xl text-white leading-none">Anfragen<br><span style="color: #666;">Tracker</span></h2>
             </div>
             
             <form method="GET" class="mt-6 md:mt-0">
@@ -655,23 +856,30 @@ $partyMap = [
 
         </div>
 
-        <div class="mono-box mb-8">
+        <section class="mono-box mb-8" aria-labelledby="timeline-heading">
             <div class="flex justify-between items-center mb-6">
-                <h3 class="text-2xl text-white">Zeitlicher Verlauf</h3>
+                <h2 id="timeline-heading" class="text-2xl text-white">Zeitlicher Verlauf NGO Business Anfragen</h2>
                 <div class="h-px bg-white w-10"></div>
             </div>
             <div style="height: 300px; width: 100%;">
-                <canvas id="timelineChart"></canvas>
+                <canvas id="timelineChart"
+                        role="img"
+                        aria-label="Liniendiagramm: Zeitlicher Verlauf der NGO Business Anfragen im österreichischen Parlament über <?php echo $rangeLabel; ?>"
+                        aria-describedby="timeline-desc"></canvas>
+                <p id="timeline-desc" class="sr-only">
+                    Dieses Diagramm zeigt die Anzahl der NGO-bezogenen parlamentarischen Anfragen im Zeitverlauf für den Zeitraum <?php echo $rangeLabel; ?>.
+                    Insgesamt wurden <?php echo $totalCount; ?> NGO Business Anfragen erfasst.
+                </p>
             </div>
-        </div>
+        </section>
 
-        <div class="mono-box mb-8">
+        <section class="mono-box mb-8" aria-labelledby="keywords-heading">
             <div class="flex justify-between items-center mb-6">
-                <h3 class="text-2xl text-white">Top Kampfbegriffe</h3>
+                <h2 id="keywords-heading" class="text-2xl text-white">Top Kampfbegriffe im NGO Business</h2>
                 <div class="h-px bg-white w-10"></div>
             </div>
             <div class="text-sm text-gray-400 mb-6 font-mono">
-                Die häufigsten INHALTLICHEN Begriffe aus Anfragetiteln (ohne Füllwörter). Zeigt welche Partei den Begriff am meisten nutzt.
+                Die häufigsten INHALTLICHEN Begriffe aus NGO Business Anfragetiteln (ohne Füllwörter). Zeigt welche Partei den Begriff am meisten nutzt.
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 <?php foreach ($topKampfbegriffe as $item): ?>
@@ -701,37 +909,51 @@ $partyMap = [
                     </div>
                 <?php endforeach; ?>
             </div>
-        </div>
+        </section>
 
-        <div class="mono-box mb-8">
+        <section class="mono-box mb-8" aria-labelledby="floodwall-heading">
             <div class="flex justify-between items-center mb-6">
-                <h3 class="text-2xl text-white">The "Flood Wall" – Kumulative Belastungskurve</h3>
+                <h2 id="floodwall-heading" class="text-2xl text-white">The "Flood Wall" – Kumulative NGO Business Belastungskurve</h2>
                 <div class="h-px bg-white w-10"></div>
             </div>
             <div class="text-sm text-gray-400 mb-4 font-mono">
-                Zeigt die kumulative Gesamtlast: Wenn eine Partei das Parlament flutet, wird ihre Linie steil nach oben gehen.
+                Zeigt die kumulative Gesamtlast der NGO Business Anfragen: Wenn eine Partei das Parlament flutet, wird ihre Linie steil nach oben gehen.
             </div>
             <div style="height: 400px; width: 100%;">
-                <canvas id="floodWallChart"></canvas>
+                <canvas id="floodWallChart"
+                        role="img"
+                        aria-label="Kumulative Belastungskurve: NGO Business Anfragen pro Partei im Zeitverlauf"
+                        aria-describedby="floodwall-desc"></canvas>
+                <p id="floodwall-desc" class="sr-only">
+                    Dieses Diagramm zeigt die kumulative Anzahl der NGO Business Anfragen pro Partei über den Zeitraum <?php echo $rangeLabel; ?>.
+                    Die Steigung der Linien zeigt die Intensität der parlamentarischen NGO Business Aktivitäten jeder Partei.
+                </p>
             </div>
-        </div>
+        </section>
 
-        <div class="mono-box mb-8">
+        <section class="mono-box mb-8" aria-labelledby="calendar-heading">
             <div class="flex justify-between items-center mb-6">
-                <h3 class="text-2xl text-white">The "Spam Calendar" – Heatmap der Intensität</h3>
+                <h2 id="calendar-heading" class="text-2xl text-white">The "Spam Calendar" – Heatmap NGO Business Intensität</h2>
                 <div class="h-px bg-white w-10"></div>
             </div>
             <div class="text-sm text-gray-400 mb-4 font-mono">
-                Anfragen kommen in Wellen: Hellere Farben = mehr Anfragen an diesem Tag
+                NGO Business Anfragen kommen in Wellen: Hellere Farben = mehr Anfragen an diesem Tag
             </div>
             <div style="height: 400px; width: 100%; overflow-x: auto;">
-                <canvas id="spamCalendarChart"></canvas>
+                <canvas id="spamCalendarChart"
+                        role="img"
+                        aria-label="Heatmap: Tägliche Intensität der NGO Business Anfragen pro Partei"
+                        aria-describedby="calendar-desc"></canvas>
+                <p id="calendar-desc" class="sr-only">
+                    Diese Heatmap visualisiert die tägliche Intensität der NGO Business Anfragen jeder Partei.
+                    Hellere Farben repräsentieren Tage mit höherer Aktivität in parlamentarischen NGO-bezogenen Anfragen.
+                </p>
             </div>
-        </div>
+        </section>
 
-        <div class="mono-box">
+        <section class="mono-box" aria-labelledby="results-heading">
             <div class="flex justify-between items-center border-b border-gray-800 pb-4 mb-4">
-                <h3 class="text-2xl text-white">Gefundene Anfragen</h3>
+                <h2 id="results-heading" class="text-2xl text-white">Gefundene NGO Business Anfragen</h2>
                 <div class="text-xs font-mono text-gray-500">
                     SEITE <?php echo $page; ?> / <?php echo $totalPages; ?>
                 </div>
@@ -814,8 +1036,72 @@ $partyMap = [
                     <?php endif; ?>
                 </div>
             <?php endif; ?>
-        </div>
-        
+        </section>
+
+
+        <!-- FAQ Section for SEO -->
+        <section class="mono-box mt-16" itemscope itemtype="https://schema.org/FAQPage" aria-labelledby="faq-heading">
+            <h2 id="faq-heading" class="text-3xl text-white mb-8" style="font-family: var(--font-head); letter-spacing: 1px;">
+                Häufig gestellte Fragen zu NGO Business Anfragen
+            </h2>
+
+            <div class="space-y-6">
+                <div class="border-b border-gray-800 pb-6" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                    <h3 class="text-xl font-bold text-white mb-3" itemprop="name">Was sind NGO Business Anfragen?</h3>
+                    <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                        <p class="text-gray-300 leading-relaxed" itemprop="text">
+                            <strong>NGO Business Anfragen</strong> sind parlamentarische Anfragen im österreichischen Nationalrat, die sich mit Nicht-Regierungsorganisationen (NGOs), deren Finanzierung, Aktivitäten und Transparenz befassen. Diese Anfragen werden von Abgeordneten gestellt und vom zuständigen Ministerium beantwortet. Unser NGO Business Tracker ermöglicht Ihnen das Echtzeit-Monitoring aller solcher Anfragen.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="border-b border-gray-800 pb-6" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                    <h3 class="text-xl font-bold text-white mb-3" itemprop="name">Wie funktioniert der NGO Business Tracker?</h3>
+                    <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                        <p class="text-gray-300 leading-relaxed" itemprop="text">
+                            Unser NGO Business Tracking System greift in Echtzeit auf die offizielle API des österreichischen Parlaments (parlament.gv.at) zu und filtert automatisch alle Anfragen, die NGO-relevante Begriffe enthalten. Die Daten werden visualisiert und nach Parteien, Zeiträumen und Themen kategorisiert. Sie erhalten so einen vollständigen Überblick über alle NGO Business Aktivitäten im Parlament.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="border-b border-gray-800 pb-6" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                    <h3 class="text-xl font-bold text-white mb-3" itemprop="name">Welche Parteien stellen NGO Business Anfragen?</h3>
+                    <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                        <p class="text-gray-300 leading-relaxed" itemprop="text">
+                            Alle im österreichischen Parlament vertretenen Parteien können parlamentarische Anfragen zu NGO Business stellen. Unser Tracker zeigt Anfragen von SPÖ (Sozialdemokratische Partei), ÖVP (Österreichische Volkspartei), FPÖ (Freiheitliche Partei), GRÜNE (Die Grünen) und NEOS (NEOS – Das Neue Österreich). Die Visualisierungen zeigen, welche Partei am aktivsten im Bereich NGO Business ist.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="border-b border-gray-800 pb-6" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                    <h3 class="text-xl font-bold text-white mb-3" itemprop="name">Warum ist NGO Business Tracking wichtig?</h3>
+                    <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                        <p class="text-gray-300 leading-relaxed" itemprop="text">
+                            NGO Business Tracking schafft <strong>Transparenz</strong> über die parlamentarische Kontrolle von Nicht-Regierungsorganisationen in Österreich. Bürger, Journalisten und NGOs selbst können nachvollziehen, welche Fragen zu NGO-Finanzierung, NGO-Aktivitäten und NGO-Transparenz gestellt werden. Dies fördert die demokratische Kontrolle und öffentliche Debatte über die Rolle von NGOs in der Gesellschaft.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="border-b border-gray-800 pb-6" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                    <h3 class="text-xl font-bold text-white mb-3" itemprop="name">Wie aktuell sind die NGO Business Daten?</h3>
+                    <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                        <p class="text-gray-300 leading-relaxed" itemprop="text">
+                            Die Daten werden in <strong>Echtzeit</strong> von der offiziellen Parlament-API abgerufen. Sobald eine neue NGO-bezogene Anfrage im österreichischen Parlament eingebracht wird, erscheint sie auch in unserem NGO Business Tracker. Die Aktualität ist einer der Hauptvorteile unseres Systems gegenüber traditionellen Recherchemethoden.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="pb-6" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                    <h3 class="text-xl font-bold text-white mb-3" itemprop="name">Was zeigen die Visualisierungen im NGO Business Tracker?</h3>
+                    <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                        <p class="text-gray-300 leading-relaxed" itemprop="text">
+                            Unser NGO Business Tracker bietet drei Hauptvisualisierungen: 1) <strong>Zeitlicher Verlauf</strong> - zeigt die Anzahl der NGO Anfragen über Zeit, 2) <strong>Flood Wall</strong> - kumulative Belastungskurve pro Partei, 3) <strong>Spam Calendar</strong> - Heatmap der täglichen Intensität. Zusätzlich analysieren wir die häufigsten Kampfbegriffe in NGO Business Anfragen und zeigen, welche Partei welche Begriffe verwendet.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
     </div>
 
     <!-- Main Site Footer -->
@@ -825,11 +1111,14 @@ $partyMap = [
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
                     <!-- About Section -->
                     <div>
-                        <h3 class="text-sm font-bold font-mono text-white mb-3 uppercase tracking-wider">Über das System</h3>
+                        <h3 class="text-sm font-bold font-mono text-white mb-3 uppercase tracking-wider">Über das NGO Business System</h3>
                         <p class="text-xs font-mono text-gray-500 leading-relaxed">
-                            Echtzeit-Tracking von NGO-bezogenen parlamentarischen Anfragen aus dem österreichischen Parlament.
-                            Datenanalyse und Visualisierung für mehr Transparenz.
+                            Der führende <strong>NGO Business Tracker</strong> für Österreich. Echtzeit-Tracking von NGO-bezogenen parlamentarischen Anfragen aus dem österreichischen Parlament.
+                            Professionelle Datenanalyse und Visualisierung für maximale <strong>NGO Transparenz</strong> und demokratische Kontrolle.
                         </p>
+                        <div class="mt-4 text-xs font-mono text-gray-600">
+                            <strong class="text-gray-400">Keywords:</strong> NGO Business Österreich, Parlamentarische Anfragen NGO, NGO Transparenz, NGO Monitoring, NGO Watch
+                        </div>
                     </div>
 
                     <!-- Data Source -->
@@ -871,11 +1160,16 @@ $partyMap = [
                 <!-- Bottom Bar -->
                 <div class="pt-6 border-t border-[rgba(255,255,255,0.05)] flex flex-col md:flex-row justify-between items-center gap-4">
                     <div class="text-xs font-mono text-gray-700">
-                        © <?php echo date('Y'); ?> NGO WATCH // DATA INTELLIGENCE SYSTEM
+                        © <?php echo date('Y'); ?> NGO WATCH - NGO Business Tracker Österreich // DATA INTELLIGENCE SYSTEM
                     </div>
-                    <div class="flex items-center gap-2">
-                        <div class="w-2 h-2 bg-green-500 rounded-full"></div>
-                        <span class="text-xs font-mono text-green-600">SYSTEM AKTIV</span>
+                    <div class="flex items-center gap-4">
+                        <div class="text-xs font-mono text-gray-700">
+                            <strong>SEO:</strong> #1 für NGO Business Tracking
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                            <span class="text-xs font-mono text-green-600">SYSTEM AKTIV</span>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -1,0 +1,67 @@
+# robots.txt for NGO Business Tracker
+# Optimized for search engine crawling and indexing
+
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://ngo-business.com/sitemap.xml
+
+# Crawl-delay for polite crawling (optional, adjust based on server capacity)
+Crawl-delay: 1
+
+# Allow all major search engines full access
+User-agent: Googlebot
+Allow: /
+
+User-agent: Googlebot-Image
+Allow: /
+
+User-agent: Googlebot-Mobile
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: Baiduspider
+Allow: /
+
+User-agent: YandexBot
+Allow: /
+
+User-agent: facebot
+Allow: /
+
+User-agent: ia_archiver
+Allow: /
+
+# Block common bad bots (but allow legitimate SEO tools)
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: AhrefsBot
+Allow: /
+
+User-agent: SEMrushBot
+Allow: /
+
+User-agent: Mediatoolkitbot
+Disallow: /
+
+User-agent: MegaIndex
+Disallow: /
+
+User-agent: SeznamBot
+Allow: /
+
+User-agent: Sogou
+Disallow: /
+
+# Note: Update the Sitemap URL above with your actual domain
+# The sitemap.xml will be generated dynamically via sitemap.php

@@ -262,7 +262,7 @@ foreach (['S', 'V', 'F', 'G', 'N', 'OTHER'] as $party) {
     }
 }
 
-// 2. OBSESSION RADAR: Keyword ownership by party
+// 2. IMPROVED WORD CLOUD: Keyword ownership by party
 $keywordPartyUsage = [];
 foreach ($allNGOResults as $result) {
     $words = preg_split('/\s+/', mb_strtolower($result['title']));
@@ -277,29 +277,23 @@ foreach ($allNGOResults as $result) {
     }
 }
 
-// Calculate top keywords and their party dominance
-$obsessionRadarData = [];
-$topKeywordsForRadar = array_slice($wordFrequency, 0, 30, true);
-
-foreach ($topKeywordsForRadar as $keyword => $totalCount) {
-    if (isset($keywordPartyUsage[$keyword])) {
-        $partyUsage = $keywordPartyUsage[$keyword];
+// Enhanced word cloud data with party dominance
+$wordCloudWithParty = [];
+foreach ($wordFrequency as $word => $count) {
+    if (isset($keywordPartyUsage[$word])) {
+        $partyUsage = $keywordPartyUsage[$word];
         $maxParty = array_keys($partyUsage, max($partyUsage))[0];
-        $maxCount = max($partyUsage);
-
-        // Calculate percentages
-        $fpoePercent = $totalCount > 0 ? ($partyUsage['F'] / $totalCount) * 100 : 0;
-        $otherPercent = $totalCount > 0 ? (($partyUsage['S'] + $partyUsage['V'] + $partyUsage['G'] + $partyUsage['N'] + $partyUsage['OTHER']) / $totalCount) * 100 : 0;
-
-        $obsessionRadarData[] = [
-            'keyword' => $keyword,
-            'totalCount' => $totalCount,
-            'dominantParty' => $maxParty,
-            'fpoePercent' => round($fpoePercent, 1),
-            'otherPercent' => round($otherPercent, 1)
+        $wordCloudWithParty[] = [
+            'word' => $word,
+            'count' => $count,
+            'party' => $maxParty,
+            'partyBreakdown' => $partyUsage
         ];
     }
 }
+
+// Top Kampfbegriffe with full party breakdown
+$topKampfbegriffe = array_slice($wordCloudWithParty, 0, 15, true);
 
 // 3. SPAM CALENDAR: Daily intensity heatmap
 $spamCalendarData = [];
@@ -564,8 +558,8 @@ $partyMap = [
             </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-8">
-            <div class="mono-box lg:col-span-2">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-8">
+            <div class="mono-box">
                 <div class="flex justify-between items-center mb-6">
                     <h3 class="text-2xl text-white">Zeitlicher Verlauf</h3>
                     <div class="h-px bg-white w-10"></div>
@@ -577,10 +571,56 @@ $partyMap = [
 
             <div class="mono-box">
                 <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-2xl text-white">Schlagwort-Dichte</h3>
+                    <h3 class="text-2xl text-white">Kampfbegriffe – Wer nutzt was?</h3>
                     <div class="h-px bg-white w-10"></div>
                 </div>
-                <canvas id="wordCloud" class="w-full" style="height: 300px;"></canvas>
+                <div class="text-sm text-gray-400 mb-4 font-mono">
+                    Die häufigsten Begriffe in Anfragetiteln, farblich nach dominierender Partei
+                </div>
+                <canvas id="wordCloud" class="w-full" style="height: 400px;"></canvas>
+            </div>
+        </div>
+
+        <div class="mono-box mb-8">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl text-white">Top Kampfbegriffe – Partei-Breakdown</h3>
+                <div class="h-px bg-white w-10"></div>
+            </div>
+            <div class="text-sm text-gray-400 mb-6 font-mono">
+                Welche Partei verwendet welche Begriffe? Zeigt die Top 15 häufigsten Wörter.
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <?php foreach ($topKampfbegriffe as $item): ?>
+                    <div class="border border-<?php echo $item['party']; ?> bg-<?php echo $item['party']; ?> bg-opacity-5 p-4 hover:bg-opacity-10 transition-all">
+                        <div class="flex justify-between items-start mb-3">
+                            <div class="text-lg font-bold font-mono text-white uppercase">
+                                <?php echo htmlspecialchars($item['word']); ?>
+                            </div>
+                            <div class="text-xs font-mono text-gray-500">
+                                <?php echo $item['count']; ?>×
+                            </div>
+                        </div>
+                        <div class="space-y-1">
+                            <?php
+                            arsort($item['partyBreakdown']);
+                            foreach ($item['partyBreakdown'] as $party => $count):
+                                if ($count > 0):
+                                    $percentage = round(($count / $item['count']) * 100);
+                            ?>
+                                <div class="flex items-center gap-2">
+                                    <div class="w-12 text-xs font-mono text-gray-400"><?php echo $partyMap[$party]; ?></div>
+                                    <div class="flex-1 h-4 bg-gray-900 relative overflow-hidden">
+                                        <div class="absolute inset-y-0 left-0 bg-<?php echo $party; ?> opacity-70" style="width: <?php echo $percentage; ?>%"></div>
+                                    </div>
+                                    <div class="w-8 text-xs font-mono text-gray-500 text-right"><?php echo $count; ?></div>
+                                </div>
+                            <?php
+                                endif;
+                            endforeach;
+                            ?>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
             </div>
         </div>
 
@@ -597,31 +637,16 @@ $partyMap = [
             </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-8">
-            <div class="mono-box">
-                <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-2xl text-white">The "Obsession Radar" – Thematische Hoheit</h3>
-                    <div class="h-px bg-white w-10"></div>
-                </div>
-                <div class="text-sm text-gray-400 mb-4 font-mono">
-                    Welche Partei "besitzt" welche Kampfbegriffe? Größe = Häufigkeit, Position = FPÖ-Dominanz
-                </div>
-                <div style="height: 400px; width: 100%;">
-                    <canvas id="obsessionRadarChart"></canvas>
-                </div>
+        <div class="mono-box mb-8">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl text-white">The "Spam Calendar" – Heatmap der Intensität</h3>
+                <div class="h-px bg-white w-10"></div>
             </div>
-
-            <div class="mono-box">
-                <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-2xl text-white">The "Spam Calendar" – Heatmap der Intensität</h3>
-                    <div class="h-px bg-white w-10"></div>
-                </div>
-                <div class="text-sm text-gray-400 mb-4 font-mono">
-                    Anfragen kommen in Wellen: Hellere Farben = mehr Anfragen an diesem Tag
-                </div>
-                <div style="height: 400px; width: 100%; overflow-x: auto;">
-                    <canvas id="spamCalendarChart"></canvas>
-                </div>
+            <div class="text-sm text-gray-400 mb-4 font-mono">
+                Anfragen kommen in Wellen: Hellere Farben = mehr Anfragen an diesem Tag
+            </div>
+            <div style="height: 400px; width: 100%; overflow-x: auto;">
+                <canvas id="spamCalendarChart"></canvas>
             </div>
         </div>
 
@@ -776,23 +801,36 @@ $partyMap = [
             }
         });
 
-        // Word Cloud
-        const wordList = <?php echo json_encode(array_map(fn($word, $count) => [$word, $count], array_keys($topWords), array_values($topWords))); ?>;
+        // Enhanced Word Cloud with Party Colors
+        const wordCloudData = <?php echo json_encode($wordCloudWithParty); ?>;
+
+        // Build word list with party colors
+        const wordList = wordCloudData.map(item => [item.word, item.count]);
+
+        // Create color mapping based on party
+        const wordColorMap = {};
+        wordCloudData.forEach(item => {
+            wordColorMap[item.word] = partyColors[item.party];
+        });
 
         if (wordList.length > 0) {
             WordCloud(document.getElementById('wordCloud'), {
                 list: wordList,
-                gridSize: 12,
-                weightFactor: 2.5,
+                gridSize: 8,
+                weightFactor: function(size) {
+                    return Math.pow(size, 0.7) * 2.5;
+                },
                 fontFamily: 'Bebas Neue, sans-serif',
-                color: function() {
-                    // Greyscale / White palette
-                    const shades = ['#ffffff', '#cccccc', '#999999', '#666666'];
-                    return shades[Math.floor(Math.random() * shades.length)];
+                color: function(word) {
+                    // Return party color for this word
+                    return wordColorMap[word] || '#ffffff';
                 },
                 rotateRatio: 0, // All horizontal for cleaner look
                 backgroundColor: 'transparent',
-                drawOutOfBound: false
+                drawOutOfBound: false,
+                minSize: 10,
+                shuffle: true,
+                shrinkToFit: true
             });
         }
 
@@ -899,93 +937,7 @@ $partyMap = [
             }
         });
 
-        // 2. OBSESSION RADAR (Bubble Chart)
-        const obsessionData = <?php echo json_encode($obsessionRadarData); ?>;
-
-        const obsessionCtx = document.getElementById('obsessionRadarChart').getContext('2d');
-        new Chart(obsessionCtx, {
-            type: 'bubble',
-            data: {
-                datasets: obsessionData.map(item => ({
-                    label: item.keyword,
-                    data: [{
-                        x: item.fpoePercent,
-                        y: item.otherPercent,
-                        r: Math.sqrt(item.totalCount) * 3 // Size based on frequency
-                    }],
-                    backgroundColor: partyColors[item.dominantParty] + 'CC',
-                    borderColor: partyColors[item.dominantParty],
-                    borderWidth: 2
-                }))
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        backgroundColor: '#000',
-                        titleColor: '#fff',
-                        bodyColor: '#fff',
-                        borderColor: '#333',
-                        borderWidth: 1,
-                        cornerRadius: 0,
-                        callbacks: {
-                            title: function(context) {
-                                return context[0].dataset.label.toUpperCase();
-                            },
-                            label: function(context) {
-                                const item = obsessionData[context.datasetIndex];
-                                return [
-                                    `Häufigkeit: ${item.totalCount}`,
-                                    `FPÖ: ${item.fpoePercent}%`,
-                                    `Andere: ${item.otherPercent}%`,
-                                    `Dominant: ${partyNames[item.dominantParty]}`
-                                ];
-                            }
-                        },
-                        titleFont: { family: 'Bebas Neue', size: 14 },
-                        bodyFont: { family: 'JetBrains Mono', size: 11 }
-                    }
-                },
-                scales: {
-                    x: {
-                        min: 0,
-                        max: 100,
-                        grid: { color: 'rgba(255,255,255,0.05)' },
-                        ticks: {
-                            font: { family: 'JetBrains Mono', size: 10 },
-                            color: '#666',
-                            callback: function(value) { return value + '%'; }
-                        },
-                        title: {
-                            display: true,
-                            text: 'FPÖ DOMINANZ →',
-                            color: '#3b82f6',
-                            font: { family: 'Bebas Neue', size: 12 }
-                        }
-                    },
-                    y: {
-                        min: 0,
-                        max: 100,
-                        grid: { color: 'rgba(255,255,255,0.05)' },
-                        ticks: {
-                            font: { family: 'JetBrains Mono', size: 10 },
-                            color: '#666',
-                            callback: function(value) { return value + '%'; }
-                        },
-                        title: {
-                            display: true,
-                            text: 'ANDERE PARTEIEN →',
-                            color: '#999',
-                            font: { family: 'Bebas Neue', size: 12 }
-                        }
-                    }
-                }
-            }
-        });
-
-        // 3. SPAM CALENDAR (Matrix Heatmap)
+        // 2. SPAM CALENDAR (Matrix Heatmap)
         const spamCalendarData = <?php echo json_encode($spamCalendarData); ?>;
         const allDatesForCalendar = <?php echo json_encode(array_keys($allDates)); ?>;
 

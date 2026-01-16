@@ -156,6 +156,11 @@ switch ($timeRange) {
         $rangeLabel = 'Letzter Monat';
         $gpCodes = ['XXVIII'];
         break;
+    case '3months':
+        $cutoffDate->modify('-3 months');
+        $rangeLabel = 'Letzte 3 Monate';
+        $gpCodes = ['XXVIII'];
+        break;
     case '6months':
         $cutoffDate->modify('-6 months');
         $rangeLabel = 'Letzte 6 Monate';
@@ -232,16 +237,17 @@ if (isset($apiResponse['rows'])) {
             $pendingCount++;
         }
 
-        // Monthly data for graph
-        $monthKey = $rowDate->format('Y-m');
-        if (!isset($monthlyData[$monthKey])) {
-            $monthlyData[$monthKey] = [
+        // Timeline data for graph (days for week/month, months for longer periods)
+        $useDays = in_array($timeRange, ['1week', '1month']);
+        $timeKey = $useDays ? $rowDate->format('Y-m-d') : $rowDate->format('Y-m');
+        if (!isset($monthlyData[$timeKey])) {
+            $monthlyData[$timeKey] = [
                 'count' => 0,
-                'label' => $rowDate->format('M Y'),
+                'label' => $useDays ? $rowDate->format('d.m.') : $rowDate->format('M Y'),
                 'timestamp' => $rowDate->getTimestamp()
             ];
         }
-        $monthlyData[$monthKey]['count']++;
+        $monthlyData[$timeKey]['count']++;
 
         // Word frequency - ONLY meaningful keywords (no stopwords!)
         $words = preg_split('/\s+/', mb_strtolower($rowTitle));
@@ -594,9 +600,10 @@ $partyMap = [
             <form method="GET" class="mt-6 md:mt-0">
                 <div class="flex items-center gap-4">
                     <span class="text-xs uppercase tracking-widest text-gray-500 font-bold">Zeitraum</span>
-                    <select name="range" onchange="this.form.submit()">
+                    <select name="range" onchange="this.form.submit()" class="px-4 py-2 bg-black border border-gray-700 text-white font-mono text-xs rounded hover:border-gray-500 focus:outline-none focus:border-white transition-colors cursor-pointer">
                         <option value="1week" <?php echo $timeRange === '1week' ? 'selected' : ''; ?>>LETZTE WOCHE</option>
                         <option value="1month" <?php echo $timeRange === '1month' ? 'selected' : ''; ?>>LETZTER MONAT</option>
+                        <option value="3months" <?php echo $timeRange === '3months' ? 'selected' : ''; ?>>3 MONATE</option>
                         <option value="6months" <?php echo $timeRange === '6months' ? 'selected' : ''; ?>>6 MONATE</option>
                         <option value="12months" <?php echo $timeRange === '12months' ? 'selected' : ''; ?>>12 MONATE</option>
                         <option value="1year" <?php echo $timeRange === '1year' ? 'selected' : ''; ?>>LETZTES JAHR</option>

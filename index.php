@@ -146,6 +146,16 @@ $now = new DateTime();
 $cutoffDate = clone $now;
 
 switch ($timeRange) {
+    case '1week':
+        $cutoffDate->modify('-1 week');
+        $rangeLabel = 'Letzte Woche';
+        $gpCodes = ['XXVIII'];
+        break;
+    case '1month':
+        $cutoffDate->modify('-1 month');
+        $rangeLabel = 'Letzter Monat';
+        $gpCodes = ['XXVIII'];
+        break;
     case '6months':
         $cutoffDate->modify('-6 months');
         $rangeLabel = 'Letzte 6 Monate';
@@ -544,6 +554,35 @@ $partyMap = [
 </head>
 <body>
 
+    <!-- Main Site Header -->
+    <header class="w-full border-b border-[rgba(255,255,255,0.1)] bg-black">
+        <div class="container-custom">
+            <div class="flex flex-col md:flex-row justify-between items-center py-6">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 border border-white flex items-center justify-center">
+                        <span class="text-2xl font-bold font-mono text-white">N</span>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl md:text-3xl font-bold" style="font-family: var(--font-head); letter-spacing: 2px;">
+                            NGO WATCH
+                        </h1>
+                        <p class="text-xs font-mono text-gray-500 uppercase tracking-wider">Data Intelligence System</p>
+                    </div>
+                </div>
+                <div class="mt-4 md:mt-0">
+                    <div class="flex items-center gap-3">
+                        <div class="text-xs font-mono text-gray-600 text-right">
+                            <div class="text-gray-400">QUELLE:</div>
+                            <div class="text-gray-500">PARLAMENT.GV.AT</div>
+                        </div>
+                        <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                        <div class="text-xs font-mono text-green-500">LIVE</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
     <div class="container-custom">
         
         <header class="flex flex-col md:flex-row justify-between items-end border-b border-[rgba(255,255,255,0.1)] pb-6 mb-10">
@@ -556,6 +595,8 @@ $partyMap = [
                 <div class="flex items-center gap-4">
                     <span class="text-xs uppercase tracking-widest text-gray-500 font-bold">Zeitraum</span>
                     <select name="range" onchange="this.form.submit()">
+                        <option value="1week" <?php echo $timeRange === '1week' ? 'selected' : ''; ?>>LETZTE WOCHE</option>
+                        <option value="1month" <?php echo $timeRange === '1month' ? 'selected' : ''; ?>>LETZTER MONAT</option>
                         <option value="6months" <?php echo $timeRange === '6months' ? 'selected' : ''; ?>>6 MONATE</option>
                         <option value="12months" <?php echo $timeRange === '12months' ? 'selected' : ''; ?>>12 MONATE</option>
                         <option value="1year" <?php echo $timeRange === '1year' ? 'selected' : ''; ?>>LETZTES JAHR</option>
@@ -566,7 +607,7 @@ $partyMap = [
             </form>
         </header>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-4 mb-8">
             <div class="mono-box">
                 <div class="stat-label">Gesamtanzahl</div>
                 <div class="stat-value"><?php echo number_format($totalCount); ?></div>
@@ -605,23 +646,6 @@ $partyMap = [
                 </div>
             </div>
 
-            <div class="mono-box">
-                <div class="stat-label">Beantwortungsquote</div>
-                <div class="flex justify-between items-end">
-                    <div>
-                        <div class="text-2xl font-bold text-green-500"><?php echo $answeredCount; ?></div>
-                        <div class="text-xs text-gray-600">ERLEDIGT</div>
-                    </div>
-                    <div class="text-right">
-                        <div class="text-2xl font-bold text-red-500"><?php echo $pendingCount; ?></div>
-                        <div class="text-xs text-gray-600">OFFEN</div>
-                    </div>
-                </div>
-                <div class="w-full h-1 bg-gray-800 mt-4 flex">
-                    <?php $width = $totalCount > 0 ? ($answeredCount / $totalCount) * 100 : 0; ?>
-                    <div class="h-full bg-green-500" style="width: <?php echo $width; ?>%"></div>
-                </div>
-            </div>
         </div>
 
         <div class="mono-box mb-8">
@@ -636,15 +660,21 @@ $partyMap = [
 
         <div class="mono-box mb-8">
             <div class="flex justify-between items-center mb-6">
-                <h3 class="text-2xl text-white">Top Kampfbegriffe – Partei-Breakdown</h3>
+                <h3 class="text-2xl text-white">Top Kampfbegriffe</h3>
                 <div class="h-px bg-white w-10"></div>
             </div>
             <div class="text-sm text-gray-400 mb-6 font-mono">
-                Die häufigsten INHALTLICHEN Begriffe aus Anfragetiteln (ohne Füllwörter). Zeigt welche Partei welche Begriffe nutzt.
+                Die häufigsten INHALTLICHEN Begriffe aus Anfragetiteln (ohne Füllwörter). Zeigt welche Partei den Begriff am meisten nutzt.
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 <?php foreach ($topKampfbegriffe as $item): ?>
-                    <div class="border border-<?php echo $item['party']; ?> bg-<?php echo $item['party']; ?> bg-opacity-5 p-4 hover:bg-opacity-10 transition-all">
+                    <?php
+                    // Find the dominant party
+                    arsort($item['partyBreakdown']);
+                    $dominantParty = array_key_first($item['partyBreakdown']);
+                    $dominantCount = $item['partyBreakdown'][$dominantParty];
+                    ?>
+                    <div class="border border-gray-800 bg-black bg-opacity-40 p-4 hover:bg-opacity-60 hover:border-gray-600 transition-all">
                         <div class="flex justify-between items-start mb-3">
                             <div class="text-lg font-bold font-mono text-white uppercase">
                                 <?php echo htmlspecialchars($item['word']); ?>
@@ -653,24 +683,13 @@ $partyMap = [
                                 <?php echo $item['count']; ?>×
                             </div>
                         </div>
-                        <div class="space-y-1">
-                            <?php
-                            arsort($item['partyBreakdown']);
-                            foreach ($item['partyBreakdown'] as $party => $count):
-                                if ($count > 0):
-                                    $percentage = round(($count / $item['count']) * 100);
-                            ?>
-                                <div class="flex items-center gap-2">
-                                    <div class="w-12 text-xs font-mono text-gray-400"><?php echo $partyMap[$party]; ?></div>
-                                    <div class="flex-1 h-4 bg-gray-900 relative overflow-hidden">
-                                        <div class="absolute inset-y-0 left-0 bg-<?php echo $party; ?> opacity-70" style="width: <?php echo $percentage; ?>%"></div>
-                                    </div>
-                                    <div class="w-8 text-xs font-mono text-gray-500 text-right"><?php echo $count; ?></div>
-                                </div>
-                            <?php
-                                endif;
-                            endforeach;
-                            ?>
+                        <div class="flex items-center justify-between pt-2 border-t border-gray-800">
+                            <div class="text-xs font-mono text-gray-400">
+                                Meist genutzt von:
+                            </div>
+                            <div class="text-sm font-bold font-mono text-white">
+                                <?php echo $partyMap[$dominantParty]; ?> <span class="text-gray-500">(<?php echo $dominantCount; ?>×)</span>
+                            </div>
                         </div>
                     </div>
                 <?php endforeach; ?>
@@ -746,10 +765,16 @@ $partyMap = [
 
                             <div class="md:col-span-2 text-left md:text-right">
                                 <?php if ($result['answered']): ?>
-                                    <span class="text-xs font-mono text-green-500">
-                                        [ ERLEDIGT ]<br>
+                                    <?php
+                                    // Extract GP code from inquiry link to construct answer link
+                                    preg_match('/\/gegenstand\/([^\/]+)\//', $result['link'], $gpMatch);
+                                    $gpCode = $gpMatch[1] ?? 'XXVIII';
+                                    $answerLink = "https://www.parlament.gv.at/gegenstand/{$gpCode}/AB/{$result['answer_number']}";
+                                    ?>
+                                    <a href="<?php echo htmlspecialchars($answerLink); ?>" target="_blank" class="text-xs font-mono text-green-500 hover:text-green-400 transition-colors">
+                                        [ BEANTWORTET ]<br>
                                         <span class="opacity-50"><?php echo $result['answer_number']; ?>/AB</span>
-                                    </span>
+                                    </a>
                                 <?php else: ?>
                                     <span class="text-xs font-mono text-red-500 animate-pulse">
                                         [ OFFEN ]
@@ -784,11 +809,71 @@ $partyMap = [
             <?php endif; ?>
         </div>
         
-        <footer class="mt-12 mb-6 text-center">
-             <p class="text-xs font-mono text-gray-700">QUELLE: PARLAMENT.GV.AT // SICHERE VERBINDUNG HERGESTELLT</p>
-        </footer>
-
     </div>
+
+    <!-- Main Site Footer -->
+    <footer class="w-full border-t border-[rgba(255,255,255,0.1)] bg-black mt-16">
+        <div class="container-custom">
+            <div class="py-8">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                    <!-- About Section -->
+                    <div>
+                        <h3 class="text-sm font-bold font-mono text-white mb-3 uppercase tracking-wider">Über das System</h3>
+                        <p class="text-xs font-mono text-gray-500 leading-relaxed">
+                            Echtzeit-Tracking von NGO-bezogenen parlamentarischen Anfragen aus dem österreichischen Parlament.
+                            Datenanalyse und Visualisierung für mehr Transparenz.
+                        </p>
+                    </div>
+
+                    <!-- Data Source -->
+                    <div>
+                        <h3 class="text-sm font-bold font-mono text-white mb-3 uppercase tracking-wider">Datenquelle</h3>
+                        <div class="text-xs font-mono text-gray-500 space-y-2">
+                            <div class="flex items-center gap-2">
+                                <div class="w-1 h-1 bg-green-500"></div>
+                                <span>Parlament.gv.at API</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <div class="w-1 h-1 bg-green-500"></div>
+                                <span>Live-Datenabfrage</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <div class="w-1 h-1 bg-green-500"></div>
+                                <span>Sichere HTTPS-Verbindung</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tech Info -->
+                    <div>
+                        <h3 class="text-sm font-bold font-mono text-white mb-3 uppercase tracking-wider">Technologie</h3>
+                        <div class="text-xs font-mono text-gray-500 space-y-1">
+                            <div>PHP <?php echo phpversion(); ?></div>
+                            <div>Chart.js 4.4.0</div>
+                            <div>Tailwind CSS</div>
+                            <div class="pt-2 text-gray-600">
+                                <?php
+                                $timestamp = date('d.m.Y H:i:s');
+                                echo "Zuletzt aktualisiert: {$timestamp}";
+                                ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bottom Bar -->
+                <div class="pt-6 border-t border-[rgba(255,255,255,0.05)] flex flex-col md:flex-row justify-between items-center gap-4">
+                    <div class="text-xs font-mono text-gray-700">
+                        © <?php echo date('Y'); ?> NGO WATCH // DATA INTELLIGENCE SYSTEM
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                        <span class="text-xs font-mono text-green-600">SYSTEM AKTIV</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
 
     <script>
         // Error logging to console

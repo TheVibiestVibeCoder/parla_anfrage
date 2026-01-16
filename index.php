@@ -840,56 +840,57 @@ $partyMap = [
             gradient.addColorStop(0, 'rgba(255, 255, 255, 0.2)');
             gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
 
-            new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: monthLabels,
-                datasets: [{
-                    label: 'ANFRAGEN',
-                    data: monthCounts,
-                    borderColor: '#ffffff',
-                    backgroundColor: gradient,
-                    borderWidth: 1,
-                    fill: true,
-                    tension: 0, // Sharp lines for tech feel
-                    pointRadius: 3,
-                    pointBackgroundColor: '#000',
-                    pointBorderColor: '#fff'
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        backgroundColor: '#000',
-                        titleColor: '#fff',
-                        bodyColor: '#fff',
-                        borderColor: '#333',
-                        borderWidth: 1,
-                        cornerRadius: 0,
-                        displayColors: false,
-                        titleFont: { family: 'Bebas Neue', size: 16 }
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        grid: { color: 'rgba(255,255,255,0.05)' },
-                        ticks: { stepSize: 1, font: { family: 'JetBrains Mono', size: 10 } }
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: monthLabels,
+                        datasets: [{
+                            label: 'ANFRAGEN',
+                            data: monthCounts,
+                            borderColor: '#ffffff',
+                            backgroundColor: gradient,
+                            borderWidth: 1,
+                            fill: true,
+                            tension: 0,
+                            pointRadius: 3,
+                            pointBackgroundColor: '#000',
+                            pointBorderColor: '#fff'
+                        }]
                     },
-                    x: {
-                        grid: { display: false },
-                        ticks: { font: { family: 'JetBrains Mono', size: 10 } }
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                backgroundColor: '#000',
+                                titleColor: '#fff',
+                                bodyColor: '#fff',
+                                borderColor: '#333',
+                                borderWidth: 1,
+                                cornerRadius: 0,
+                                displayColors: false,
+                                titleFont: { family: 'Bebas Neue', size: 16 }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                grid: { color: 'rgba(255,255,255,0.05)' },
+                                ticks: { stepSize: 1, font: { family: 'JetBrains Mono', size: 10 } }
+                            },
+                            x: {
+                                grid: { display: false },
+                                ticks: { font: { family: 'JetBrains Mono', size: 10 } }
+                            }
+                        }
                     }
-                }
-            });
-            console.log('Timeline Chart initialized successfully');
-        } catch (error) {
-            console.error('ERROR initializing Timeline Chart:', error);
-            alert('FEHLER beim Laden des Timeline Charts: ' + error.message);
-        }
+                });
+                console.log('Timeline Chart initialized successfully');
+            } catch (error) {
+                console.error('ERROR initializing Timeline Chart:', error);
+                alert('FEHLER beim Laden des Timeline Charts: ' + error.message);
+            }
 
         // ==========================================
         // VISUALIZATIONS
@@ -928,24 +929,24 @@ $partyMap = [
                 throw new Error('Flood Wall chart canvas not found!');
             }
 
-            new Chart(floodWallCtx, {
-            type: 'line',
-            data: {
-                labels: dateLabels,
-                datasets: Object.keys(floodWallData).map(party => ({
-                    label: partyNames[party],
-                    data: floodWallData[party].map(d => d.cumulative),
-                    borderColor: partyColors[party],
-                    backgroundColor: partyColors[party] + '20',
-                    borderWidth: 2,
-                    fill: false,
-                    stepped: 'before', // Step interpolation for "wall effect"
-                    pointRadius: 0,
-                    pointHoverRadius: 4,
-                    tension: 0
-                }))
-            },
-            options: {
+                new Chart(floodWallCtx, {
+                    type: 'line',
+                    data: {
+                        labels: dateLabels,
+                        datasets: Object.keys(floodWallData).map(party => ({
+                            label: partyNames[party],
+                            data: floodWallData[party].map(d => d.cumulative),
+                            borderColor: partyColors[party],
+                            backgroundColor: partyColors[party] + '20',
+                            borderWidth: 2,
+                            fill: false,
+                            stepped: 'before',
+                            pointRadius: 0,
+                            pointHoverRadius: 4,
+                            tension: 0
+                        }))
+                    },
+                    options: {
                 responsive: true,
                 maintainAspectRatio: false,
                 interaction: {
@@ -1000,12 +1001,12 @@ $partyMap = [
                         }
                     }
                 }
-            });
-            console.log('Flood Wall Chart initialized successfully');
-        } catch (error) {
-            console.error('ERROR initializing Flood Wall Chart:', error);
-            alert('FEHLER beim Laden des Flood Wall Charts: ' + error.message);
-        }
+                });
+                console.log('Flood Wall Chart initialized successfully');
+            } catch (error) {
+                console.error('ERROR initializing Flood Wall Chart:', error);
+                alert('FEHLER beim Laden des Flood Wall Charts: ' + error.message);
+            }
 
         // 2. SPAM CALENDAR (Matrix Heatmap)
         try {
@@ -1052,41 +1053,41 @@ $partyMap = [
                 throw new Error('Spam Calendar chart canvas not found!');
             }
 
-            new Chart(spamCalendarCtx, {
-            type: 'scatter',
-            data: {
-                datasets: [{
-                    data: matrixData.map(d => ({
-                        x: d.x,
-                        y: d.y,
-                        count: d.v,
-                        party: d.party,
-                        date: d.date
-                    })),
-                    backgroundColor: function(context) {
-                        const point = context.raw;
-                        if (!point) return 'rgba(255,255,255,0.1)';
-                        const intensity = point.count / maxCount;
-                        const baseColor = partyColors[point.party];
-                        // Convert hex to rgb and apply opacity
-                        const hex = baseColor.replace('#', '');
-                        const r = parseInt(hex.substring(0,2), 16);
-                        const g = parseInt(hex.substring(2,4), 16);
-                        const b = parseInt(hex.substring(4,6), 16);
-                        return `rgba(${r}, ${g}, ${b}, ${intensity})`;
+                new Chart(spamCalendarCtx, {
+                    type: 'scatter',
+                    data: {
+                        datasets: [{
+                            data: matrixData.map(d => ({
+                                x: d.x,
+                                y: d.y,
+                                count: d.v,
+                                party: d.party,
+                                date: d.date
+                            })),
+                            backgroundColor: function(context) {
+                                const point = context.raw;
+                                if (!point) return 'rgba(255,255,255,0.1)';
+                                const intensity = point.count / maxCount;
+                                const baseColor = partyColors[point.party];
+                                // Convert hex to rgb and apply opacity
+                                const hex = baseColor.replace('#', '');
+                                const r = parseInt(hex.substring(0,2), 16);
+                                const g = parseInt(hex.substring(2,4), 16);
+                                const b = parseInt(hex.substring(4,6), 16);
+                                return `rgba(${r}, ${g}, ${b}, ${intensity})`;
+                            },
+                            pointRadius: function(context) {
+                                return 8;
+                            },
+                            pointStyle: 'rect'
+                        }]
                     },
-                    pointRadius: function(context) {
-                        return 8; // Fixed size squares
-                    },
-                    pointStyle: 'rect'
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
                         backgroundColor: '#000',
                         titleColor: '#fff',
                         bodyColor: '#fff',
@@ -1141,15 +1142,15 @@ $partyMap = [
                         }
                     }
                 }
-            });
-            console.log('Spam Calendar Chart initialized successfully');
-        } catch (error) {
-            console.error('ERROR initializing Spam Calendar Chart:', error);
-            alert('FEHLER beim Laden des Spam Calendar Charts: ' + error.message);
-        }
+                });
+                console.log('Spam Calendar Chart initialized successfully');
+            } catch (error) {
+                console.error('ERROR initializing Spam Calendar Chart:', error);
+                alert('FEHLER beim Laden des Spam Calendar Charts: ' + error.message);
+            }
 
-        console.log('=== ALL CHARTS INITIALIZED ===');
-        console.log('=== NGO TRACKER DEBUG END ===');
+            console.log('=== ALL CHARTS INITIALIZED ===');
+            console.log('=== NGO TRACKER DEBUG END ===');
         }); // End of DOMContentLoaded event listener
     </script>
 </body>

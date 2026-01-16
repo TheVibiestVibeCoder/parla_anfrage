@@ -424,7 +424,7 @@ $partyMap = [
 
     <?php
     // SEO-Optimized Dynamic Title
-    $seoTitle = "NGO Business Tracker Österreich | " . $rangeLabel . " | Parlamentarische Anfragen Live";
+    $seoTitle = "\"NGO Business\" Tracker Österreich | " . $rangeLabel . " | Parlamentarische Anfragen Live";
     $seoDescription = "Analyse des Begriffs 'NGO Business' im Parlament. Tracking der Strategie, Ressourcenbindung und Skandalisierung durch parlamentarische Anfragen in Österreich.";
     $seoKeywords = "ngo business, ngo business österreich, ngo anfragen, parlamentarische anfragen ngo, ngo business tracker, framing ngo, ngo business strategie, parlamentsanfragen";
     $currentUrl = "https://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
@@ -436,7 +436,7 @@ $partyMap = [
     <meta name="title" content="<?php echo htmlspecialchars($seoTitle); ?>">
     <meta name="description" content="<?php echo htmlspecialchars($seoDescription); ?>">
     <meta name="keywords" content="<?php echo htmlspecialchars($seoKeywords); ?>">
-    <meta name="author" content="NGO Watch - Data Intelligence System">
+    <meta name="author" content="&quot;NGO Business&quot; Tracker - Anfragen Dashboard">
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
     <meta name="language" content="German">
     <meta name="revisit-after" content="1 days">
@@ -450,7 +450,7 @@ $partyMap = [
     <link rel="canonical" href="<?php echo htmlspecialchars($canonicalUrl); ?>">
 
     <meta property="og:type" content="website">
-    <meta property="og:site_name" content="NGO Watch - Data Intelligence">
+    <meta property="og:site_name" content="&quot;NGO Business&quot; Tracker - Anfragen Dashboard">
     <meta property="og:url" content="<?php echo htmlspecialchars($currentUrl); ?>">
     <meta property="og:title" content="<?php echo htmlspecialchars($seoTitle); ?>">
     <meta property="og:description" content="<?php echo htmlspecialchars($seoDescription); ?>">
@@ -464,8 +464,8 @@ $partyMap = [
 
     <meta name="theme-color" content="#050505">
     <meta name="msapplication-TileColor" content="#050505">
-    <meta name="application-name" content="NGO Watch">
-    <meta name="apple-mobile-web-app-title" content="NGO Watch">
+    <meta name="application-name" content="&quot;NGO Business&quot; Tracker">
+    <meta name="apple-mobile-web-app-title" content="&quot;NGO Business&quot; Tracker">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
@@ -490,7 +490,7 @@ $partyMap = [
         "@graph": [
             {
                 "@type": "Organization",
-                "name": "NGO Watch - Data Intelligence System",
+                "name": "\"NGO Business\" Tracker - Anfragen Dashboard",
                 "url": "<?php echo htmlspecialchars($canonicalUrl); ?>",
                 "logo": "<?php echo htmlspecialchars($canonicalUrl); ?>",
                 "description": "Echtzeit-Tracking und Analyse von NGO-bezogenen parlamentarischen Anfragen im österreichischen Parlament",
@@ -503,7 +503,7 @@ $partyMap = [
             },
             {
                 "@type": "WebSite",
-                "name": "NGO Watch",
+                "name": "\"NGO Business\" Tracker",
                 "url": "<?php echo htmlspecialchars($canonicalUrl); ?>",
                 "description": "<?php echo htmlspecialchars($seoDescription); ?>",
                 "inLanguage": "de-AT",
@@ -537,7 +537,7 @@ $partyMap = [
                 "keywords": "<?php echo htmlspecialchars($seoKeywords); ?>",
                 "creator": {
                     "@type": "Organization",
-                    "name": "NGO Watch"
+                    "name": "\"NGO Business\" Tracker"
                 },
                 "datePublished": "<?php echo date('c', strtotime('-1 year')); ?>",
                 "dateModified": "<?php echo date('c'); ?>",
@@ -729,9 +729,9 @@ $partyMap = [
                     </div>
                     <div>
                         <h1 class="text-2xl md:text-3xl font-bold" style="font-family: var(--font-head); letter-spacing: 2px;">
-                            NGO WATCH
+                            "NGO BUSINESS" TRACKER
                         </h1>
-                        <p class="text-xs font-mono text-gray-500 uppercase tracking-wider">Data Intelligence System</p>
+                        <p class="text-xs font-mono text-gray-500 uppercase tracking-wider">Anfragen Dashboard</p>
                     </div>
                 </div>
                 <div class="mt-4 md:mt-0">
@@ -757,16 +757,13 @@ $partyMap = [
                 </h1>
             </header>
             <div class="text-base md:text-lg text-gray-300 space-y-4 leading-relaxed" itemprop="articleBody">
-                <p>
-                    Der Begriff <strong>NGO-Business</strong> kursiert immer öfter im Parlament. Handelt es sich dabei um eine neutrale Beschreibung? Unsere Datenanalyse legt eine andere Vermutung nahe. Es scheint, als werde hier ein politisches Framing etabliert, das zivilgesellschaftliches Engagement strategisch in die Nähe von Profitgier rückt. Wir tracken diese Entwicklung.
-                </p>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8 border-t border-gray-800 pt-6">
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
                     <div class="bg-black bg-opacity-40 p-5 border border-gray-800 hover:border-gray-600 transition-colors">
                         <div class="text-red-500 text-xs font-mono font-bold mb-2 uppercase tracking-widest">[PHASE 1]</div>
                         <h3 class="text-lg font-bold font-mono text-white mb-2 uppercase">Die Ressourcen-Falle</h3>
                         <p class="text-sm text-gray-400">
-                            Es lässt sich beobachten, dass Anfragen zum <strong>NGO-Business</strong> oft hunderte Detailfragen umfassen. Kritiker könnten vermuten: Ziel ist nicht nur die Antwort, sondern die Lahmlegung ministerieller Ressourcen.
+                            Es lässt sich beobachten, dass Anfragen zu dem Begriff NGO-Business mittlerweile hunderte Anfrage umfassen. Dabei haben sie oft das gleiche Muster und sollen offensichtlich den Informationsraum mit einem gewünschten Narrativ besetzen.
                         </p>
                     </div>
                     
@@ -774,15 +771,15 @@ $partyMap = [
                         <div class="text-red-500 text-xs font-mono font-bold mb-2 uppercase tracking-widest">[PHASE 2]</div>
                         <h3 class="text-lg font-bold font-mono text-white mb-2 uppercase">Data Mining</h3>
                         <p class="text-sm text-gray-400">
-                            Die Antworten liefern rohes Zahlenmaterial über Förderungen. Diese Daten dienen scheinbar als Munition, um das Narrativ einer "Industrie" namens <strong>NGO-Business</strong> überhaupt erst zu konstruieren.
+                            Wir dachten uns: Lasst uns durch das Narrativ sehen. Wir haben daher einen simplen Tracker gebaut, der alle parlamentarischen Anfragen, die mit dem Thema NGOs zu tun haben trackt. Wer sich Daten ansieht, kann schnell einen spannenden Eindruck gewinnen.
                         </p>
                     </div>
 
                     <div class="bg-black bg-opacity-40 p-5 border border-gray-800 hover:border-gray-600 transition-colors">
                         <div class="text-red-500 text-xs font-mono font-bold mb-2 uppercase tracking-widest">[PHASE 3]</div>
-                        <h3 class="text-lg font-bold font-mono text-white mb-2 uppercase">Die Skandalisierung</h3>
+                        <h3 class="text-lg font-bold font-mono text-white mb-2 uppercase">Keyword Squatting</h3>
                         <p class="text-sm text-gray-400">
-                            Das Finale: Völlig legale Finanzflüsse werden aus dem Kontext gerissen. Es entsteht der Eindruck, Transparenz werde hier als Waffe genutzt, um das <strong>NGO-Business</strong> pauschal zu diskreditieren.
+                            Ist das unweigerliche Resultat. Suchmaschinen indexieren nämlich, wo der Begriff oft vorkommt (sehr simpel gesagt). Je vertrauenswürdiger die Website – desto besser. Das Ergebnis? NGO-Business: Ein Aushängeschild für Informationsmanipulation.
                         </p>
                     </div>
                 </div>
@@ -1107,7 +1104,7 @@ $partyMap = [
                     <div>
                         <h3 class="text-sm font-bold font-mono text-white mb-3 uppercase tracking-wider">Über das NGO Business System</h3>
                         <p class="text-xs font-mono text-gray-500 leading-relaxed">
-                            Der führende <strong>NGO Business Tracker</strong> für Österreich. Echtzeit-Tracking von NGO-bezogenen parlamentarischen Anfragen aus dem österreichischen Parlament.
+                            Der führende <strong>"NGO Business" Tracker</strong> für Österreich. Echtzeit-Tracking von NGO-bezogenen parlamentarischen Anfragen aus dem österreichischen Parlament.
                             Professionelle Datenanalyse und Visualisierung für maximale <strong>NGO Transparenz</strong> und demokratische Kontrolle.
                         </p>
                         <div class="mt-4 text-xs font-mono text-gray-600">
@@ -1151,7 +1148,7 @@ $partyMap = [
 
                 <div class="pt-6 border-t border-[rgba(255,255,255,0.05)] flex flex-col md:flex-row justify-between items-center gap-4">
                     <div class="text-xs font-mono text-gray-700">
-                        © <?php echo date('Y'); ?> NGO WATCH - NGO Business Tracker Österreich // DATA INTELLIGENCE SYSTEM
+                        © <?php echo date('Y'); ?> "NGO BUSINESS" TRACKER - Anfragen Dashboard
                     </div>
                     <div class="flex items-center gap-4">
                         <div class="text-xs font-mono text-gray-700">

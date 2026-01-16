@@ -135,6 +135,7 @@ $apiResponse = fetchAllRows($gpCodes);
 $allNGOResults = [];
 $wordFrequency = [];
 $monthlyData = [];
+// Initialize with all parties to ensure they appear in the chart
 $partyStats = ['S' => 0, 'V' => 0, 'F' => 0, 'G' => 0, 'N' => 0, 'OTHER' => 0];
 $answeredCount = 0;
 $pendingCount = 0;
@@ -230,7 +231,7 @@ $displayResults = array_slice($allNGOResults, $offset, $perPage);
 
 $totalCount = count($allNGOResults);
 
-// Party name mapping
+// Party name mapping (German)
 $partyMap = [
     'S' => 'SPÖ',
     'V' => 'ÖVP',
@@ -316,23 +317,26 @@ $partyMap = [
         .stat-value { font-size: 3.5rem; line-height: 1; font-family: var(--font-head); color: var(--accent); }
         .stat-label { font-size: 0.85rem; text-transform: uppercase; color: #888; letter-spacing: 2px; margin-bottom: 0.5rem; }
 
-        /* FORM ELEMENTS */
+        /* FORM ELEMENTS - Updated for more space */
         select {
             background: #000;
             color: #fff;
             border: 1px solid #333;
-            padding: 0.5rem 2rem 0.5rem 1rem;
+            /* Increased Padding */
+            padding: 0.75rem 3rem 0.75rem 1.25rem;
             font-family: var(--font-mono);
-            font-size: 0.8rem;
+            font-size: 0.9rem;
             text-transform: uppercase;
             cursor: pointer;
             appearance: none;
             background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23FFFFFF%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
             background-repeat: no-repeat;
-            background-position: right .7em top 50%;
+            background-position: right 1em top 50%;
             background-size: .65em auto;
+            transition: all 0.2s ease;
         }
-        select:focus { outline: 1px solid #fff; }
+        select:hover { border-color: #666; }
+        select:focus { outline: 1px solid #fff; border-color: #fff; }
 
         /* LIST ITEMS */
         .result-item {
@@ -379,6 +383,7 @@ $partyMap = [
         .bg-F { background-color: var(--color-f); }
         .bg-G { background-color: var(--color-g); }
         .bg-N { background-color: var(--color-n); }
+        .bg-OTHER { background-color: var(--color-other); }
     </style>
 </head>
 <body>
@@ -387,19 +392,19 @@ $partyMap = [
         
         <header class="flex flex-col md:flex-row justify-between items-end border-b border-[rgba(255,255,255,0.1)] pb-6 mb-10">
             <div>
-                <div class="text-xs font-mono text-gray-500 mb-2">SYSTEM: PARLIAMENT_WATCH // TRACKING: NGO_INTERACTIONS</div>
-                <h1 class="text-5xl md:text-7xl text-white leading-none">Inquiry<br><span style="color: #666;">Tracker</span></h1>
+                <div class="text-xs font-mono text-gray-500 mb-2">SYSTEM: PARLAMENT_WATCH // TRACKING: NGO_INTERACTIONS</div>
+                <h1 class="text-5xl md:text-7xl text-white leading-none">Anfragen<br><span style="color: #666;">Tracker</span></h1>
             </div>
             
             <form method="GET" class="mt-6 md:mt-0">
                 <div class="flex items-center gap-4">
-                    <span class="text-xs uppercase tracking-widest text-gray-500 font-bold">Timeframe</span>
+                    <span class="text-xs uppercase tracking-widest text-gray-500 font-bold">Zeitraum</span>
                     <select name="range" onchange="this.form.submit()">
-                        <option value="6months" <?php echo $timeRange === '6months' ? 'selected' : ''; ?>>6 MONTHS</option>
-                        <option value="12months" <?php echo $timeRange === '12months' ? 'selected' : ''; ?>>12 MONTHS</option>
-                        <option value="1year" <?php echo $timeRange === '1year' ? 'selected' : ''; ?>>LAST YEAR</option>
-                        <option value="3years" <?php echo $timeRange === '3years' ? 'selected' : ''; ?>>3 YEARS</option>
-                        <option value="5years" <?php echo $timeRange === '5years' ? 'selected' : ''; ?>>5 YEARS</option>
+                        <option value="6months" <?php echo $timeRange === '6months' ? 'selected' : ''; ?>>6 MONATE</option>
+                        <option value="12months" <?php echo $timeRange === '12months' ? 'selected' : ''; ?>>12 MONATE</option>
+                        <option value="1year" <?php echo $timeRange === '1year' ? 'selected' : ''; ?>>LETZTES JAHR</option>
+                        <option value="3years" <?php echo $timeRange === '3years' ? 'selected' : ''; ?>>3 JAHRE</option>
+                        <option value="5years" <?php echo $timeRange === '5years' ? 'selected' : ''; ?>>5 JAHRE</option>
                     </select>
                 </div>
             </form>
@@ -407,26 +412,37 @@ $partyMap = [
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
             <div class="mono-box">
-                <div class="stat-label">Total Inquiries</div>
+                <div class="stat-label">Gesamtanzahl</div>
                 <div class="stat-value"><?php echo number_format($totalCount); ?></div>
-                <div class="text-xs font-mono text-gray-600 mt-2">DETECTED IN RANGE</div>
+                <div class="text-xs font-mono text-gray-600 mt-2">ANFRAGEN IM ZEITRAUM</div>
             </div>
 
             <div class="mono-box lg:col-span-2 flex flex-col justify-between">
-                <div class="stat-label">Origin Breakdown</div>
-                <div class="flex h-full items-end gap-2 mt-4 pb-2" style="min-height: 60px;">
+                <div class="stat-label">Verteilung nach Parteien</div>
+                
+                <div class="flex h-full items-end gap-3 mt-4 pb-2" style="min-height: 120px;">
                     <?php 
                     $maxVal = max($partyStats) ?: 1; 
+                    // Explicitly define order or iterate current stats (which contains all keys)
+                    // The CSS flex-1 ensures they spread evenly.
                     foreach ($partyStats as $code => $count): 
-                        if($count == 0) continue;
-                        $height = ($count / $maxVal) * 100;
-                        $width = 100 / count(array_filter($partyStats));
+                        // Even if count is 0, we show it to display all parties
+                        $height = ($count > 0) ? ($count / $maxVal) * 100 : 0;
+                        // Min height just for visual marker
+                        $visualHeight = $height == 0 ? 1 : $height; 
                     ?>
                         <div class="relative group flex-1 h-full flex flex-col justify-end">
-                            <div class="w-full bg-<?php echo $code; ?> opacity-80 group-hover:opacity-100 transition-all" style="height: <?php echo $height; ?>%;"></div>
-                            <div class="mt-2 text-xs font-mono text-gray-400 border-t border-gray-800 pt-1 flex justify-between">
-                                <span><?php echo $code; ?></span>
-                                <span class="text-white"><?php echo $count; ?></span>
+                            <div class="w-full bg-<?php echo $code; ?> opacity-70 group-hover:opacity-100 transition-all relative" 
+                                 style="height: <?php echo $visualHeight; ?>%; min-height: 2px;">
+                                 <?php if($count > 0): ?>
+                                    <div class="absolute -top-6 w-full text-center text-xs font-mono text-white opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <?php echo $count; ?>
+                                    </div>
+                                 <?php endif; ?>
+                            </div>
+                            <div class="mt-3 text-xs font-mono text-gray-400 border-t border-gray-800 pt-2 flex flex-col items-center gap-1">
+                                <span class="font-bold text-gray-300"><?php echo isset($partyMap[$code]) ? $partyMap[$code] : $code; ?></span>
+                                <span class="text-[10px] text-gray-600"><?php echo $count; ?></span>
                             </div>
                         </div>
                     <?php endforeach; ?>
@@ -434,15 +450,15 @@ $partyMap = [
             </div>
 
             <div class="mono-box">
-                <div class="stat-label">Response Ratio</div>
+                <div class="stat-label">Beantwortungsquote</div>
                 <div class="flex justify-between items-end">
                     <div>
                         <div class="text-2xl font-bold text-green-500"><?php echo $answeredCount; ?></div>
-                        <div class="text-xs text-gray-600">RESOLVED</div>
+                        <div class="text-xs text-gray-600">ERLEDIGT</div>
                     </div>
                     <div class="text-right">
                         <div class="text-2xl font-bold text-red-500"><?php echo $pendingCount; ?></div>
-                        <div class="text-xs text-gray-600">PENDING</div>
+                        <div class="text-xs text-gray-600">OFFEN</div>
                     </div>
                 </div>
                 <div class="w-full h-1 bg-gray-800 mt-4 flex">
@@ -455,7 +471,7 @@ $partyMap = [
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-8">
             <div class="mono-box lg:col-span-2">
                 <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-2xl text-white">Temporal Activity</h3>
+                    <h3 class="text-2xl text-white">Zeitlicher Verlauf</h3>
                     <div class="h-px bg-white w-10"></div>
                 </div>
                 <div style="height: 300px; width: 100%;">
@@ -465,7 +481,7 @@ $partyMap = [
 
             <div class="mono-box">
                 <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-2xl text-white">Keyword Density</h3>
+                    <h3 class="text-2xl text-white">Schlagwort-Dichte</h3>
                     <div class="h-px bg-white w-10"></div>
                 </div>
                 <canvas id="wordCloud" class="w-full" style="height: 300px;"></canvas>
@@ -474,22 +490,22 @@ $partyMap = [
 
         <div class="mono-box">
             <div class="flex justify-between items-center border-b border-gray-800 pb-4 mb-4">
-                <h3 class="text-2xl text-white">Intercepted Logs</h3>
+                <h3 class="text-2xl text-white">Gefundene Anfragen</h3>
                 <div class="text-xs font-mono text-gray-500">
-                    PAGE <?php echo $page; ?> / <?php echo $totalPages; ?>
+                    SEITE <?php echo $page; ?> / <?php echo $totalPages; ?>
                 </div>
             </div>
 
             <?php if (empty($displayResults)): ?>
                 <div class="py-12 text-center">
-                    <h3 class="text-gray-500">NO DATA FOUND IN SECTOR</h3>
+                    <h3 class="text-gray-500">KEINE DATEN IN DIESEM BEREICH GEFUNDEN</h3>
                 </div>
             <?php else: ?>
                 <div class="flex flex-col">
                     <div class="hidden md:grid grid-cols-12 gap-4 text-xs font-mono text-gray-600 pb-2 uppercase tracking-wider">
-                        <div class="col-span-2">Date / ID</div>
-                        <div class="col-span-1">Actor</div>
-                        <div class="col-span-7">Subject</div>
+                        <div class="col-span-2">Datum / ID</div>
+                        <div class="col-span-1">Partei</div>
+                        <div class="col-span-7">Betreff</div>
                         <div class="col-span-2 text-right">Status</div>
                     </div>
 
@@ -516,12 +532,12 @@ $partyMap = [
                             <div class="md:col-span-2 text-left md:text-right">
                                 <?php if ($result['answered']): ?>
                                     <span class="text-xs font-mono text-green-500">
-                                        [ RESOLVED ]<br>
+                                        [ ERLEDIGT ]<br>
                                         <span class="opacity-50"><?php echo $result['answer_number']; ?>/AB</span>
                                     </span>
                                 <?php else: ?>
                                     <span class="text-xs font-mono text-red-500 animate-pulse">
-                                        [ PENDING ]
+                                        [ OFFEN ]
                                     </span>
                                 <?php endif; ?>
                             </div>
@@ -533,7 +549,7 @@ $partyMap = [
             <?php if ($totalPages > 1): ?>
                 <div class="flex flex-wrap justify-center gap-2 mt-8 pt-4 border-t border-gray-800">
                     <?php if ($page > 1): ?>
-                        <a href="?range=<?php echo $timeRange; ?>&page=<?php echo $page - 1; ?>" class="pag-btn">&lt; PREV</a>
+                        <a href="?range=<?php echo $timeRange; ?>&page=<?php echo $page - 1; ?>" class="pag-btn">&lt; ZURÜCK</a>
                     <?php endif; ?>
 
                     <?php
@@ -547,14 +563,14 @@ $partyMap = [
                     <?php endfor; ?>
 
                     <?php if ($page < $totalPages): ?>
-                        <a href="?range=<?php echo $timeRange; ?>&page=<?php echo $page + 1; ?>" class="pag-btn">NEXT &gt;</a>
+                        <a href="?range=<?php echo $timeRange; ?>&page=<?php echo $page + 1; ?>" class="pag-btn">WEITER &gt;</a>
                     <?php endif; ?>
                 </div>
             <?php endif; ?>
         </div>
         
         <footer class="mt-12 mb-6 text-center">
-             <p class="text-xs font-mono text-gray-700">SOURCE: PARLAMENT.GV.AT // SECURE CONNECTION ESTABLISHED</p>
+             <p class="text-xs font-mono text-gray-700">QUELLE: PARLAMENT.GV.AT // SICHERE VERBINDUNG HERGESTELLT</p>
         </footer>
 
     </div>
@@ -581,7 +597,7 @@ $partyMap = [
             data: {
                 labels: monthLabels,
                 datasets: [{
-                    label: 'INQUIRIES',
+                    label: 'ANFRAGEN',
                     data: monthCounts,
                     borderColor: '#ffffff',
                     backgroundColor: gradient,

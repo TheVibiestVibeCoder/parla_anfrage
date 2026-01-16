@@ -1000,6 +1000,7 @@ $partyMap = [
                             minRotation: 45
                         }
                     }
+                    }
                 }
                 });
                 console.log('Flood Wall Chart initialized successfully');
@@ -1140,10 +1141,11 @@ $partyMap = [
                                 return partyNames[partyOrder[value]] || '';
                             }
                         }
+                        }
                     }
                 }
                 });
-                console.log('Spam Calendar Chart initialized successfully');
+                console.log('Spam Calendar Chart initialized successfully');;
             } catch (error) {
                 console.error('ERROR initializing Spam Calendar Chart:', error);
                 alert('FEHLER beim Laden des Spam Calendar Charts: ' + error.message);

@@ -221,6 +221,102 @@ ksort($monthlyData);
 arsort($wordFrequency);
 $topWords = array_slice($wordFrequency, 0, 50, true);
 
+// ==========================================
+// DATA FOR NEW VISUALIZATIONS
+// ==========================================
+
+// 1. FLOOD WALL: Cumulative inquiry count per party over time
+$floodWallData = [];
+$partyDailyCounts = ['S' => [], 'V' => [], 'F' => [], 'G' => [], 'N' => [], 'OTHER' => []];
+
+// Group by date first
+foreach ($allNGOResults as $result) {
+    $dateKey = $result['date_obj']->format('Y-m-d');
+    if (!isset($partyDailyCounts[$result['party']][$dateKey])) {
+        $partyDailyCounts[$result['party']][$dateKey] = 0;
+    }
+    $partyDailyCounts[$result['party']][$dateKey]++;
+}
+
+// Get all unique dates sorted
+$allDates = [];
+foreach ($allNGOResults as $result) {
+    $dateKey = $result['date_obj']->format('Y-m-d');
+    if (!isset($allDates[$dateKey])) {
+        $allDates[$dateKey] = $result['date_obj'];
+    }
+}
+ksort($allDates);
+
+// Calculate cumulative sums for each party
+foreach (['S', 'V', 'F', 'G', 'N', 'OTHER'] as $party) {
+    $cumulative = 0;
+    $floodWallData[$party] = [];
+    foreach ($allDates as $dateKey => $dateObj) {
+        $count = $partyDailyCounts[$party][$dateKey] ?? 0;
+        $cumulative += $count;
+        $floodWallData[$party][] = [
+            'date' => $dateObj->format('d.m.Y'),
+            'cumulative' => $cumulative
+        ];
+    }
+}
+
+// 2. OBSESSION RADAR: Keyword ownership by party
+$keywordPartyUsage = [];
+foreach ($allNGOResults as $result) {
+    $words = preg_split('/\s+/', mb_strtolower($result['title']));
+    foreach ($words as $word) {
+        $word = preg_replace('/[^\p{L}\p{N}]/u', '', $word);
+        if (mb_strlen($word) > 4) {
+            if (!isset($keywordPartyUsage[$word])) {
+                $keywordPartyUsage[$word] = ['S' => 0, 'V' => 0, 'F' => 0, 'G' => 0, 'N' => 0, 'OTHER' => 0];
+            }
+            $keywordPartyUsage[$word][$result['party']]++;
+        }
+    }
+}
+
+// Calculate top keywords and their party dominance
+$obsessionRadarData = [];
+$topKeywordsForRadar = array_slice($wordFrequency, 0, 30, true);
+
+foreach ($topKeywordsForRadar as $keyword => $totalCount) {
+    if (isset($keywordPartyUsage[$keyword])) {
+        $partyUsage = $keywordPartyUsage[$keyword];
+        $maxParty = array_keys($partyUsage, max($partyUsage))[0];
+        $maxCount = max($partyUsage);
+
+        // Calculate percentages
+        $fpoePercent = $totalCount > 0 ? ($partyUsage['F'] / $totalCount) * 100 : 0;
+        $otherPercent = $totalCount > 0 ? (($partyUsage['S'] + $partyUsage['V'] + $partyUsage['G'] + $partyUsage['N'] + $partyUsage['OTHER']) / $totalCount) * 100 : 0;
+
+        $obsessionRadarData[] = [
+            'keyword' => $keyword,
+            'totalCount' => $totalCount,
+            'dominantParty' => $maxParty,
+            'fpoePercent' => round($fpoePercent, 1),
+            'otherPercent' => round($otherPercent, 1)
+        ];
+    }
+}
+
+// 3. SPAM CALENDAR: Daily intensity heatmap
+$spamCalendarData = [];
+foreach (['S', 'V', 'F', 'G', 'N', 'OTHER'] as $party) {
+    $spamCalendarData[$party] = [];
+    foreach ($allDates as $dateKey => $dateObj) {
+        $count = $partyDailyCounts[$party][$dateKey] ?? 0;
+        if ($count > 0) { // Only include days with activity for efficiency
+            $spamCalendarData[$party][] = [
+                'date' => $dateKey,
+                'displayDate' => $dateObj->format('d.m.Y'),
+                'count' => $count
+            ];
+        }
+    }
+}
+
 // Pagination
 $page = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
 $perPage = 25;
@@ -488,6 +584,47 @@ $partyMap = [
             </div>
         </div>
 
+        <div class="mono-box mb-8">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl text-white">The "Flood Wall" – Kumulative Belastungskurve</h3>
+                <div class="h-px bg-white w-10"></div>
+            </div>
+            <div class="text-sm text-gray-400 mb-4 font-mono">
+                Zeigt die kumulative Gesamtlast: Wenn eine Partei das Parlament flutet, wird ihre Linie steil nach oben gehen.
+            </div>
+            <div style="height: 400px; width: 100%;">
+                <canvas id="floodWallChart"></canvas>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-8">
+            <div class="mono-box">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-2xl text-white">The "Obsession Radar" – Thematische Hoheit</h3>
+                    <div class="h-px bg-white w-10"></div>
+                </div>
+                <div class="text-sm text-gray-400 mb-4 font-mono">
+                    Welche Partei "besitzt" welche Kampfbegriffe? Größe = Häufigkeit, Position = FPÖ-Dominanz
+                </div>
+                <div style="height: 400px; width: 100%;">
+                    <canvas id="obsessionRadarChart"></canvas>
+                </div>
+            </div>
+
+            <div class="mono-box">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-2xl text-white">The "Spam Calendar" – Heatmap der Intensität</h3>
+                    <div class="h-px bg-white w-10"></div>
+                </div>
+                <div class="text-sm text-gray-400 mb-4 font-mono">
+                    Anfragen kommen in Wellen: Hellere Farben = mehr Anfragen an diesem Tag
+                </div>
+                <div style="height: 400px; width: 100%; overflow-x: auto;">
+                    <canvas id="spamCalendarChart"></canvas>
+                </div>
+            </div>
+        </div>
+
         <div class="mono-box">
             <div class="flex justify-between items-center border-b border-gray-800 pb-4 mb-4">
                 <h3 class="text-2xl text-white">Gefundene Anfragen</h3>
@@ -658,6 +795,320 @@ $partyMap = [
                 drawOutOfBound: false
             });
         }
+
+        // ==========================================
+        // NEW VISUALIZATIONS
+        // ==========================================
+
+        // Party color mapping
+        const partyColors = {
+            'S': '#ef4444',
+            'V': '#22d3ee',
+            'F': '#3b82f6',
+            'G': '#22c55e',
+            'N': '#e879f9',
+            'OTHER': '#9ca3af'
+        };
+
+        const partyNames = {
+            'S': 'SPÖ',
+            'V': 'ÖVP',
+            'F': 'FPÖ',
+            'G': 'GRÜNE',
+            'N': 'NEOS',
+            'OTHER': 'ANDERE'
+        };
+
+        // 1. FLOOD WALL CHART (Cumulative Line Chart with Step Interpolation)
+        const floodWallData = <?php echo json_encode($floodWallData); ?>;
+        const dateLabels = <?php echo json_encode(array_values(array_map(fn($d) => $d->format('d.m.Y'), $allDates))); ?>;
+
+        const floodWallCtx = document.getElementById('floodWallChart').getContext('2d');
+        new Chart(floodWallCtx, {
+            type: 'line',
+            data: {
+                labels: dateLabels,
+                datasets: Object.keys(floodWallData).map(party => ({
+                    label: partyNames[party],
+                    data: floodWallData[party].map(d => d.cumulative),
+                    borderColor: partyColors[party],
+                    backgroundColor: partyColors[party] + '20',
+                    borderWidth: 2,
+                    fill: false,
+                    stepped: 'before', // Step interpolation for "wall effect"
+                    pointRadius: 0,
+                    pointHoverRadius: 4,
+                    tension: 0
+                }))
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    mode: 'index',
+                    intersect: false
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                        labels: {
+                            color: '#fff',
+                            font: { family: 'JetBrains Mono', size: 11 },
+                            usePointStyle: true,
+                            padding: 15
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: '#000',
+                        titleColor: '#fff',
+                        bodyColor: '#fff',
+                        borderColor: '#333',
+                        borderWidth: 1,
+                        cornerRadius: 0,
+                        titleFont: { family: 'Bebas Neue', size: 14 },
+                        bodyFont: { family: 'JetBrains Mono', size: 12 }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: 'rgba(255,255,255,0.05)' },
+                        ticks: {
+                            stepSize: 10,
+                            font: { family: 'JetBrains Mono', size: 10 },
+                            color: '#666'
+                        },
+                        title: {
+                            display: true,
+                            text: 'KUMULATIVE ANFRAGEN',
+                            color: '#999',
+                            font: { family: 'Bebas Neue', size: 12 }
+                        }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: {
+                            font: { family: 'JetBrains Mono', size: 9 },
+                            color: '#666',
+                            maxRotation: 45,
+                            minRotation: 45
+                        }
+                    }
+                }
+            }
+        });
+
+        // 2. OBSESSION RADAR (Bubble Chart)
+        const obsessionData = <?php echo json_encode($obsessionRadarData); ?>;
+
+        const obsessionCtx = document.getElementById('obsessionRadarChart').getContext('2d');
+        new Chart(obsessionCtx, {
+            type: 'bubble',
+            data: {
+                datasets: obsessionData.map(item => ({
+                    label: item.keyword,
+                    data: [{
+                        x: item.fpoePercent,
+                        y: item.otherPercent,
+                        r: Math.sqrt(item.totalCount) * 3 // Size based on frequency
+                    }],
+                    backgroundColor: partyColors[item.dominantParty] + 'CC',
+                    borderColor: partyColors[item.dominantParty],
+                    borderWidth: 2
+                }))
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#000',
+                        titleColor: '#fff',
+                        bodyColor: '#fff',
+                        borderColor: '#333',
+                        borderWidth: 1,
+                        cornerRadius: 0,
+                        callbacks: {
+                            title: function(context) {
+                                return context[0].dataset.label.toUpperCase();
+                            },
+                            label: function(context) {
+                                const item = obsessionData[context.datasetIndex];
+                                return [
+                                    `Häufigkeit: ${item.totalCount}`,
+                                    `FPÖ: ${item.fpoePercent}%`,
+                                    `Andere: ${item.otherPercent}%`,
+                                    `Dominant: ${partyNames[item.dominantParty]}`
+                                ];
+                            }
+                        },
+                        titleFont: { family: 'Bebas Neue', size: 14 },
+                        bodyFont: { family: 'JetBrains Mono', size: 11 }
+                    }
+                },
+                scales: {
+                    x: {
+                        min: 0,
+                        max: 100,
+                        grid: { color: 'rgba(255,255,255,0.05)' },
+                        ticks: {
+                            font: { family: 'JetBrains Mono', size: 10 },
+                            color: '#666',
+                            callback: function(value) { return value + '%'; }
+                        },
+                        title: {
+                            display: true,
+                            text: 'FPÖ DOMINANZ →',
+                            color: '#3b82f6',
+                            font: { family: 'Bebas Neue', size: 12 }
+                        }
+                    },
+                    y: {
+                        min: 0,
+                        max: 100,
+                        grid: { color: 'rgba(255,255,255,0.05)' },
+                        ticks: {
+                            font: { family: 'JetBrains Mono', size: 10 },
+                            color: '#666',
+                            callback: function(value) { return value + '%'; }
+                        },
+                        title: {
+                            display: true,
+                            text: 'ANDERE PARTEIEN →',
+                            color: '#999',
+                            font: { family: 'Bebas Neue', size: 12 }
+                        }
+                    }
+                }
+            }
+        });
+
+        // 3. SPAM CALENDAR (Matrix Heatmap)
+        const spamCalendarData = <?php echo json_encode($spamCalendarData); ?>;
+        const allDatesForCalendar = <?php echo json_encode(array_keys($allDates)); ?>;
+
+        // Build matrix data
+        const matrixData = [];
+        const partyOrder = ['S', 'V', 'F', 'G', 'N', 'OTHER'];
+
+        partyOrder.forEach((party, partyIndex) => {
+            const partyData = spamCalendarData[party] || [];
+            const dateMap = {};
+            partyData.forEach(item => {
+                dateMap[item.date] = item.count;
+            });
+
+            allDatesForCalendar.forEach((date, dateIndex) => {
+                const count = dateMap[date] || 0;
+                if (count > 0) { // Only plot active days
+                    matrixData.push({
+                        x: dateIndex,
+                        y: partyIndex,
+                        v: count,
+                        party: party,
+                        date: date
+                    });
+                }
+            });
+        });
+
+        // Find max count for normalization
+        const maxCount = Math.max(...matrixData.map(d => d.v), 1);
+
+        const spamCalendarCtx = document.getElementById('spamCalendarChart').getContext('2d');
+        new Chart(spamCalendarCtx, {
+            type: 'scatter',
+            data: {
+                datasets: [{
+                    data: matrixData.map(d => ({
+                        x: d.x,
+                        y: d.y,
+                        count: d.v,
+                        party: d.party,
+                        date: d.date
+                    })),
+                    backgroundColor: function(context) {
+                        const point = context.raw;
+                        if (!point) return 'rgba(255,255,255,0.1)';
+                        const intensity = point.count / maxCount;
+                        const baseColor = partyColors[point.party];
+                        // Convert hex to rgb and apply opacity
+                        const hex = baseColor.replace('#', '');
+                        const r = parseInt(hex.substring(0,2), 16);
+                        const g = parseInt(hex.substring(2,4), 16);
+                        const b = parseInt(hex.substring(4,6), 16);
+                        return `rgba(${r}, ${g}, ${b}, ${intensity})`;
+                    },
+                    pointRadius: function(context) {
+                        return 8; // Fixed size squares
+                    },
+                    pointStyle: 'rect'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#000',
+                        titleColor: '#fff',
+                        bodyColor: '#fff',
+                        borderColor: '#333',
+                        borderWidth: 1,
+                        cornerRadius: 0,
+                        callbacks: {
+                            title: function(context) {
+                                const point = context[0].raw;
+                                return `${partyNames[point.party]} - ${point.date}`;
+                            },
+                            label: function(context) {
+                                const point = context.raw;
+                                return `${point.count} Anfrage(n)`;
+                            }
+                        },
+                        titleFont: { family: 'Bebas Neue', size: 14 },
+                        bodyFont: { family: 'JetBrains Mono', size: 12 }
+                    }
+                },
+                scales: {
+                    x: {
+                        type: 'linear',
+                        min: -0.5,
+                        max: allDatesForCalendar.length - 0.5,
+                        grid: { color: 'rgba(255,255,255,0.05)' },
+                        ticks: {
+                            stepSize: Math.max(1, Math.floor(allDatesForCalendar.length / 20)),
+                            font: { family: 'JetBrains Mono', size: 8 },
+                            color: '#666',
+                            callback: function(value, index) {
+                                if (allDatesForCalendar[value]) {
+                                    const date = new Date(allDatesForCalendar[value]);
+                                    return date.toLocaleDateString('de-DE', { month: 'short', day: 'numeric' });
+                                }
+                                return '';
+                            }
+                        }
+                    },
+                    y: {
+                        type: 'linear',
+                        min: -0.5,
+                        max: partyOrder.length - 0.5,
+                        grid: { color: 'rgba(255,255,255,0.05)' },
+                        ticks: {
+                            stepSize: 1,
+                            font: { family: 'JetBrains Mono', size: 11 },
+                            color: '#fff',
+                            callback: function(value) {
+                                return partyNames[partyOrder[value]] || '';
+                            }
+                        }
+                    }
+                }
+            }
+        });
     </script>
 </body>
 </html>

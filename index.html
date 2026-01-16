@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAFO</title>
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="theme-color" content="#050505">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js"
+            }
+        }
+    </script>
+
+    <style>
+        /* --- RESET & VARIABLES --- */
+        :root {
+            --bg-color: #050505;
+            --text-color: #f0f0f0;
+            --highlight: #ffffff;
+            --grid-line: rgba(255, 255, 255, 0.1);
+            --font-head: 'Bebas Neue', display;
+            --font-body: 'Manrope', sans-serif;
+            --transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-body);
+            overflow: hidden; /* No scrolling needed for single message */
+            width: 100%;
+            height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- TYPOGRAPHY --- */
+        h1 {
+            font-family: var(--font-head);
+            text-transform: uppercase;
+            font-weight: 400; 
+            letter-spacing: 2px;
+            line-height: 0.85;
+            font-size: clamp(4rem, 15vw, 15rem); 
+            color: var(--highlight);
+            margin-bottom: 1rem;
+        }
+
+        p { 
+            font-family: var(--font-body);
+            font-size: clamp(1rem, 2vw, 1.5rem); 
+            color: #b0b0b0; 
+            font-weight: 300; 
+            letter-spacing: 1px;
+        }
+
+        /* --- LAYOUT --- */
+        .container {
+            width: 90%;
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* --- BACKGROUND --- */
+        #canvas-container {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 1; opacity: 0.6; pointer-events: none;
+        }
+
+        /* --- ANIMATION --- */
+        .fade-in { 
+            opacity: 0; 
+            transform: translateY(30px); 
+            animation: fadeInAnim 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes fadeInAnim {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- MOBILE --- */
+        @media (max-width: 768px) {
+            h1 { font-size: 18vw; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="canvas-container"></div>
+
+    <div class="container">
+        <h1 class="fade-in" style="animation-delay: 0.2s;">
+            Fuck Around,<br>Find Out.
+        </h1>
+        <p class="fade-in" style="animation-delay: 0.6s;">
+            We are coming for you :)
+        </p>
+    </div>
+
+<script type="module">
+    import * as THREE from 'three';
+
+    // --- CONFIG ---
+    const container = document.getElementById('canvas-container');
+    const scene = new THREE.Scene();
+    scene.fog = new THREE.FogExp2(0x050505, 0.035);
+
+    // --- CAMERA ---
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
+    camera.position.z = 10;
+
+    // --- RENDERER ---
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    container.appendChild(renderer.domElement);
+
+    // --- PARTICLES ---
+    
+    // 1. Background Particles
+    const bgGeometry = new THREE.BufferGeometry();
+    const bgCount = 400;
+    const bgPos = new Float32Array(bgCount * 3);
+    const bgColors = new Float32Array(bgCount * 3);
+    const bgInfection = new Float32Array(bgCount); 
+
+    for(let i = 0; i < bgCount; i++) {
+        bgPos[i * 3] = (Math.random() - 0.5) * 50; 
+        bgPos[i * 3 + 1] = (Math.random() - 0.5) * 50; 
+        bgPos[i * 3 + 2] = (Math.random() - 0.5) * 50; 
+
+        bgColors[i * 3] = 0.26; bgColors[i * 3 + 1] = 0.26; bgColors[i * 3 + 2] = 0.26;
+        bgInfection[i] = 0.0; 
+    }
+    bgGeometry.setAttribute('position', new THREE.BufferAttribute(bgPos, 3));
+    bgGeometry.setAttribute('color', new THREE.BufferAttribute(bgColors, 3));
+    const bgMaterial = new THREE.PointsMaterial({ size: 0.05, vertexColors: true, transparent: true, opacity: 0.4 });
+    const bgParticles = new THREE.Points(bgGeometry, bgMaterial);
+    scene.add(bgParticles);
+
+    // 2. Foreground Particles
+    const fgGeometry = new THREE.BufferGeometry();
+    const fgCount = 80;
+    const fgPos = new Float32Array(fgCount * 3);
+    const fgColors = new Float32Array(fgCount * 3);
+    const fgInfection = new Float32Array(fgCount); 
+
+    for(let i = 0; i < fgCount; i++) {
+        fgPos[i * 3] = (Math.random() - 0.5) * 30;     
+        fgPos[i * 3 + 1] = (Math.random() - 0.5) * 20; 
+        fgPos[i * 3 + 2] = (Math.random() - 0.5) * 10; 
+        fgColors[i * 3] = 1.0; fgColors[i * 3 + 1] = 1.0; fgColors[i * 3 + 2] = 1.0;
+        fgInfection[i] = 0.0; 
+    }
+    fgGeometry.setAttribute('position', new THREE.BufferAttribute(fgPos, 3));
+    fgGeometry.setAttribute('color', new THREE.BufferAttribute(fgColors, 3));
+    const fgMaterial = new THREE.PointsMaterial({ size: 0.08, vertexColors: true, transparent: true, opacity: 0.6 });
+    const fgParticles = new THREE.Points(fgGeometry, fgMaterial);
+    scene.add(fgParticles);
+
+    // --- FLOATING LABELS (CONTEXTUAL) ---
+    const labelTerms = ["TARGET_LOCKED", "TRACKING", "IP_LOGGED", "SEE_YOU_SOON", "RUN", "HIDE", "0_DAY"];
+    const labels = [];
+    const tempV = new THREE.Vector3(); 
+
+    if (window.innerWidth > 800) {
+        const validIndices = [];
+        for(let i = 0; i < fgCount; i++) {
+            if (fgPos[i*3] > 3 && Math.abs(fgPos[i*3+1]) < 7) validIndices.push(i);
+        }
+        validIndices.sort(() => Math.random() - 0.5);
+
+        labelTerms.forEach((term, i) => {
+            if (i >= validIndices.length) return;
+            const div = document.createElement('div');
+            div.textContent = term;
+            Object.assign(div.style, {
+                position: 'absolute', top: '0', left: '0', zIndex: '10',
+                color: '#fff', fontFamily: "'Manrope', sans-serif", fontSize: '10px',
+                fontWeight: '600', letterSpacing: '1px', padding: '3px 6px',
+                border: '1px solid rgba(255,255,255,0.6)', background: 'rgba(0,0,0,0.7)',
+                pointerEvents: 'none', borderLeft: '3px solid #fff', transition: 'opacity 0.2s'
+            });
+            container.appendChild(div);
+            labels.push({ element: div, index: validIndices[i] });
+        });
+    }
+
+    // --- ANIMATION LOOP ---
+    let mouseX = 0, mouseY = 0;
+    document.addEventListener('mousemove', (e) => {
+        mouseX = (e.clientX - window.innerWidth/2) * 0.0005;
+        mouseY = (e.clientY - window.innerHeight/2) * 0.0005;
+    });
+
+    const clock = new THREE.Clock();
+    function animate() {
+        requestAnimationFrame(animate);
+        const time = clock.getElapsedTime();
+
+        // Infection Logic (Makes particles flicker/change color)
+        const fgColor = fgParticles.geometry.attributes.color;
+        for(let i=0; i<fgCount; i++) {
+            if(fgInfection[i] < 1.0 && Math.random() < 0.005) fgInfection[i] += 0.02;
+            if(fgInfection[i] > 0) {
+                fgInfection[i] = Math.min(fgInfection[i] + 0.01, 1.0);
+                fgColor.array[i*3] = 1.0; 
+                fgColor.array[i*3+1] = 1.0 - fgInfection[i]; // Fade to Red
+                fgColor.array[i*3+2] = 1.0 - fgInfection[i]; 
+            }
+        }
+        fgColor.needsUpdate = true;
+
+        // Movement
+        camera.rotation.x += 0.05 * (-mouseY - camera.rotation.x);
+        camera.rotation.y += 0.05 * (-mouseX - camera.rotation.y);
+        
+        const pos = fgParticles.geometry.attributes.position.array;
+        for(let i=0; i<fgCount; i++) pos[i*3+1] += Math.sin(time*0.5 + pos[i*3]*0.5) * 0.002;
+        fgParticles.geometry.attributes.position.needsUpdate = true;
+        bgParticles.rotation.y = time * 0.02;
+        fgParticles.rotation.y = time * 0.04;
+
+        // Label Positioning
+        fgParticles.updateMatrixWorld();
+        labels.forEach(l => {
+            tempV.set(pos[l.index*3], pos[l.index*3+1], pos[l.index*3+2]).applyMatrix4(fgParticles.matrixWorld);
+            tempV.project(camera);
+            if(Math.abs(tempV.z)>1) l.element.style.opacity=0;
+            else {
+                const x = (tempV.x * .5 + .5) * window.innerWidth;
+                const y = (tempV.y * -.5 + .5) * window.innerHeight;
+                l.element.style.transform = `translate3d(${x+10}px,${y}px,0) translateY(-50%)`;
+                l.element.style.opacity = Math.max(0.1, Math.min(0.8, 1 - ((tempV.distanceTo(camera.position)-5)/10)));
+            }
+        });
+
+        renderer.render(scene, camera);
+    }
+    animate();
+
+    window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+</script>
+</body>
+</html>

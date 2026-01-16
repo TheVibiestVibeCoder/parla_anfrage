@@ -802,13 +802,27 @@ $partyMap = [
             console.log('Chart.js loaded successfully');
         }
 
-        // --- CHART CONFIG ---
-        Chart.defaults.color = '#666';
-        Chart.defaults.borderColor = 'rgba(255,255,255,0.05)';
-        Chart.defaults.font.family = "'Manrope', sans-serif";
+        // CRITICAL: Wait for DOM to be fully loaded before initializing charts
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM Content Loaded - initializing charts...');
 
-        // Timeline Chart
-        try {
+            // Check if all canvas elements exist
+            const timelineCanvas = document.getElementById('timelineChart');
+            const floodWallCanvas = document.getElementById('floodWallChart');
+            const spamCalendarCanvas = document.getElementById('spamCalendarChart');
+
+            console.log('Canvas elements found:');
+            console.log('- timelineChart:', timelineCanvas ? 'YES' : 'NO');
+            console.log('- floodWallChart:', floodWallCanvas ? 'YES' : 'NO');
+            console.log('- spamCalendarChart:', spamCalendarCanvas ? 'YES' : 'NO');
+
+            // --- CHART CONFIG ---
+            Chart.defaults.color = '#666';
+            Chart.defaults.borderColor = 'rgba(255,255,255,0.05)';
+            Chart.defaults.font.family = "'Manrope', sans-serif";
+
+            // Timeline Chart
+            try {
             console.log('Initializing Timeline Chart...');
             const monthLabels = <?php echo json_encode(array_values(array_map(fn($m) => $m['label'], $monthlyData))); ?>;
             const monthCounts = <?php echo json_encode(array_values(array_map(fn($m) => $m['count'], $monthlyData))); ?>;
@@ -1134,7 +1148,9 @@ $partyMap = [
             alert('FEHLER beim Laden des Spam Calendar Charts: ' + error.message);
         }
 
+        console.log('=== ALL CHARTS INITIALIZED ===');
         console.log('=== NGO TRACKER DEBUG END ===');
+        }); // End of DOMContentLoaded event listener
     </script>
 </body>
 </html>

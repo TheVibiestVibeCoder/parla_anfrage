@@ -239,16 +239,7 @@ $partyMap = [
     'F' => 'FPÖ',
     'G' => 'GRÜNE',
     'N' => 'NEOS',
-    'OTHER' => 'Andere'
-];
-
-$partyColors = [
-    'S' => ['color' => 'bg-red-500', 'text' => 'text-red-700', 'bg' => 'bg-red-50', 'hex' => '#ef4444'],
-    'V' => ['color' => 'bg-black', 'text' => 'text-gray-700', 'bg' => 'bg-gray-50', 'hex' => '#000000'],
-    'F' => ['color' => 'bg-blue-600', 'text' => 'text-blue-700', 'bg' => 'bg-blue-50', 'hex' => '#2563eb'],
-    'G' => ['color' => 'bg-green-600', 'text' => 'text-green-700', 'bg' => 'bg-green-50', 'hex' => '#16a34a'],
-    'N' => ['color' => 'bg-pink-500', 'text' => 'text-pink-700', 'bg' => 'bg-pink-50', 'hex' => '#ec4899'],
-    'OTHER' => ['color' => 'bg-gray-400', 'text' => 'text-gray-700', 'bg' => 'bg-gray-50', 'hex' => '#9ca3af']
+    'OTHER' => 'ANDERE'
 ];
 
 ?>
@@ -258,309 +249,377 @@ $partyColors = [
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NGO Anfragen Tracker – Parlamentarische Anfragen zu NGOs</title>
+    <title>NGO WATCH | DATA INTELLIGENCE</title>
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@300;400;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/wordcloud@1.2.2/src/wordcloud2.min.js"></script>
+    
     <style>
+        :root {
+            --bg-color: #050505;
+            --text-color: #f0f0f0;
+            --grid-line: rgba(255, 255, 255, 0.1);
+            --accent: #ffffff;
+            --font-head: 'Bebas Neue', display;
+            --font-body: 'Manrope', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            
+            /* Party Colors Dark Mode */
+            --color-s: #ef4444;
+            --color-v: #22d3ee;
+            --color-f: #3b82f6;
+            --color-g: #22c55e;
+            --color-n: #e879f9;
+            --color-other: #9ca3af;
+        }
+
         body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-body);
+            -webkit-font-smoothing: antialiased;
         }
-        .glass {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+
+        h1, h2, h3 { font-family: var(--font-head); letter-spacing: 1px; text-transform: uppercase; }
+        
+        .container-custom {
+            width: 95%; max-width: 1600px; margin: 0 auto; padding: 2rem 1rem;
         }
-        .stat-card {
-            transition: transform 0.2s, box-shadow 0.2s;
+
+        /* GRID AESTHETIC */
+        .mono-box {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--grid-line);
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            position: relative;
         }
-        .stat-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        
+        .mono-box:hover {
+            border-color: rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.04);
         }
-        ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        .mono-box::before {
+            content: '';
+            position: absolute; top: -1px; left: -1px;
+            width: 10px; height: 10px;
+            border-top: 2px solid var(--accent);
+            border-left: 2px solid var(--accent);
+            opacity: 0.5;
+        }
+
+        /* TYPOGRAPHY OVERRIDES */
+        .stat-value { font-size: 3.5rem; line-height: 1; font-family: var(--font-head); color: var(--accent); }
+        .stat-label { font-size: 0.85rem; text-transform: uppercase; color: #888; letter-spacing: 2px; margin-bottom: 0.5rem; }
+
+        /* FORM ELEMENTS */
+        select {
+            background: #000;
+            color: #fff;
+            border: 1px solid #333;
+            padding: 0.5rem 2rem 0.5rem 1rem;
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23FFFFFF%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+            background-repeat: no-repeat;
+            background-position: right .7em top 50%;
+            background-size: .65em auto;
+        }
+        select:focus { outline: 1px solid #fff; }
+
+        /* LIST ITEMS */
+        .result-item {
+            border-bottom: 1px solid var(--grid-line);
+            padding: 1.25rem 0;
+            transition: all 0.2s;
+        }
+        .result-item:hover {
+            background: rgba(255,255,255,0.03);
+            padding-left: 1rem;
+            border-left: 2px solid var(--accent);
+        }
+
+        /* SCROLLBAR */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0a0a0a; }
+        ::-webkit-scrollbar-thumb { background: #333; }
+        ::-webkit-scrollbar-thumb:hover { background: #555; }
+
+        /* PAGINATION */
+        .pag-btn {
+            border: 1px solid var(--grid-line);
+            padding: 0.5rem 1rem;
+            color: #888;
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            transition: 0.3s;
+        }
+        .pag-btn:hover, .pag-btn.active {
+            background: #fff;
+            color: #000;
+            border-color: #fff;
+        }
+
+        /* PARTY COLORS */
+        .border-S { border-color: var(--color-s) !important; color: var(--color-s); }
+        .border-V { border-color: var(--color-v) !important; color: var(--color-v); }
+        .border-F { border-color: var(--color-f) !important; color: var(--color-f); }
+        .border-G { border-color: var(--color-g) !important; color: var(--color-g); }
+        .border-N { border-color: var(--color-n) !important; color: var(--color-n); }
+        
+        .bg-S { background-color: var(--color-s); }
+        .bg-V { background-color: var(--color-v); }
+        .bg-F { background-color: var(--color-f); }
+        .bg-G { background-color: var(--color-g); }
+        .bg-N { background-color: var(--color-n); }
     </style>
 </head>
-<body class="p-4 md:p-8">
-    <div class="max-w-7xl mx-auto">
-        <!-- Header -->
-        <div class="glass rounded-2xl shadow-2xl p-6 md:p-8 mb-6">
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                <div>
-                    <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
-                        🏛️ NGO Anfragen Tracker
-                    </h1>
-                    <p class="text-gray-600">
-                        Wer spricht im Parlament über NGOs? Wie? Warum?
-                    </p>
-                </div>
-                <form method="GET" class="flex items-center gap-3">
-                    <label class="text-sm font-medium text-gray-700">Zeitraum:</label>
-                    <select name="range" onchange="this.form.submit()"
-                            class="px-4 py-2 rounded-lg border-2 border-purple-200 focus:border-purple-500 focus:outline-none bg-white font-medium text-gray-900">
-                        <option value="6months" <?php echo $timeRange === '6months' ? 'selected' : ''; ?>>Letzte 6 Monate</option>
-                        <option value="12months" <?php echo $timeRange === '12months' ? 'selected' : ''; ?>>Letzte 12 Monate</option>
-                        <option value="1year" <?php echo $timeRange === '1year' ? 'selected' : ''; ?>>Letztes Jahr</option>
-                        <option value="3years" <?php echo $timeRange === '3years' ? 'selected' : ''; ?>>Letzte 3 Jahre</option>
-                        <option value="5years" <?php echo $timeRange === '5years' ? 'selected' : ''; ?>>Letzte 5 Jahre</option>
+<body>
+
+    <div class="container-custom">
+        
+        <header class="flex flex-col md:flex-row justify-between items-end border-b border-[rgba(255,255,255,0.1)] pb-6 mb-10">
+            <div>
+                <div class="text-xs font-mono text-gray-500 mb-2">SYSTEM: PARLIAMENT_WATCH // TRACKING: NGO_INTERACTIONS</div>
+                <h1 class="text-5xl md:text-7xl text-white leading-none">Inquiry<br><span style="color: #666;">Tracker</span></h1>
+            </div>
+            
+            <form method="GET" class="mt-6 md:mt-0">
+                <div class="flex items-center gap-4">
+                    <span class="text-xs uppercase tracking-widest text-gray-500 font-bold">Timeframe</span>
+                    <select name="range" onchange="this.form.submit()">
+                        <option value="6months" <?php echo $timeRange === '6months' ? 'selected' : ''; ?>>6 MONTHS</option>
+                        <option value="12months" <?php echo $timeRange === '12months' ? 'selected' : ''; ?>>12 MONTHS</option>
+                        <option value="1year" <?php echo $timeRange === '1year' ? 'selected' : ''; ?>>LAST YEAR</option>
+                        <option value="3years" <?php echo $timeRange === '3years' ? 'selected' : ''; ?>>3 YEARS</option>
+                        <option value="5years" <?php echo $timeRange === '5years' ? 'selected' : ''; ?>>5 YEARS</option>
                     </select>
-                </form>
-            </div>
-        </div>
-
-        <!-- Statistics Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-6">
-            <!-- Total Count -->
-            <div class="glass rounded-xl shadow-lg p-6 stat-card">
-                <div class="flex items-center justify-between mb-3">
-                    <h3 class="text-sm font-semibold text-gray-600 uppercase tracking-wider">Total Anfragen</h3>
-                    <div class="p-2 bg-purple-100 rounded-lg">
-                        <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                        </svg>
-                    </div>
                 </div>
-                <div class="text-4xl font-bold text-gray-900"><?php echo $totalCount; ?></div>
-                <div class="text-sm text-gray-500 mt-1"><?php echo $rangeLabel; ?></div>
+            </form>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+            <div class="mono-box">
+                <div class="stat-label">Total Inquiries</div>
+                <div class="stat-value"><?php echo number_format($totalCount); ?></div>
+                <div class="text-xs font-mono text-gray-600 mt-2">DETECTED IN RANGE</div>
             </div>
 
-            <!-- Party Distribution -->
-            <div class="glass rounded-xl shadow-lg p-6 stat-card">
-                <div class="flex items-center justify-between mb-3">
-                    <h3 class="text-sm font-semibold text-gray-600 uppercase tracking-wider">Nach Partei</h3>
-                    <div class="p-2 bg-blue-100 rounded-lg">
-                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                        </svg>
-                    </div>
-                </div>
-                <div class="space-y-2">
-                    <?php foreach ($partyStats as $code => $count): ?>
-                        <?php if ($count > 0): ?>
-                            <div class="flex items-center justify-between text-sm">
-                                <span class="flex items-center gap-2">
-                                    <div class="w-3 h-3 rounded-full <?php echo $partyColors[$code]['color']; ?>"></div>
-                                    <span class="font-medium text-gray-700"><?php echo $partyMap[$code]; ?></span>
-                                </span>
-                                <span class="font-bold text-gray-900"><?php echo $count; ?></span>
+            <div class="mono-box lg:col-span-2 flex flex-col justify-between">
+                <div class="stat-label">Origin Breakdown</div>
+                <div class="flex h-full items-end gap-2 mt-4 pb-2" style="min-height: 60px;">
+                    <?php 
+                    $maxVal = max($partyStats) ?: 1; 
+                    foreach ($partyStats as $code => $count): 
+                        if($count == 0) continue;
+                        $height = ($count / $maxVal) * 100;
+                        $width = 100 / count(array_filter($partyStats));
+                    ?>
+                        <div class="relative group flex-1 h-full flex flex-col justify-end">
+                            <div class="w-full bg-<?php echo $code; ?> opacity-80 group-hover:opacity-100 transition-all" style="height: <?php echo $height; ?>%;"></div>
+                            <div class="mt-2 text-xs font-mono text-gray-400 border-t border-gray-800 pt-1 flex justify-between">
+                                <span><?php echo $code; ?></span>
+                                <span class="text-white"><?php echo $count; ?></span>
                             </div>
-                        <?php endif; ?>
+                        </div>
                     <?php endforeach; ?>
                 </div>
             </div>
 
-            <!-- Answered -->
-            <div class="glass rounded-xl shadow-lg p-6 stat-card">
-                <div class="flex items-center justify-between mb-3">
-                    <h3 class="text-sm font-semibold text-gray-600 uppercase tracking-wider">Beantwortet</h3>
-                    <div class="p-2 bg-green-100 rounded-lg">
-                        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
+            <div class="mono-box">
+                <div class="stat-label">Response Ratio</div>
+                <div class="flex justify-between items-end">
+                    <div>
+                        <div class="text-2xl font-bold text-green-500"><?php echo $answeredCount; ?></div>
+                        <div class="text-xs text-gray-600">RESOLVED</div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-2xl font-bold text-red-500"><?php echo $pendingCount; ?></div>
+                        <div class="text-xs text-gray-600">PENDING</div>
                     </div>
                 </div>
-                <div class="text-4xl font-bold text-green-600"><?php echo $answeredCount; ?></div>
-                <div class="text-sm text-gray-500 mt-1">
-                    <?php echo $totalCount > 0 ? round(($answeredCount / $totalCount) * 100) : 0; ?>% der Anfragen
-                </div>
-            </div>
-
-            <!-- Pending -->
-            <div class="glass rounded-xl shadow-lg p-6 stat-card">
-                <div class="flex items-center justify-between mb-3">
-                    <h3 class="text-sm font-semibold text-gray-600 uppercase tracking-wider">Ausstehend</h3>
-                    <div class="p-2 bg-orange-100 rounded-lg">
-                        <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                    </div>
-                </div>
-                <div class="text-4xl font-bold text-orange-600"><?php echo $pendingCount; ?></div>
-                <div class="text-sm text-gray-500 mt-1">
-                    <?php echo $totalCount > 0 ? round(($pendingCount / $totalCount) * 100) : 0; ?>% der Anfragen
+                <div class="w-full h-1 bg-gray-800 mt-4 flex">
+                    <?php $width = $totalCount > 0 ? ($answeredCount / $totalCount) * 100 : 0; ?>
+                    <div class="h-full bg-green-500" style="width: <?php echo $width; ?>%"></div>
                 </div>
             </div>
         </div>
 
-        <!-- Graph and Word Cloud -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-            <!-- Development Graph -->
-            <div class="glass rounded-xl shadow-lg p-6">
-                <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                    <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path>
-                    </svg>
-                    Entwicklung über Zeit
-                </h2>
-                <canvas id="timelineChart" class="w-full" style="max-height: 300px;"></canvas>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-8">
+            <div class="mono-box lg:col-span-2">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-2xl text-white">Temporal Activity</h3>
+                    <div class="h-px bg-white w-10"></div>
+                </div>
+                <div style="height: 300px; width: 100%;">
+                    <canvas id="timelineChart"></canvas>
+                </div>
             </div>
 
-            <!-- Word Cloud -->
-            <div class="glass rounded-xl shadow-lg p-6">
-                <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                    <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path>
-                    </svg>
-                    Meist verwendete Begriffe
-                </h2>
+            <div class="mono-box">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-2xl text-white">Keyword Density</h3>
+                    <div class="h-px bg-white w-10"></div>
+                </div>
                 <canvas id="wordCloud" class="w-full" style="height: 300px;"></canvas>
             </div>
         </div>
 
-        <!-- Results List -->
-        <div class="glass rounded-xl shadow-lg p-6">
-            <div class="flex items-center justify-between mb-6">
-                <h2 class="text-2xl font-bold text-gray-900 flex items-center gap-2">
-                    <svg class="w-7 h-7 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
-                    </svg>
-                    Alle Anfragen
-                </h2>
-                <div class="text-sm text-gray-600">
-                    Seite <?php echo $page; ?> von <?php echo $totalPages; ?> (<?php echo $totalResults; ?> Gesamt)
+        <div class="mono-box">
+            <div class="flex justify-between items-center border-b border-gray-800 pb-4 mb-4">
+                <h3 class="text-2xl text-white">Intercepted Logs</h3>
+                <div class="text-xs font-mono text-gray-500">
+                    PAGE <?php echo $page; ?> / <?php echo $totalPages; ?>
                 </div>
             </div>
 
             <?php if (empty($displayResults)): ?>
-                <div class="text-center py-12">
-                    <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Keine Anfragen gefunden</h3>
-                    <p class="text-gray-600">Im gewählten Zeitraum wurden keine NGO-bezogenen Anfragen gefunden.</p>
+                <div class="py-12 text-center">
+                    <h3 class="text-gray-500">NO DATA FOUND IN SECTOR</h3>
                 </div>
             <?php else: ?>
-                <div class="space-y-3 max-h-[600px] overflow-y-auto pr-2">
+                <div class="flex flex-col">
+                    <div class="hidden md:grid grid-cols-12 gap-4 text-xs font-mono text-gray-600 pb-2 uppercase tracking-wider">
+                        <div class="col-span-2">Date / ID</div>
+                        <div class="col-span-1">Actor</div>
+                        <div class="col-span-7">Subject</div>
+                        <div class="col-span-2 text-right">Status</div>
+                    </div>
+
                     <?php foreach ($displayResults as $result): ?>
-                        <div class="border border-gray-200 rounded-lg p-4 hover:border-purple-300 hover:shadow-md transition-all">
-                            <div class="flex items-start gap-3">
-                                <div class="flex-shrink-0 mt-1">
-                                    <div class="w-3 h-3 rounded-full <?php echo $partyColors[$result['party']]['color']; ?>"></div>
-                                </div>
-                                <div class="flex-1 min-w-0">
-                                    <a href="<?php echo htmlspecialchars($result['link']); ?>" target="_blank"
-                                       class="text-gray-900 hover:text-purple-600 font-medium line-clamp-2 mb-2 block">
-                                        <?php echo htmlspecialchars($result['title']); ?>
-                                    </a>
-                                    <div class="flex items-center gap-3 text-xs text-gray-600 flex-wrap">
-                                        <span class="flex items-center gap-1">
-                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                            </svg>
-                                            <?php echo $result['date']; ?>
-                                        </span>
-                                        <span>•</span>
-                                        <span class="font-semibold"><?php echo $partyMap[$result['party']]; ?></span>
-                                        <span>•</span>
-                                        <span class="text-purple-600 font-mono"><?php echo htmlspecialchars($result['number']); ?></span>
-                                        <?php if ($result['answered']): ?>
-                                            <span class="ml-auto inline-flex items-center gap-1 px-2 py-1 rounded-full bg-green-100 text-green-700 font-medium">
-                                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                                </svg>
-                                                Beantwortet (<?php echo $result['answer_number']; ?>/AB)
-                                            </span>
-                                        <?php else: ?>
-                                            <span class="ml-auto inline-flex items-center gap-1 px-2 py-1 rounded-full bg-orange-100 text-orange-700 font-medium">
-                                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                                </svg>
-                                                Ausstehend
-                                            </span>
-                                        <?php endif; ?>
-                                    </div>
-                                </div>
+                        <div class="result-item grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 items-center group">
+                            
+                            <div class="md:col-span-2 font-mono text-xs text-gray-400">
+                                <div class="text-white"><?php echo $result['date']; ?></div>
+                                <div class="text-gray-600"><?php echo $result['number']; ?></div>
+                            </div>
+
+                            <div class="md:col-span-1">
+                                <span class="border-<?php echo $result['party']; ?> border px-2 py-1 text-xs font-bold font-mono">
+                                    <?php echo $partyMap[$result['party']]; ?>
+                                </span>
+                            </div>
+
+                            <div class="md:col-span-7">
+                                <a href="<?php echo htmlspecialchars($result['link']); ?>" target="_blank" class="text-lg text-gray-300 group-hover:text-white transition-colors leading-tight block">
+                                    <?php echo htmlspecialchars($result['title']); ?>
+                                </a>
+                            </div>
+
+                            <div class="md:col-span-2 text-left md:text-right">
+                                <?php if ($result['answered']): ?>
+                                    <span class="text-xs font-mono text-green-500">
+                                        [ RESOLVED ]<br>
+                                        <span class="opacity-50"><?php echo $result['answer_number']; ?>/AB</span>
+                                    </span>
+                                <?php else: ?>
+                                    <span class="text-xs font-mono text-red-500 animate-pulse">
+                                        [ PENDING ]
+                                    </span>
+                                <?php endif; ?>
                             </div>
                         </div>
                     <?php endforeach; ?>
                 </div>
+            <?php endif; ?>
 
-                <!-- Pagination -->
-                <?php if ($totalPages > 1): ?>
-                    <div class="flex items-center justify-center gap-2 mt-6 pt-6 border-t border-gray-200">
-                        <?php if ($page > 1): ?>
-                            <a href="?range=<?php echo $timeRange; ?>&page=<?php echo $page - 1; ?>"
-                               class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-medium">
-                                ← Zurück
-                            </a>
-                        <?php endif; ?>
+            <?php if ($totalPages > 1): ?>
+                <div class="flex flex-wrap justify-center gap-2 mt-8 pt-4 border-t border-gray-800">
+                    <?php if ($page > 1): ?>
+                        <a href="?range=<?php echo $timeRange; ?>&page=<?php echo $page - 1; ?>" class="pag-btn">&lt; PREV</a>
+                    <?php endif; ?>
 
-                        <div class="flex items-center gap-1">
-                            <?php
-                            $start = max(1, $page - 2);
-                            $end = min($totalPages, $page + 2);
+                    <?php
+                    $start = max(1, $page - 2);
+                    $end = min($totalPages, $page + 2);
+                    for ($i = $start; $i <= $end; $i++):
+                    ?>
+                        <a href="?range=<?php echo $timeRange; ?>&page=<?php echo $i; ?>" class="pag-btn <?php echo $i === $page ? 'active' : ''; ?>">
+                            <?php echo $i; ?>
+                        </a>
+                    <?php endfor; ?>
 
-                            for ($i = $start; $i <= $end; $i++):
-                            ?>
-                                <a href="?range=<?php echo $timeRange; ?>&page=<?php echo $i; ?>"
-                                   class="px-3 py-2 rounded-lg font-medium transition-colors <?php echo $i === $page ? 'bg-purple-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'; ?>">
-                                    <?php echo $i; ?>
-                                </a>
-                            <?php endfor; ?>
-                        </div>
-
-                        <?php if ($page < $totalPages): ?>
-                            <a href="?range=<?php echo $timeRange; ?>&page=<?php echo $page + 1; ?>"
-                               class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-medium">
-                                Weiter →
-                            </a>
-                        <?php endif; ?>
-                    </div>
-                <?php endif; ?>
+                    <?php if ($page < $totalPages): ?>
+                        <a href="?range=<?php echo $timeRange; ?>&page=<?php echo $page + 1; ?>" class="pag-btn">NEXT &gt;</a>
+                    <?php endif; ?>
+                </div>
             <?php endif; ?>
         </div>
+        
+        <footer class="mt-12 mb-6 text-center">
+             <p class="text-xs font-mono text-gray-700">SOURCE: PARLAMENT.GV.AT // SECURE CONNECTION ESTABLISHED</p>
+        </footer>
 
-        <!-- Footer -->
-        <div class="mt-6 text-center text-white text-sm">
-            <p>Daten: <a href="https://www.parlament.gv.at" target="_blank" class="underline hover:text-purple-200">Parlament Österreich</a></p>
-        </div>
     </div>
 
     <script>
+        // --- CHART CONFIG ---
+        Chart.defaults.color = '#666';
+        Chart.defaults.borderColor = 'rgba(255,255,255,0.05)';
+        Chart.defaults.font.family = "'Manrope', sans-serif";
+
         // Timeline Chart
         const monthLabels = <?php echo json_encode(array_values(array_map(fn($m) => $m['label'], $monthlyData))); ?>;
         const monthCounts = <?php echo json_encode(array_values(array_map(fn($m) => $m['count'], $monthlyData))); ?>;
 
         const ctx = document.getElementById('timelineChart').getContext('2d');
+        
+        // Create Gradient
+        const gradient = ctx.createLinearGradient(0, 0, 0, 300);
+        gradient.addColorStop(0, 'rgba(255, 255, 255, 0.2)');
+        gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+
         new Chart(ctx, {
             type: 'line',
             data: {
                 labels: monthLabels,
                 datasets: [{
-                    label: 'NGO-Anfragen',
+                    label: 'INQUIRIES',
                     data: monthCounts,
-                    borderColor: '#9333ea',
-                    backgroundColor: 'rgba(147, 51, 234, 0.1)',
-                    borderWidth: 3,
+                    borderColor: '#ffffff',
+                    backgroundColor: gradient,
+                    borderWidth: 1,
                     fill: true,
-                    tension: 0.4,
-                    pointRadius: 4,
-                    pointHoverRadius: 6,
-                    pointBackgroundColor: '#9333ea'
+                    tension: 0, // Sharp lines for tech feel
+                    pointRadius: 3,
+                    pointBackgroundColor: '#000',
+                    pointBorderColor: '#fff'
                 }]
             },
             options: {
                 responsive: true,
-                maintainAspectRatio: true,
+                maintainAspectRatio: false,
                 plugins: {
-                    legend: {
-                        display: false
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#000',
+                        titleColor: '#fff',
+                        bodyColor: '#fff',
+                        borderColor: '#333',
+                        borderWidth: 1,
+                        cornerRadius: 0,
+                        displayColors: false,
+                        titleFont: { family: 'Bebas Neue', size: 16 }
                     }
                 },
                 scales: {
                     y: {
                         beginAtZero: true,
-                        ticks: {
-                            stepSize: 1
-                        }
+                        grid: { color: 'rgba(255,255,255,0.05)' },
+                        ticks: { stepSize: 1, font: { family: 'JetBrains Mono', size: 10 } }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { font: { family: 'JetBrains Mono', size: 10 } }
                     }
                 }
             }
@@ -572,15 +631,17 @@ $partyColors = [
         if (wordList.length > 0) {
             WordCloud(document.getElementById('wordCloud'), {
                 list: wordList,
-                gridSize: 8,
-                weightFactor: 3,
-                fontFamily: 'Inter, sans-serif',
+                gridSize: 12,
+                weightFactor: 2.5,
+                fontFamily: 'Bebas Neue, sans-serif',
                 color: function() {
-                    const colors = ['#9333ea', '#7c3aed', '#6d28d9', '#5b21b6', '#4c1d95'];
-                    return colors[Math.floor(Math.random() * colors.length)];
+                    // Greyscale / White palette
+                    const shades = ['#ffffff', '#cccccc', '#999999', '#666666'];
+                    return shades[Math.floor(Math.random() * shades.length)];
                 },
-                rotateRatio: 0.3,
-                backgroundColor: 'transparent'
+                rotateRatio: 0, // All horizontal for cleaner look
+                backgroundColor: 'transparent',
+                drawOutOfBound: false
             });
         }
     </script>

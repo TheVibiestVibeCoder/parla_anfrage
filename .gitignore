@@ -1,0 +1,27 @@
+# Cache files (but keep directory structure)
+cache/*.dat
+!cache/.gitkeep
+
+# Downloaded assets (can be regenerated, but keep directory structure)
+assets/js/chart.min.js
+assets/css/tailwind.min.css
+!assets/js/.gitkeep
+!assets/css/.gitkeep
+
+# PHP error logs
+php_errors.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Temporary files
+*.tmp
+*.temp

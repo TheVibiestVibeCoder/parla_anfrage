@@ -537,16 +537,66 @@ $partyMap = [
     <link rel="alternate" hreflang="de" href="<?php echo htmlspecialchars($currentUrl); ?>">
     <link rel="alternate" hreflang="x-default" href="<?php echo htmlspecialchars($canonicalUrl); ?>">
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+    <!-- Resource Hints: Establish early connections to required origins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
     <link rel="dns-prefetch" href="https://www.parlament.gv.at">
 
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Preload critical fonts to reduce render delay -->
+    <link rel="preload" href="https://fonts.gstatic.com/s/bebasneue/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuI6fMZhrib2Bg-4.woff2" as="font" type="font/woff2" crossorigin fetchpriority="high">
+    <link rel="preload" href="https://fonts.gstatic.com/s/inter/v24/tDbv2o-flEEny0FZhsfKu5WU5zr3E_BX0zS8.woff2" as="font" type="font/woff2" crossorigin fetchpriority="high">
 
+    <!-- Optimized Google Fonts with font-display: swap to prevent render blocking -->
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet"></noscript>
+
+    <!-- Tailwind CSS - kept synchronous as it's critical for layout -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+    <!-- Chart.js - Deferred and lazy loaded when needed -->
+    <script>
+        // Lazy load Chart.js only when charts are visible
+        window.chartJsLoaded = false;
+        window.loadChartJS = function() {
+            if (window.chartJsLoaded) return Promise.resolve();
+            return new Promise((resolve, reject) => {
+                const script = document.createElement('script');
+                script.src = 'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js';
+                script.onload = () => {
+                    window.chartJsLoaded = true;
+                    resolve();
+                };
+                script.onerror = reject;
+                document.head.appendChild(script);
+            });
+        };
+
+        // Intersection Observer to detect when chart containers are visible
+        if ('IntersectionObserver' in window) {
+            const chartObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting && !window.chartJsLoaded) {
+                        loadChartJS();
+                        chartObserver.disconnect();
+                    }
+                });
+            }, { rootMargin: '50px' });
+
+            // Start observing when DOM is ready
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', () => {
+                    document.querySelectorAll('canvas').forEach(canvas => chartObserver.observe(canvas));
+                });
+            } else {
+                document.querySelectorAll('canvas').forEach(canvas => chartObserver.observe(canvas));
+            }
+        } else {
+            // Fallback for browsers without IntersectionObserver
+            loadChartJS();
+        }
+    </script>
 
     <script type="application/ld+json">
     {
@@ -1031,7 +1081,8 @@ $partyMap = [
         </div>
     </section>
 
-    <div id="tracker" class="container-custom pt-16 md:pt-24 lg:pt-20 xl:pt-24">
+    <!-- Main content area with semantic landmark -->
+    <main id="tracker" class="container-custom pt-16 md:pt-24 lg:pt-20 xl:pt-24">
 
         <header class="flex flex-col lg:flex-row justify-between items-start lg:items-end mb-12 lg:mb-16 xl:mb-20 border-b-2 border-white pb-8">
             <div class="mb-8 lg:mb-0">
@@ -1041,8 +1092,8 @@ $partyMap = [
             
             <form method="GET" class="w-full lg:w-auto">
                 <div class="flex flex-col items-start w-full">
-                    <span class="text-[10px] uppercase tracking-widest text-gray-500 mb-1">Zeitraum wählen</span>
-                    <select name="range" onchange="this.form.submit()" class="w-full lg:w-auto hover:text-gray-300 transition-colors">
+                    <label for="time-range-select" class="text-[10px] uppercase tracking-widest text-gray-500 mb-1">Zeitraum wählen</label>
+                    <select id="time-range-select" name="range" onchange="this.form.submit()" class="w-full lg:w-auto hover:text-gray-300 transition-colors" aria-label="Zeitraum für Anfragen auswählen">
                         <option value="1week" <?php echo $timeRange === '1week' ? 'selected' : ''; ?>>LETZTE WOCHE</option>
                         <option value="1month" <?php echo $timeRange === '1month' ? 'selected' : ''; ?>>LETZTER MONAT</option>
                         <option value="3months" <?php echo $timeRange === '3months' ? 'selected' : ''; ?>>3 MONATE</option>
@@ -1355,7 +1406,7 @@ $partyMap = [
             </div>
         </section>
 
-    </div>
+    </main>
 
     <div id="modal-timeline" class="modal-overlay" onclick="closeModalOnOverlay(event, 'timeline')">
         <div class="modal-content" onclick="event.stopPropagation()">
@@ -1446,12 +1497,27 @@ $partyMap = [
 
     <script>
         console.log('=== NGO TRACKER DEBUG START ===');
-        
-        document.addEventListener('DOMContentLoaded', function() {
+
+        // Initialize charts function - called after Chart.js loads
+        function initializeCharts() {
+            // Wait for Chart.js to be available
+            if (typeof Chart === 'undefined') {
+                console.log('Chart.js not loaded yet, waiting...');
+                return;
+            }
+
             // Chart Config - Cleaner, less "techy" more editorial
             Chart.defaults.color = '#555';
             Chart.defaults.borderColor = 'rgba(255,255,255,0.1)';
             Chart.defaults.font.family = "'Inter', sans-serif";
+
+            // Performance optimization: reduce animation duration to minimize layout thrashing
+            Chart.defaults.animation = {
+                duration: 400, // Reduced from default 1000ms
+                easing: 'easeOutQuart'
+            };
+            Chart.defaults.responsive = true;
+            Chart.defaults.maintainAspectRatio = false;
 
             // Data Prep
             const monthlyData = <?php echo json_encode($monthlyData); ?>;
@@ -1459,7 +1525,7 @@ $partyMap = [
             const spamData = <?php echo json_encode($spamCalendarData); ?>;
             const dates = <?php echo json_encode(array_values(array_map(fn($d) => $d->format('d.m.Y'), $allDates))); ?>;
             const allDateKeys = <?php echo json_encode(array_keys($allDates)); ?>;
-            
+
             const partyColors = {
                 'S': '#ef4444', 'V': '#22d3ee', 'F': '#3b82f6',
                 'G': '#22c55e', 'N': '#e879f9', 'OTHER': '#9ca3af'
@@ -1666,6 +1732,21 @@ $partyMap = [
                         closeModal(modalId);
                     }
                 }
+            });
+        }
+
+        // Initialize charts when Chart.js is ready and DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load Chart.js and initialize charts
+            loadChartJS().then(() => {
+                // Small delay to ensure Chart.js is fully initialized
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        initializeCharts();
+                    });
+                });
+            }).catch(err => {
+                console.error('Failed to load Chart.js:', err);
             });
         });
     </script>

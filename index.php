@@ -537,22 +537,18 @@ $partyMap = [
     <link rel="alternate" hreflang="de" href="<?php echo htmlspecialchars($currentUrl); ?>">
     <link rel="alternate" hreflang="x-default" href="<?php echo htmlspecialchars($canonicalUrl); ?>">
 
-    <!-- Resource Hints: Establish early connections to required origins -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://cdn.tailwindcss.com">
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
     <link rel="dns-prefetch" href="https://www.parlament.gv.at">
 
-    <!-- Preload critical fonts to reduce render delay -->
     <link rel="preload" href="https://fonts.gstatic.com/s/bebasneue/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuI6fMZhrib2Bg-4.woff2" as="font" type="font/woff2" crossorigin fetchpriority="high">
     <link rel="preload" href="https://fonts.gstatic.com/s/inter/v24/tDbv2o-flEEny0FZhsfKu5WU5zr3E_BX0zS8.woff2" as="font" type="font/woff2" crossorigin fetchpriority="high">
 
-    <!-- Optimized Google Fonts with font-display: swap to prevent render blocking -->
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
     <noscript><link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet"></noscript>
 
-    <!-- Critical CSS: Inline styles for above-the-fold content to eliminate render blocking -->
     <style>
         /* Font-face with swap for immediate text rendering */
         @font-face {
@@ -885,7 +881,6 @@ $partyMap = [
         }
     </style>
 
-    <!-- Tailwind CSS - Load immediately but async for balanced performance + appearance -->
     <script>
         // Load Tailwind CSS immediately but async to maintain good appearance
         (function() {
@@ -896,7 +891,6 @@ $partyMap = [
         })();
     </script>
 
-    <!-- Chart.js - Deferred and lazy loaded when needed -->
     <script>
         // Lazy load Chart.js with minimal overhead
         (function() {
@@ -1391,7 +1385,7 @@ $partyMap = [
 </head>
 <body class="flex flex-col min-h-screen">
 
-    <section class="min-h-screen flex flex-col justify-between items-center text-center bg-black border-b border-white px-6 py-10 md:py-16">
+    <section class="min-h-screen flex flex-col justify-between items-center text-center bg-black border-b border-white px-4 py-6 md:px-6 md:py-8 lg:py-12">
         
         <div class="w-full flex justify-between items-center max-w-[1200px]">
             <div class="flex items-center gap-2 md:gap-3">
@@ -1404,22 +1398,22 @@ $partyMap = [
             </div>
         </div>
 
-        <div class="flex-grow flex flex-col justify-center max-w-5xl mx-auto w-full py-12">
+        <div class="flex-grow flex flex-col justify-center max-w-5xl mx-auto w-full py-4 md:py-8 lg:py-0">
             <article>
-                <header class="mb-8 md:mb-10">
-                    <span class="inline-block border-b border-gray-600 pb-1 mb-6 text-[10px] md:text-xs font-mono text-gray-400 uppercase tracking-[0.2em]">Die Analyse</span>
-                    <h1 class="text-5xl sm:text-6xl md:text-7xl lg:text-7xl xl:text-9xl text-white leading-[0.9] mb-6 md:mb-8 break-words tracking-tight" style="font-family: 'Bebas Neue', sans-serif;">
+                <header class="mb-6 md:mb-8">
+                    <span class="inline-block border-b border-gray-600 pb-1 mb-4 md:mb-6 text-[10px] md:text-xs font-mono text-gray-400 uppercase tracking-[0.2em]">Die Analyse</span>
+                    <h1 class="text-5xl sm:text-6xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-9xl text-white leading-[0.9] mb-4 md:mb-6 break-words tracking-tight" style="font-family: 'Bebas Neue', sans-serif;">
                         Das "NGO-Business"<br>Narrativ der FPÖ
                     </h1>
                 </header>
 
-                <div class="space-y-6 max-w-3xl mx-auto text-left md:text-center px-4">
-                    <p class="text-base md:text-xl text-gray-300 font-sans leading-relaxed">
+                <div class="space-y-4 md:space-y-6 max-w-3xl mx-auto text-left md:text-center px-4">
+                    <p class="text-sm md:text-base lg:text-lg text-gray-300 font-sans leading-relaxed">
                         <span class="text-white font-bold border-b border-gray-600">Datenjournalismus:</span> Die FPÖ flutet das Parlament mit dem Begriff "NGO-Business". Seit <?php echo $earliestDateFormatted; ?>
                         sind <?php echo number_format($totalCount); ?> Anfragen zum Thema NGOs, fast immer mit dem Begriff "NGO-Business" versehen, eingegangen.
                     </p>
 
-                    <p class="text-sm md:text-lg text-gray-400 font-sans leading-relaxed">
+                    <p class="text-xs md:text-sm lg:text-base text-gray-400 font-sans leading-relaxed">
                         Warum? Wichtige NGO-Arbeit wird ganz bewusst in den Kontext von Steuergeld-Verschwendung gerückt,
                         um die Arbeit von Non-Profit-Organisationen zu verunglimpfen.
                         <br><br>
@@ -1429,7 +1423,7 @@ $partyMap = [
             </article>
         </div>
 
-        <div class="w-full flex flex-col items-center justify-center pb-4 md:pb-0">
+        <div class="w-full flex flex-col items-center justify-center pb-6 md:pb-0">
              <a href="#tracker" class="group flex flex-col items-center gap-4 cursor-pointer hover:opacity-80 transition-opacity p-2">
                 <span class="text-[10px] md:text-xs font-mono uppercase tracking-widest text-gray-500 group-hover:text-white transition-colors">Zum Anfragen-Tracker</span>
                 <div class="w-8 h-8 md:w-10 md:h-10 border border-white flex items-center justify-center rounded-full">
@@ -1441,7 +1435,6 @@ $partyMap = [
         </div>
     </section>
 
-    <!-- Main content area with semantic landmark -->
     <main id="tracker" class="container-custom pt-16 md:pt-24 lg:pt-20 xl:pt-24">
 
         <header class="flex flex-col lg:flex-row justify-between items-start lg:items-end mb-12 lg:mb-16 xl:mb-20 border-b-2 border-white pb-8">

@@ -1060,68 +1060,72 @@ $partyMap = [
             <?php endif; ?>
         </section>
 
+<section class="mono-box mt-16" itemscope itemtype="https://schema.org/FAQPage" aria-labelledby="faq-heading">
+    <h2 id="faq-heading" class="text-3xl text-white mb-8" style="font-family: var(--font-head); letter-spacing: 1px;">
+        Was steckt hinter den NGO Business Anfragen
+    </h2>
 
-        <section class="mono-box mt-16" itemscope itemtype="https://schema.org/FAQPage" aria-labelledby="faq-heading">
-            <h2 id="faq-heading" class="text-3xl text-white mb-8" style="font-family: var(--font-head); letter-spacing: 1px;">
-                Häufig gestellte Fragen zu NGO Business Anfragen
-            </h2>
+    <div class="space-y-6">
 
-            <div class="space-y-6">
-                <div class="border-b border-gray-800 pb-6" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-                    <h3 class="text-xl font-bold text-white mb-3" itemprop="name">Was sind NGO Business Anfragen?</h3>
-                    <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-                        <p class="text-gray-300 leading-relaxed" itemprop="text">
-                            <strong>NGO Business Anfragen</strong> sind parlamentarische Anfragen im österreichischen Nationalrat, die sich mit Nicht-Regierungsorganisationen (NGOs), deren Finanzierung, Aktivitäten und Transparenz befassen. Diese Anfragen werden von Abgeordneten gestellt und vom zuständigen Ministerium beantwortet. Unser NGO Business Tracker ermöglicht Ihnen das Echtzeit-Monitoring aller solcher Anfragen.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="border-b border-gray-800 pb-6" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-                    <h3 class="text-xl font-bold text-white mb-3" itemprop="name">Wie funktioniert der NGO Business Tracker?</h3>
-                    <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-                        <p class="text-gray-300 leading-relaxed" itemprop="text">
-                            Unser NGO Business Tracking System greift in Echtzeit auf die offizielle API des österreichischen Parlaments (parlament.gv.at) zu und filtert automatisch alle Anfragen, die NGO-relevante Begriffe enthalten. Die Daten werden visualisiert und nach Parteien, Zeiträumen und Themen kategorisiert. Sie erhalten so einen vollständigen Überblick über alle NGO Business Aktivitäten im Parlament.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="border-b border-gray-800 pb-6" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-                    <h3 class="text-xl font-bold text-white mb-3" itemprop="name">Welche Parteien stellen NGO Business Anfragen?</h3>
-                    <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-                        <p class="text-gray-300 leading-relaxed" itemprop="text">
-                            Alle im österreichischen Parlament vertretenen Parteien können parlamentarische Anfragen zu NGO Business stellen. Unser Tracker zeigt Anfragen von SPÖ (Sozialdemokratische Partei), ÖVP (Österreichische Volkspartei), FPÖ (Freiheitliche Partei), GRÜNE (Die Grünen) und NEOS (NEOS – Das Neue Österreich). Die Visualisierungen zeigen, welche Partei am aktivsten im Bereich NGO Business ist.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="border-b border-gray-800 pb-6" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-                    <h3 class="text-xl font-bold text-white mb-3" itemprop="name">Warum ist NGO Business Tracking wichtig?</h3>
-                    <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-                        <p class="text-gray-300 leading-relaxed" itemprop="text">
-                            NGO Business Tracking schafft <strong>Transparenz</strong> über die parlamentarische Kontrolle von Nicht-Regierungsorganisationen in Österreich. Bürger, Journalisten und NGOs selbst können nachvollziehen, welche Fragen zu NGO-Finanzierung, NGO-Aktivitäten und NGO-Transparenz gestellt werden. Dies fördert die demokratische Kontrolle und öffentliche Debatte über die Rolle von NGOs in der Gesellschaft.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="border-b border-gray-800 pb-6" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-                    <h3 class="text-xl font-bold text-white mb-3" itemprop="name">Wie aktuell sind die NGO Business Daten?</h3>
-                    <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-                        <p class="text-gray-300 leading-relaxed" itemprop="text">
-                            Die Daten werden in <strong>Echtzeit</strong> von der offiziellen Parlament-API abgerufen. Sobald eine neue NGO-bezogene Anfrage im österreichischen Parlament eingebracht wird, erscheint sie auch in unserem NGO Business Tracker. Die Aktualität ist einer der Hauptvorteile unseres Systems gegenüber traditionellen Recherchemethoden.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="pb-6" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-                    <h3 class="text-xl font-bold text-white mb-3" itemprop="name">Was zeigen die Visualisierungen im NGO Business Tracker?</h3>
-                    <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-                        <p class="text-gray-300 leading-relaxed" itemprop="text">
-                            Unser NGO Business Tracker bietet drei Hauptvisualisierungen: 1) <strong>Zeitlicher Verlauf</strong> - zeigt die Anzahl der NGO Anfragen über Zeit, 2) <strong>Flood Wall</strong> - kumulative Belastungskurve pro Partei, 3) <strong>Spam Calendar</strong> - Heatmap der täglichen Intensität. Zusätzlich analysieren wir die häufigsten Kampfbegriffe in NGO Business Anfragen und zeigen, welche Partei welche Begriffe verwendet.
-                        </p>
-                    </div>
-                </div>
+        <div class="border-b border-gray-800 pb-6" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+            <h3 class="text-xl font-bold text-white mb-3" itemprop="name">
+                Was sind parlamentarische Anfragen?
+            </h3>
+            <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                <p class="text-gray-300 leading-relaxed" itemprop="text">
+                    Parlamentarische Anfragen sind ein offizielles Kontrollinstrument im österreichischen Nationalrat.
+                    Abgeordnete können damit schriftliche Fragen an Ministerien richten, die verpflichtend beantwortet werden müssen.
+                    Sie dienen grundsätzlich der demokratischen Kontrolle der Regierung.
+                </p>
             </div>
-        </section>
+        </div>
+
+        <div class="border-b border-gray-800 pb-6" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+            <h3 class="text-xl font-bold text-white mb-3" itemprop="name">
+                Was könnte die Strategie dahinter sein?
+            </h3>
+            <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                <p class="text-gray-300 leading-relaxed" itemprop="text">
+                    Die massenhafte Verwendung des Begriffs „NGO Business“ deutet auf eine bewusste politische Strategie hin.
+                    Durch hunderte nahezu identische Anfragen wird ein Narrativ erzeugt, das NGO Arbeit mit
+                    Steuergeldverschwendung, Ideologie und Missbrauch öffentlicher Mittel verknüpft.
+                    Ziel ist weniger Aufklärung als vielmehr Delegitimierung.
+                </p>
+            </div>
+        </div>
+
+        <div class="border-b border-gray-800 pb-6" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+            <h3 class="text-xl font-bold text-white mb-3" itemprop="name">
+                Wieso ist das relevant?
+            </h3>
+            <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                <p class="text-gray-300 leading-relaxed" itemprop="text">
+                    Parlamentarische Anfragen erzeugen öffentliche Dokumente, Schlagzeilen und Suchtreffer.
+                    Werden sie strategisch geflutet, entsteht der Eindruck eines systemischen Problems,
+                    selbst wenn keine Rechtswidrigkeit vorliegt.
+                    So kann Vertrauen in Zivilgesellschaft, Wissenschaft und soziale Arbeit gezielt untergraben werden.
+                </p>
+            </div>
+        </div>
+
+        <div class="pb-6" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+            <h3 class="text-xl font-bold text-white mb-3" itemprop="name">
+                Was kannst du tun?
+            </h3>
+            <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                <p class="text-gray-300 leading-relaxed" itemprop="text">
+                    Red darüber.
+                    Teile die Daten.
+                    Hinterfrage Schlagworte.
+                    Je sichtbarer solche Muster werden, desto schwerer wird es,
+                    parlamentarische Instrumente für politische Stimmungsmache zu missbrauchen.
+                </p>
+            </div>
+        </div>
+
+    </div>
+</section>
+
 
     </div>
 

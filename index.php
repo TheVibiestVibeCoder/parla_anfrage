@@ -629,6 +629,7 @@ $partyMap = [
             font-family: var(--font-body);
             -webkit-font-smoothing: antialiased;
             line-height: 1.6;
+            overflow-x: hidden; /* Prevent horizontal scroll on small devices */
         }
 
         h1, h2, h3 { 
@@ -641,7 +642,12 @@ $partyMap = [
             width: 100%; 
             max-width: 1200px; 
             margin: 0 auto; 
-            padding: 0 1.5rem;
+            padding: 0 1rem;
+        }
+        @media (min-width: 768px) {
+            .container-custom {
+                padding: 0 1.5rem;
+            }
         }
 
         /* INVESTIGATIVE DOSSIER STYLE */
@@ -649,25 +655,43 @@ $partyMap = [
             background: var(--bg-color);
             border-top: 4px solid var(--text-color);
             border-bottom: 1px solid var(--border-color);
-            padding: 2rem 0;
-            margin-bottom: 3rem;
+            padding: 1.5rem 0;
+            margin-bottom: 2rem;
+        }
+        @media (min-width: 768px) {
+            .investigative-box {
+                padding: 2rem 0;
+                margin-bottom: 3rem;
+            }
         }
 
         .investigative-header {
             font-family: var(--font-head);
-            font-size: 2.2rem;
+            font-size: 1.8rem;
             color: #fff;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
             line-height: 1;
+        }
+        @media (min-width: 768px) {
+            .investigative-header {
+                font-size: 2.2rem;
+                margin-bottom: 1.5rem;
+            }
         }
 
         /* TYPOGRAPHY */
         .stat-value { 
-            font-size: 4rem; 
+            font-size: 3rem; 
             line-height: 1; 
             font-family: var(--font-head); 
             color: #fff; 
         }
+        @media (min-width: 768px) {
+            .stat-value { 
+                font-size: 4rem; 
+            }
+        }
+
         .stat-label { 
             font-size: 0.75rem; 
             text-transform: uppercase; 
@@ -688,7 +712,7 @@ $partyMap = [
             border-bottom: 2px solid #fff;
             padding: 0.5rem 2rem 0.5rem 0;
             font-family: var(--font-head);
-            font-size: 1.5rem;
+            font-size: 1.25rem;
             cursor: pointer;
             appearance: none;
             background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23FFFFFF%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
@@ -696,14 +720,25 @@ $partyMap = [
             background-position: right 0 top 50%;
             background-size: .5em auto;
             border-radius: 0;
+            max-width: 100%;
+        }
+        @media (min-width: 768px) {
+            select {
+                font-size: 1.5rem;
+            }
         }
         select:focus { outline: none; border-color: var(--text-muted); }
 
         /* LIST ITEMS - Editorial Style */
         .result-item {
             border-bottom: 1px solid var(--border-color);
-            padding: 1.5rem 0;
+            padding: 1.25rem 0;
             transition: background 0.2s;
+        }
+        @media (min-width: 768px) {
+            .result-item {
+                padding: 1.5rem 0;
+            }
         }
         .result-item:hover {
             background: #161616;
@@ -713,9 +748,16 @@ $partyMap = [
         .pag-btn {
             font-family: var(--font-body);
             font-weight: 600;
-            padding: 0.5rem 1rem;
+            padding: 0.5rem 0.75rem;
             color: var(--text-muted);
             border: 1px solid transparent;
+            font-size: 0.9rem;
+        }
+        @media (min-width: 768px) {
+            .pag-btn {
+                padding: 0.5rem 1rem;
+                font-size: 1rem;
+            }
         }
         .pag-btn:hover, .pag-btn.active {
             color: #fff;
@@ -765,6 +807,7 @@ $partyMap = [
             cursor: pointer;
             transition: all 0.2s;
             margin-left: 8px;
+            flex-shrink: 0;
         }
         .info-btn:hover {
             border-color: #fff;
@@ -784,7 +827,7 @@ $partyMap = [
             z-index: 9999;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            padding: 16px;
         }
         .modal-overlay.active {
             display: flex;
@@ -794,11 +837,17 @@ $partyMap = [
             border: 2px solid var(--text-color);
             max-width: 600px;
             width: 100%;
-            max-height: 80vh;
+            max-height: 85vh;
             overflow-y: auto;
-            padding: 2rem;
+            padding: 1.5rem;
             position: relative;
             animation: modalSlideIn 0.3s ease-out;
+            margin: 0 auto;
+        }
+        @media (min-width: 768px) {
+            .modal-content {
+                padding: 2rem;
+            }
         }
         @keyframes modalSlideIn {
             from {
@@ -812,8 +861,8 @@ $partyMap = [
         }
         .modal-close {
             position: absolute;
-            top: 1rem;
-            right: 1rem;
+            top: 0.75rem;
+            right: 0.75rem;
             background: transparent;
             border: none;
             color: var(--text-muted);
@@ -831,15 +880,27 @@ $partyMap = [
         }
         .modal-title {
             font-family: var(--font-head);
-            font-size: 2rem;
+            font-size: 1.75rem;
             color: #fff;
             margin-bottom: 1rem;
             padding-right: 2rem;
         }
+        @media (min-width: 768px) {
+            .modal-title {
+                font-size: 2rem;
+            }
+        }
         .modal-body {
             font-family: var(--font-body);
             color: var(--text-muted);
-            line-height: 1.8;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+        @media (min-width: 768px) {
+            .modal-body {
+                line-height: 1.8;
+                font-size: 1rem;
+            }
         }
         .modal-body p {
             margin-bottom: 1rem;
@@ -858,32 +919,32 @@ $partyMap = [
     <section class="h-[100vh] min-h-[600px] flex flex-col justify-between items-center text-center bg-black border-b border-white px-4">
         
         <div class="w-full pt-6 flex justify-between items-center max-w-[1200px]">
-            <div class="flex items-center gap-3">
-                <div class="w-3 h-3 bg-white"></div>
-                <span class="tracking-widest text-lg font-head text-white">NGO-Business</span>
+            <div class="flex items-center gap-2 md:gap-3">
+                <div class="w-2 h-2 md:w-3 md:h-3 bg-white"></div>
+                <span class="tracking-widest text-sm md:text-lg font-head text-white">NGO-Business</span>
             </div>
             <div class="flex items-center gap-2">
-                <span class="w-2 h-2 bg-red-600 rounded-full animate-pulse"></span>
-                <span class="text-xs font-mono text-red-600 uppercase">Live Update</span>
+                <span class="w-1.5 h-1.5 md:w-2 md:h-2 bg-red-600 rounded-full animate-pulse"></span>
+                <span class="text-[10px] md:text-xs font-mono text-red-600 uppercase">Live Update</span>
             </div>
         </div>
 
         <div class="flex-grow flex flex-col justify-center max-w-4xl mx-auto w-full">
             <article>
-                <header class="mb-8">
-                    <span class="inline-block border-b border-gray-600 pb-1 mb-4 text-xs font-mono text-gray-400 uppercase tracking-[0.2em]">Die Analyse</span>
-                    <h1 class="text-6xl md:text-8xl lg:text-9xl text-white leading-[0.9] mb-6" style="font-family: 'Bebas Neue', sans-serif;">
+                <header class="mb-6 md:mb-8">
+                    <span class="inline-block border-b border-gray-600 pb-1 mb-4 text-[10px] md:text-xs font-mono text-gray-400 uppercase tracking-[0.2em]">Die Analyse</span>
+                    <h1 class="text-5xl sm:text-6xl md:text-8xl lg:text-9xl text-white leading-[0.9] mb-4 md:mb-6 break-words" style="font-family: 'Bebas Neue', sans-serif;">
                         Das "NGO-Business"<br>Narrativ der FPÖ
                     </h1>
                 </header>
 
-                <div class="space-y-6 max-w-2xl mx-auto text-left md:text-center">
-                    <p class="text-lg md:text-xl text-gray-300 font-sans leading-relaxed">
+                <div class="space-y-4 md:space-y-6 max-w-2xl mx-auto text-left md:text-center px-2">
+                    <p class="text-base md:text-xl text-gray-300 font-sans leading-relaxed">
                         <span class="text-white font-bold border-b border-gray-600">Datenjournalismus:</span> Die FPÖ flutet das Parlament mit dem Begriff "NGO-Business". Seit <?php echo $earliestDateFormatted; ?>
                         sind <?php echo number_format($totalCount); ?> Anfragen zum Thema NGOs, fast immer mit dem Begriff "NGO-Business" versehen, eingegangen.
                     </p>
 
-                    <p class="text-base md:text-lg text-gray-400 font-sans leading-relaxed">
+                    <p class="text-sm md:text-lg text-gray-400 font-sans leading-relaxed">
                         Warum? Wichtige NGO-Arbeit wird ganz bewusst in den Kontext von Steuergeld-Verschwendung gerückt,
                         um die Arbeit von Non-Profit-Organisationen zu verunglimpfen.
                         <br><br>
@@ -893,11 +954,11 @@ $partyMap = [
             </article>
         </div>
 
-        <div class="pb-8 w-full flex flex-col items-center justify-center">
-             <a href="#tracker" class="group flex flex-col items-center gap-4 cursor-pointer hover:opacity-80 transition-opacity">
-                <span class="text-xs font-mono uppercase tracking-widest text-gray-500 group-hover:text-white transition-colors">Zum Anfragen-Tracker</span>
-                <div class="w-10 h-10 border border-white flex items-center justify-center rounded-full">
-                    <svg class="w-4 h-4 text-white animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="pb-6 md:pb-8 w-full flex flex-col items-center justify-center">
+             <a href="#tracker" class="group flex flex-col items-center gap-4 cursor-pointer hover:opacity-80 transition-opacity p-2">
+                <span class="text-[10px] md:text-xs font-mono uppercase tracking-widest text-gray-500 group-hover:text-white transition-colors">Zum Anfragen-Tracker</span>
+                <div class="w-8 h-8 md:w-10 md:h-10 border border-white flex items-center justify-center rounded-full">
+                    <svg class="w-3 h-3 md:w-4 md:h-4 text-white animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
                     </svg>
                 </div>
@@ -905,18 +966,18 @@ $partyMap = [
         </div>
     </section>
 
-    <div id="tracker" class="container-custom pt-16 md:pt-24">
+    <div id="tracker" class="container-custom pt-12 md:pt-24">
 
-        <header class="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 border-b-2 border-white pb-6">
-            <div>
-                <div class="text-xs font-mono text-gray-500 mb-2">SYSTEM: PARLAMENT_WATCH // TRACKING: NGO_INTERACTIONS</div>
-                <h2 class="text-6xl md:text-8xl text-white leading-none">Anfragen Tracker</h2>
+        <header class="flex flex-col lg:flex-row justify-between items-start lg:items-end mb-12 md:mb-16 border-b-2 border-white pb-6">
+            <div class="mb-8 lg:mb-0">
+                <div class="text-[10px] md:text-xs font-mono text-gray-500 mb-2">SYSTEM: PARLAMENT_WATCH // TRACKING: NGO_INTERACTIONS</div>
+                <h2 class="text-5xl md:text-8xl text-white leading-none">Anfragen Tracker</h2>
             </div>
             
-            <form method="GET" class="mt-8 md:mt-0 w-full md:w-auto">
-                <div class="flex flex-col items-start">
+            <form method="GET" class="w-full lg:w-auto">
+                <div class="flex flex-col items-start w-full">
                     <span class="text-[10px] uppercase tracking-widest text-gray-500 mb-1">Zeitraum wählen</span>
-                    <select name="range" onchange="this.form.submit()" class="w-full md:w-auto hover:text-gray-300 transition-colors">
+                    <select name="range" onchange="this.form.submit()" class="w-full lg:w-auto hover:text-gray-300 transition-colors">
                         <option value="1week" <?php echo $timeRange === '1week' ? 'selected' : ''; ?>>LETZTE WOCHE</option>
                         <option value="1month" <?php echo $timeRange === '1month' ? 'selected' : ''; ?>>LETZTER MONAT</option>
                         <option value="3months" <?php echo $timeRange === '3months' ? 'selected' : ''; ?>>3 MONATE</option>
@@ -930,9 +991,9 @@ $partyMap = [
             </form>
         </header>
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-20">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12 mb-16 md:mb-20">
             
-            <div class="lg:col-span-4 flex flex-col gap-12">
+            <div class="lg:col-span-4 flex flex-col gap-8 md:gap-12">
                 <div class="border-l-4 border-white pl-6 py-2">
                     <div class="stat-label">Gesamtanzahl</div>
                     <div class="stat-value"><?php echo number_format($totalCount); ?></div>
@@ -963,15 +1024,15 @@ $partyMap = [
 
             <div class="lg:col-span-8">
                 <div class="investigative-box !border-t-2 !py-0 !border-b-0">
-                    <div class="flex justify-between items-end mb-6">
+                    <div class="flex justify-between items-end mb-4 md:mb-6">
                         <div class="flex items-center">
-                            <h2 class="text-3xl text-white">Zeitlicher Verlauf</h2>
+                            <h2 class="text-2xl md:text-3xl text-white">Zeitlicher Verlauf</h2>
                             <button class="info-btn" onclick="openModal('timeline')" aria-label="Information zum zeitlichen Verlauf">i</button>
                         </div>
                     </div>
-                    <div style="height: 350px; width: 100%;">
-                        <canvas id="timelineChart"
-                                role="img"
+                    <div class="h-[250px] sm:h-[300px] md:h-[350px] w-full relative">
+                        <canvas id="timelineChart" 
+                                role="img" 
                                 aria-label="Liniendiagramm: Zeitlicher Verlauf der NGO Business Anfragen"
                                 aria-describedby="timeline-desc"></canvas>
                         <p id="timeline-desc" class="sr-only">Diagramm zeigt Verlauf der Anfragen über <?php echo $rangeLabel; ?>.</p>
@@ -980,34 +1041,34 @@ $partyMap = [
             </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-20">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 mb-16 md:mb-20">
             
             <div class="investigative-box">
                 <div class="flex items-start mb-4">
-                    <h2 class="investigative-header mb-0">Kampfbegriffe<br><span class="text-gray-500 text-lg font-sans font-normal">Die Sprache der Anfragen</span></h2>
+                    <h2 class="investigative-header mb-0">Kampfbegriffe<br><span class="text-gray-500 text-base md:text-lg font-sans font-normal">Die Sprache der Anfragen</span></h2>
                     <button class="info-btn" onclick="openModal('kampfbegriffe')" aria-label="Information zu Kampfbegriffen">i</button>
                 </div>
                 
-                <div class="grid grid-cols-1 gap-4">
+                <div class="grid grid-cols-1 gap-3 md:gap-4">
                     <?php foreach ($topKampfbegriffe as $index => $item): ?>
                         <?php if ($index >= 10) break; // Only show top 10 for cleaner look ?>
-                        <?php
+                        <?php 
                         arsort($item['partyBreakdown']);
                         $dominantParty = array_key_first($item['partyBreakdown']);
                         ?>
-                        <div class="flex items-baseline justify-between border-b border-gray-800 pb-2 group hover:border-gray-600 transition-colors">
+                        <div class="flex flex-wrap items-baseline justify-between border-b border-gray-800 pb-2 group hover:border-gray-600 transition-colors gap-2">
                             <div class="flex items-baseline gap-3">
                                 <span class="text-xs font-mono text-gray-600">0<?php echo $index + 1; ?></span>
-                                <span class="text-lg md:text-xl font-bold text-white group-hover:text-<?php echo $dominantParty; ?> transition-colors">
+                                <span class="text-base md:text-lg lg:text-xl font-bold text-white group-hover:text-<?php echo $dominantParty; ?> transition-colors break-all">
                                     <?php echo htmlspecialchars($item['word']); ?>
                                 </span>
                             </div>
-                            <div class="flex items-center gap-2">
-                                <span class="text-xs font-mono text-gray-500 uppercase">Dominanz:</span>
-                                <span class="text-xs font-bold px-1 bg-<?php echo $dominantParty; ?> text-black">
+                            <div class="flex items-center gap-2 ml-auto">
+                                <span class="hidden sm:inline text-xs font-mono text-gray-500 uppercase">Dominanz:</span>
+                                <span class="text-[10px] md:text-xs font-bold px-1 bg-<?php echo $dominantParty; ?> text-black">
                                     <?php echo $partyMap[$dominantParty]; ?>
                                 </span>
-                                <span class="text-sm font-mono text-gray-400 ml-2"><?php echo $item['count']; ?>×</span>
+                                <span class="text-xs md:text-sm font-mono text-gray-400 ml-2"><?php echo $item['count']; ?>×</span>
                             </div>
                         </div>
                     <?php endforeach; ?>
@@ -1016,28 +1077,28 @@ $partyMap = [
 
             <div class="investigative-box">
                 <div class="flex items-start mb-4">
-                    <h2 class="investigative-header mb-0">The Flood Wall<br><span class="text-gray-500 text-lg font-sans font-normal">Kumulative Belastung</span></h2>
+                    <h2 class="investigative-header mb-0">The Flood Wall<br><span class="text-gray-500 text-base md:text-lg font-sans font-normal">Kumulative Belastung</span></h2>
                     <button class="info-btn" onclick="openModal('floodwall')" aria-label="Information zur Flood Wall">i</button>
                 </div>
-                <div style="height: 400px; width: 100%;">
-                    <canvas id="floodWallChart"
-                            role="img"
-                            aria-label="Kumulative Belastungskurve"
+                <div class="h-[300px] md:h-[400px] w-full relative">
+                    <canvas id="floodWallChart" 
+                            role="img" 
+                            aria-label="Kumulative Belastungskurve" 
                             aria-describedby="floodwall-desc"></canvas>
                     <p id="floodwall-desc" class="sr-only">Diagramm zeigt die kumulative Anzahl der Anfragen.</p>
                 </div>
             </div>
         </div>
 
-        <div class="investigative-box mb-20">
+        <div class="investigative-box mb-16 md:mb-20">
             <div class="flex items-start mb-4">
-                <h2 class="investigative-header mb-0">Der Kalender<br><span class="text-gray-500 text-lg font-sans font-normal">Intensität nach Tagen</span></h2>
+                <h2 class="investigative-header mb-0">Der Kalender<br><span class="text-gray-500 text-base md:text-lg font-sans font-normal">Intensität nach Tagen</span></h2>
                 <button class="info-btn" onclick="openModal('calendar')" aria-label="Information zum Kalender">i</button>
             </div>
-             <div style="height: 300px; width: 100%;">
-                <canvas id="spamCalendarChart"
-                        role="img"
-                        aria-label="Heatmap der Anfragen"
+             <div class="h-[250px] sm:h-[300px] w-full relative">
+                <canvas id="spamCalendarChart" 
+                        role="img" 
+                        aria-label="Heatmap der Anfragen" 
                         aria-describedby="calendar-desc"></canvas>
                 <p id="calendar-desc" class="sr-only">Heatmap der täglichen Anfragen.</p>
             </div>
@@ -1046,7 +1107,7 @@ $partyMap = [
         <div class="mb-24">
             <div class="flex justify-between items-end border-b-4 border-white pb-4 mb-8">
                 <h2 class="text-4xl md:text-6xl text-white">Die Akten</h2>
-                <div class="text-sm font-mono text-gray-500">
+                <div class="text-xs md:text-sm font-mono text-gray-500">
                     SEITE <?php echo $page; ?> / <?php echo $totalPages; ?>
                 </div>
             </div>
@@ -1067,8 +1128,11 @@ $partyMap = [
                     <?php foreach ($displayResults as $result): ?>
                         <div class="result-item grid grid-cols-1 md:grid-cols-12 gap-3 md:gap-6 items-start group">
                             
-                            <div class="flex justify-between md:hidden mb-1">
-                                <span class="text-xs font-mono text-gray-400"><?php echo $result['date']; ?></span>
+                            <div class="flex justify-between items-baseline md:hidden mb-1">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-xs font-mono text-gray-400"><?php echo $result['date']; ?></span>
+                                    <span class="text-[10px] text-gray-600"><?php echo $result['number']; ?></span>
+                                </div>
                                 <span class="text-xs font-bold text-<?php echo $result['party']; ?>"><?php echo $partyMap[$result['party']]; ?></span>
                             </div>
 
@@ -1084,14 +1148,14 @@ $partyMap = [
                             </div>
 
                             <div class="md:col-span-7">
-                                <a href="<?php echo htmlspecialchars($result['link']); ?>" target="_blank" class="text-base md:text-lg text-white font-sans leading-snug hover:underline decoration-1 underline-offset-4 decoration-gray-500">
+                                <a href="<?php echo htmlspecialchars($result['link']); ?>" target="_blank" class="text-base md:text-lg text-white font-sans leading-snug hover:underline decoration-1 underline-offset-4 decoration-gray-500 block">
                                     <?php echo htmlspecialchars($result['title']); ?>
                                 </a>
                             </div>
 
-                            <div class="md:col-span-2 flex justify-between md:block md:text-right mt-2 md:mt-0">
+                            <div class="md:col-span-2 flex justify-end md:block md:text-right mt-2 md:mt-0">
                                 <?php if ($result['answered']): ?>
-                                    <?php
+                                    <?php 
                                     preg_match('/\/gegenstand\/([^\/]+)\//', $result['link'], $gpMatch);
                                     $gpCode = $gpMatch[1] ?? 'XXVIII';
                                     $answerLink = "https://www.parlament.gv.at/gegenstand/{$gpCode}/AB/{$result['answer_number']}";
@@ -1111,12 +1175,12 @@ $partyMap = [
             <?php endif; ?>
 
             <?php if ($totalPages > 1): ?>
-                <div class="flex flex-wrap justify-center gap-4 mt-16">
+                <div class="flex flex-wrap justify-center gap-2 md:gap-4 mt-12 md:mt-16">
                     <?php if ($page > 1): ?>
                         <a href="?range=<?php echo $timeRange; ?>&page=<?php echo $page - 1; ?>" class="pag-btn">&larr; Zurück</a>
                     <?php endif; ?>
 
-                    <?php
+                    <?php 
                     $start = max(1, $page - 2);
                     $end = min($totalPages, $page + 2);
                     for ($i = $start; $i <= $end; $i++):
@@ -1134,91 +1198,91 @@ $partyMap = [
         </div>
 
         <section class="mb-24 pt-12 border-t border-gray-800" itemscope itemtype="https://schema.org/FAQPage">
-            <h2 class="text-3xl text-white mb-12 font-head text-center">Hintergrund</h2>
+            <h2 class="text-2xl md:text-3xl text-white mb-12 font-head text-center">Hintergrund</h2>
 
-            <div class="max-w-4xl mx-auto space-y-8">
+            <div class="max-w-4xl mx-auto space-y-8 px-2 md:px-0">
                 <div itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-                    <h3 class="text-xl font-bold text-white mb-4 border-l-2 border-white pl-4" itemprop="name">
+                    <h3 class="text-lg md:text-xl font-bold text-white mb-4 border-l-2 border-white pl-4" itemprop="name">
                         Was sind parlamentarische Anfragen?
                     </h3>
                     <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
                         <p class="text-gray-400 leading-relaxed font-sans" itemprop="text">
-                            Parlamentarische Anfragen sind ein offizielles Kontrollinstrument im österreichischen Nationalrat.
-                            Abgeordnete können damit schriftliche Fragen an Ministerien richten, die verpflichtend beantwortet werden müssen.
+                            Parlamentarische Anfragen sind ein offizielles Kontrollinstrument im österreichischen Nationalrat. 
+                            Abgeordnete können damit schriftliche Fragen an Ministerien richten, die verpflichtend beantwortet werden müssen. 
                             Sie dienen grundsätzlich der demokratischen Kontrolle der Regierung.
                         </p>
                     </div>
                 </div>
 
                 <div itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-                    <h3 class="text-xl font-bold text-white mb-4 border-l-2 border-white pl-4" itemprop="name">
+                    <h3 class="text-lg md:text-xl font-bold text-white mb-4 border-l-2 border-white pl-4" itemprop="name">
                         Was könnte die Strategie dahinter sein?
                     </h3>
                     <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
                         <p class="text-gray-400 leading-relaxed font-sans" itemprop="text">
-                            Die massenhafte Verwendung des Begriffs „NGO Business" deutet auf eine bewusste politische Strategie hin.
-                            Durch hunderte nahezu identische Anfragen wird ein Narrativ erzeugt, das NGO Arbeit mit
-                            Steuergeldverschwendung, Ideologie und Missbrauch öffentlicher Mittel verknüpft.
+                            Die massenhafte Verwendung des Begriffs „NGO Business" deutet auf eine bewusste politische Strategie hin. 
+                            Durch hunderte nahezu identische Anfragen wird ein Narrativ erzeugt, das NGO Arbeit mit 
+                            Steuergeldverschwendung, Ideologie und Missbrauch öffentlicher Mittel verknüpft. 
                             Ziel ist weniger Aufklärung als vielmehr Delegitimierung.
                         </p>
                     </div>
                 </div>
 
                 <div itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-                    <h3 class="text-xl font-bold text-white mb-4 border-l-2 border-white pl-4" itemprop="name">
+                    <h3 class="text-lg md:text-xl font-bold text-white mb-4 border-l-2 border-white pl-4" itemprop="name">
                         Wieso ist das relevant?
                     </h3>
                     <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
                         <p class="text-gray-400 leading-relaxed font-sans" itemprop="text">
-                            Parlamentarische Anfragen erzeugen öffentliche Dokumente, Schlagzeilen und Suchtreffer.
-                            Werden sie strategisch geflutet, entsteht der Eindruck eines systemischen Problems,
-                            selbst wenn keine Rechtswidrigkeit vorliegt.
+                            Parlamentarische Anfragen erzeugen öffentliche Dokumente, Schlagzeilen und Suchtreffer. 
+                            Werden sie strategisch geflutet, entsteht der Eindruck eines systemischen Problems, 
+                            selbst wenn keine Rechtswidrigkeit vorliegt. 
                             So kann Vertrauen in Zivilgesellschaft, Wissenschaft und soziale Arbeit gezielt untergraben werden.
                         </p>
                     </div>
                 </div>
 
                 <div itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-                    <h3 class="text-xl font-bold text-white mb-4 border-l-2 border-white pl-4" itemprop="name">
+                    <h3 class="text-lg md:text-xl font-bold text-white mb-4 border-l-2 border-white pl-4" itemprop="name">
                         Was kannst du tun?
                     </h3>
                     <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
                         <p class="text-gray-400 leading-relaxed font-sans" itemprop="text">
-                            Red darüber. Teile die Daten. Hinterfrage Schlagworte.
-                            Je sichtbarer solche Muster werden, desto schwerer wird es,
+                            Red darüber. Teile die Daten. Hinterfrage Schlagworte. 
+                            Je sichtbarer solche Muster werden, desto schwerer wird es, 
                             parlamentarische Instrumente für politische Stimmungsmache zu missbrauchen.
                         </p>
                     </div>
                 </div>
 
                 <div class="border-t border-gray-700 pt-8" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-                    <h3 class="text-xl font-bold text-white mb-4 border-l-2 border-white pl-4" itemprop="name">
+                    <h3 class="text-lg md:text-xl font-bold text-white mb-4 border-l-2 border-white pl-4" itemprop="name">
                         Was ist Keyword-Squatting?
                     </h3>
                     <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
                         <p class="text-gray-300 leading-relaxed" itemprop="text">
-                            Keyword-Squatting beschreibt die gezielte Besetzung eines Begriffs durch massenhafte Wiederholung,
-                            um dessen Bedeutung langfristig zu prägen.
-                            Der Begriff wird so häufig verwendet, dass er in Suchmaschinen,
+                            Keyword-Squatting beschreibt die gezielte Besetzung eines Begriffs durch massenhafte Wiederholung, 
+                            um dessen Bedeutung langfristig zu prägen. 
+                            Der Begriff wird so häufig verwendet, dass er in Suchmaschinen, 
                             Medienberichten und öffentlichen Dokumenten automatisch mit einem bestimmten Narrativ verknüpft wird.
                         </p>
-
+                        
                         <p class="text-gray-300 leading-relaxed mt-4" itemprop="text">
-                            Im Fall von „NGO-Business" entsteht durch hunderte parlamentarische Anfragen eine künstliche Verbindung
-                            zwischen NGOs und negativ konnotierten Begriffen wie Steuergeld, Ideologie oder Missbrauch,
+                            Im Fall von „NGO-Business" entsteht durch hunderte parlamentarische Anfragen eine künstliche Verbindung 
+                            zwischen NGOs und negativ konnotierten Begriffen wie Steuergeld, Ideologie oder Missbrauch, 
                             unabhängig davon, ob es reale Probleme gibt.
                         </p>
 
                         <p class="text-gray-300 leading-relaxed mt-4" itemprop="text">
-                            Parlamentsseiten eignen sich dafür besonders gut.
-                            Sie gelten als staatliche Primärquelle, besitzen hohe Glaubwürdigkeit
-                            und werden von Suchmaschinen stark priorisiert.
+                            Parlamentsseiten eignen sich dafür besonders gut. 
+                            Sie gelten als staatliche Primärquelle, besitzen hohe Glaubwürdigkeit 
+                            und werden von Suchmaschinen stark priorisiert. 
                             Jeder dort verwendete Begriff erhält dadurch Sichtbarkeit, Autorität und Dauerhaftigkeit.
                         </p>
 
                         <p class="text-gray-300 leading-relaxed mt-4" itemprop="text">
-                            Wird ein Schlagwort systematisch über parlamentarische Dokumente verbreitet,
-                            entsteht ein digitales Archiv politischer Narrative,
+                            Wird ein Schlagwort systematisch über parlamentarische Dokumente verbreitet, 
+                            entsteht ein digitales Archiv politischer Narrative, 
                             das weit über tagespolitische Debatten hinaus wirkt.
                         </p>
                     </div>
@@ -1228,7 +1292,6 @@ $partyMap = [
 
     </div>
 
-    <!-- Modals für Graph-Informationen -->
     <div id="modal-timeline" class="modal-overlay" onclick="closeModalOnOverlay(event, 'timeline')">
         <div class="modal-content" onclick="event.stopPropagation()">
             <button class="modal-close" onclick="closeModal('timeline')" aria-label="Schließen">&times;</button>
@@ -1289,25 +1352,25 @@ $partyMap = [
         </div>
     </div>
 
-    <footer class="bg-black border-t border-white py-12 mt-auto">
+    <footer class="bg-black border-t border-white py-8 md:py-12 mt-auto">
         <div class="container-custom">
             <div class="flex flex-col md:flex-row justify-between items-start gap-8">
                 <div class="max-w-md">
                     <h3 class="text-sm font-bold text-white mb-4 uppercase tracking-wider">Über das Projekt</h3>
                     <p class="text-xs text-gray-500 leading-relaxed font-sans mb-4">
-                        Der NGO Business Tracker analysiert parlamentarische Anfragen im österreichischen Nationalrat, die gezielt zum Thema NGOs gestellt werden.
+                        Der NGO Business Tracker analysiert parlamentarische Anfragen im österreichischen Nationalrat, die gezielt zum Thema NGOs gestellt werden. 
                         <br><br>
                         Er macht sichtbar, wie oft, von wem und in welchen Mustern das Framing gepusht wird.
                     </p>
                     <div class="text-xs font-mono text-gray-600">
-                         © <?php echo date('Y'); ?> "NGO BUSINESS" TRACKER
+                          © <?php echo date('Y'); ?> "NGO BUSINESS" TRACKER
                     </div>
                 </div>
 
-                <div class="text-right">
+                <div class="text-left md:text-right w-full md:w-auto">
                     <div class="text-xs font-mono text-gray-500 mb-2">QUELLE: PARLAMENT.GV.AT</div>
                     <div class="text-xs font-mono text-gray-500 mb-2">LAST UPDATE: <?php echo date('d.m.Y H:i'); ?></div>
-                    <div class="flex items-center justify-end gap-2 mt-4">
+                    <div class="flex items-center justify-start md:justify-end gap-2 mt-4">
                         <div class="w-2 h-2 bg-green-600 rounded-full"></div>
                         <span class="text-xs font-mono text-green-600">SYSTEM OPERATIONAL</span>
                     </div>

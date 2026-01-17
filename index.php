@@ -537,16 +537,426 @@ $partyMap = [
     <link rel="alternate" hreflang="de" href="<?php echo htmlspecialchars($currentUrl); ?>">
     <link rel="alternate" hreflang="x-default" href="<?php echo htmlspecialchars($canonicalUrl); ?>">
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+    <!-- Resource Hints: Establish early connections to required origins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
     <link rel="dns-prefetch" href="https://www.parlament.gv.at">
 
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Preload critical fonts to reduce render delay -->
+    <link rel="preload" href="https://fonts.gstatic.com/s/bebasneue/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuI6fMZhrib2Bg-4.woff2" as="font" type="font/woff2" crossorigin fetchpriority="high">
+    <link rel="preload" href="https://fonts.gstatic.com/s/inter/v24/tDbv2o-flEEny0FZhsfKu5WU5zr3E_BX0zS8.woff2" as="font" type="font/woff2" crossorigin fetchpriority="high">
 
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <!-- Optimized Google Fonts with font-display: swap to prevent render blocking -->
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet"></noscript>
+
+    <!-- Critical CSS: Inline styles for above-the-fold content to eliminate render blocking -->
+    <style>
+        /* Font-face with swap for immediate text rendering */
+        @font-face {
+            font-family: 'Bebas Neue';
+            font-style: normal;
+            font-weight: 400;
+            font-display: swap;
+            src: url(https://fonts.gstatic.com/s/bebasneue/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuI6fMZhrib2Bg-4.woff2) format('woff2');
+        }
+        @font-face {
+            font-family: 'Inter';
+            font-style: normal;
+            font-weight: 400;
+            font-display: swap;
+            src: url(https://fonts.gstatic.com/s/inter/v24/tDbv2o-flEEny0FZhsfKu5WU5zr3E_BX0zS8.woff2) format('woff2');
+        }
+
+        /* Reset & Base */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        body {
+            background-color: #111111;
+            color: #e5e5e5;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Hero Section Critical Styles */
+        .min-h-screen { min-height: 100vh; }
+        .flex { display: flex; }
+        .flex-col { flex-direction: column; }
+        .items-center { align-items: center; }
+        .justify-between { justify-content: space-between; }
+        .justify-center { justify-content: center; }
+        .text-center { text-align: center; }
+        .gap-2 { gap: 0.5rem; }
+        .gap-3 { gap: 0.75rem; }
+        .gap-4 { gap: 1rem; }
+        .gap-6 { gap: 1.5rem; }
+
+        /* Spacing */
+        .px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+        .py-10 { padding-top: 2.5rem; padding-bottom: 2.5rem; }
+        .py-12 { padding-top: 3rem; padding-bottom: 3rem; }
+        .mb-6 { margin-bottom: 1.5rem; }
+        .mb-8 { margin-bottom: 2rem; }
+        .pb-1 { padding-bottom: 0.25rem; }
+
+        /* Typography */
+        .text-white { color: #ffffff; }
+        .text-gray-300 { color: #d1d5db; }
+        .text-gray-400 { color: #9ca3af; }
+        .text-gray-600 { color: #4b5563; }
+        .text-red-600 { color: #dc2626; }
+        .text-sm { font-size: 0.875rem; }
+        .text-base { font-size: 1rem; }
+        .text-lg { font-size: 1.125rem; }
+        .text-xl { font-size: 1.25rem; }
+        .font-bold { font-weight: 700; }
+        .font-sans { font-family: 'Inter', sans-serif; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+        .leading-relaxed { line-height: 1.625; }
+        .uppercase { text-transform: uppercase; }
+        .tracking-widest { letter-spacing: 0.1em; }
+
+        /* Borders */
+        .border-b { border-bottom-width: 1px; }
+        .border-white { border-color: #ffffff; }
+        .border-gray-600 { border-color: #4b5563; }
+
+        /* Backgrounds */
+        .bg-black { background-color: #000000; }
+        .bg-white { background-color: #ffffff; }
+        .bg-red-600 { background-color: #dc2626; }
+
+        /* Sizing */
+        .w-2 { width: 0.5rem; }
+        .h-2 { height: 0.5rem; }
+        .w-3 { width: 0.75rem; }
+        .h-3 { height: 0.75rem; }
+        .w-1\.5 { width: 0.375rem; }
+        .h-1\.5 { height: 0.375rem; }
+        .w-8 { width: 2rem; }
+        .h-8 { height: 2rem; }
+        .w-full { width: 100%; }
+        .max-w-5xl { max-width: 64rem; }
+        .max-w-3xl { max-width: 48rem; }
+        .mx-auto { margin-left: auto; margin-right: auto; }
+
+        /* Animations */
+        .animate-pulse { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+        .animate-bounce { animation: bounce 1s infinite; }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: .5; }
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(-25%); animation-timing-function: cubic-bezier(0.8, 0, 1, 1); }
+            50% { transform: translateY(0); animation-timing-function: cubic-bezier(0, 0, 0.2, 1); }
+        }
+
+        /* Utilities */
+        .inline-block { display: inline-block; }
+        .rounded-full { border-radius: 9999px; }
+        .space-y-6 > * + * { margin-top: 1.5rem; }
+
+        /* Hero Heading - Critical LCP Element */
+        h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 3rem;
+            line-height: 0.9;
+            color: #ffffff;
+            letter-spacing: -0.025em;
+            font-display: swap; /* Ensure text is visible during font load */
+        }
+
+        /* Additional critical layout utilities */
+        .flex-grow { flex-grow: 1; }
+        .break-words { word-wrap: break-word; overflow-wrap: break-word; }
+        .text-left { text-align: left; }
+        article, header { display: block; }
+
+        /* Responsive adjustments */
+        @media (min-width: 640px) {
+            h1 { font-size: 3.75rem; }
+        }
+        @media (min-width: 768px) {
+            h1 { font-size: 4.5rem; }
+            .py-10 { padding-top: 4rem; padding-bottom: 4rem; }
+            .gap-3 { gap: 0.75rem; }
+            .text-lg { font-size: 1.25rem; }
+            .w-2 { width: 0.5rem; }
+            .h-2 { height: 0.5rem; }
+            .w-3 { width: 0.75rem; }
+            .h-3 { height: 0.75rem; }
+            .text-center { text-align: center; }
+        }
+        @media (min-width: 1024px) {
+            h1 { font-size: 4.5rem; }
+        }
+        @media (min-width: 1280px) {
+            h1 { font-size: 6rem; }
+        }
+
+        /* Performance optimization: Prevent layout shift during load */
+        .text-5xl { font-size: 3rem; line-height: 1; }
+        .text-6xl { font-size: 3.75rem; line-height: 1; }
+        .text-7xl { font-size: 4.5rem; line-height: 1; }
+        .text-9xl { font-size: 8rem; line-height: 1; }
+        @media (min-width: 640px) { .sm\:text-6xl { font-size: 3.75rem; line-height: 1; } }
+        @media (min-width: 768px) { .md\:text-7xl { font-size: 4.5rem; line-height: 1; } }
+        @media (min-width: 1024px) { .lg\:text-7xl { font-size: 4.5rem; line-height: 1; } }
+        @media (min-width: 1280px) { .xl\:text-9xl { font-size: 8rem; line-height: 1; } }
+
+        /* Critical paragraph styles for LCP element */
+        p { margin: 0; }
+        .leading-\[0\.9\] { line-height: 0.9; }
+        .tracking-tight { letter-spacing: -0.025em; }
+        .tracking-\[0\.2em\] { letter-spacing: 0.2em; }
+
+        /* Mobile-specific text sizes */
+        .text-\[10px\] { font-size: 10px; }
+        .text-xs { font-size: 0.75rem; line-height: 1rem; }
+        .text-2xl { font-size: 1.5rem; line-height: 2rem; }
+        .text-3xl { font-size: 1.875rem; line-height: 2.25rem; }
+        .text-4xl { font-size: 2.25rem; line-height: 2.5rem; }
+
+        /* Additional layout utilities for mobile */
+        .items-start { align-items: flex-start; }
+        .items-baseline { align-items: baseline; }
+        .justify-end { justify-content: flex-end; }
+        .grid { display: grid; }
+        .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+        .hidden { display: none; }
+        .block { display: block; }
+        .relative { position: relative; }
+        .cursor-pointer { cursor: pointer; }
+        .overflow-hidden { overflow: hidden; }
+
+        /* Additional spacing */
+        .gap-8 { gap: 2rem; }
+        .px-2 { padding-left: 0.5rem; padding-right: 0.5rem; }
+        .px-4 { padding-left: 1rem; padding-right: 1rem; }
+        .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+        .py-4 { padding-top: 1rem; padding-bottom: 1rem; }
+        .py-8 { padding-top: 2rem; padding-bottom: 2rem; }
+        .pt-4 { padding-top: 1rem; }
+        .pt-16 { padding-top: 4rem; }
+        .pb-2 { padding-bottom: 0.5rem; }
+        .pb-4 { padding-bottom: 1rem; }
+        .pb-8 { padding-bottom: 2rem; }
+        .pl-4 { padding-left: 1rem; }
+        .pl-6 { padding-left: 1.5rem; }
+        .mb-1 { margin-bottom: 0.25rem; }
+        .mb-2 { margin-bottom: 0.5rem; }
+        .mb-4 { margin-bottom: 1rem; }
+        .mb-12 { margin-bottom: 3rem; }
+        .mb-16 { margin-bottom: 4rem; }
+        .mb-20 { margin-bottom: 5rem; }
+        .mb-24 { margin-bottom: 6rem; }
+        .mt-2 { margin-top: 0.5rem; }
+        .mt-4 { margin-top: 1rem; }
+        .mt-auto { margin-top: auto; }
+        .ml-2 { margin-left: 0.5rem; }
+        .ml-auto { margin-left: auto; }
+
+        /* Additional colors */
+        .text-gray-500 { color: #6b7280; }
+        .text-red-500 { color: #ef4444; }
+        .text-green-500 { color: #22c55e; }
+        .bg-gray-900 { background-color: #111827; }
+
+        /* Additional borders */
+        .border-b-2 { border-bottom-width: 2px; }
+        .border-b-4 { border-bottom-width: 4px; }
+        .border-l-2 { border-left-width: 2px; }
+        .border-l-4 { border-left-width: 4px; }
+        .border-t { border-top-width: 1px; }
+        .border-gray-700 { border-color: #374151; }
+        .border-gray-800 { border-color: #1f2937; }
+        .border-green-900 { border-color: #14532d; }
+
+        /* Additional sizing */
+        .w-12 { width: 3rem; }
+        .max-w-4xl { max-width: 56rem; }
+        .max-w-md { max-width: 28rem; }
+        .max-w-\[1200px\] { max-width: 1200px; }
+
+        /* Additional typography */
+        .font-head { font-family: 'Bebas Neue', sans-serif; }
+        .text-right { text-align: right; }
+        .leading-none { line-height: 1; }
+        .leading-snug { line-height: 1.375; }
+        .italic { font-style: italic; }
+        .break-all { word-break: break-all; }
+
+        /* Additional utilities */
+        .space-y-8 > * + * { margin-top: 2rem; }
+        .space-y-4 > * + * { margin-top: 1rem; }
+        .transition-colors { transition-property: color, background-color, border-color; transition-duration: 150ms; }
+        .container-custom {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* Flexbox wrap and direction */
+        .flex-row { flex-direction: row; }
+        .flex-wrap { flex-wrap: wrap; }
+
+        /* Additional semantic elements */
+        main, section, footer, article, header { display: block; }
+        h2, h3 { font-family: 'Bebas Neue', sans-serif; font-weight: 400; }
+
+        /* Responsive utilities */
+        @media (min-width: 640px) {
+            .sm\:text-6xl { font-size: 3.75rem; line-height: 1; }
+        }
+        @media (min-width: 768px) {
+            .container-custom { padding: 0 1.5rem; }
+            .md\:flex { display: flex; }
+            .md\:hidden { display: none; }
+            .md\:block { display: block; }
+            .md\:grid { display: grid; }
+            .md\:flex-row { flex-direction: row; }
+            .md\:gap-3 { gap: 0.75rem; }
+            .md\:gap-6 { gap: 1.5rem; }
+            .md\:gap-10 { gap: 2.5rem; }
+            .md\:py-12 { padding-top: 3rem; padding-bottom: 3rem; }
+            .md\:py-16 { padding-top: 4rem; padding-bottom: 4rem; }
+            .md\:px-0 { padding-left: 0; padding-right: 0; }
+            .md\:pt-24 { padding-top: 6rem; }
+            .md\:mb-6 { margin-bottom: 1.5rem; }
+            .md\:mb-10 { margin-bottom: 2.5rem; }
+            .md\:mb-16 { margin-bottom: 4rem; }
+            .md\:text-xs { font-size: 0.75rem; line-height: 1rem; }
+            .md\:text-sm { font-size: 0.875rem; line-height: 1.25rem; }
+            .md\:text-lg { font-size: 1.125rem; line-height: 1.75rem; }
+            .md\:text-xl { font-size: 1.25rem; line-height: 1.75rem; }
+            .md\:text-3xl { font-size: 1.875rem; line-height: 2.25rem; }
+            .md\:text-5xl { font-size: 3rem; line-height: 1; }
+            .md\:text-6xl { font-size: 3.75rem; line-height: 1; }
+            .md\:text-7xl { font-size: 4.5rem; line-height: 1; }
+            .md\:text-center { text-align: center; }
+            .md\:text-right { text-align: right; }
+            .md\:w-2 { width: 0.5rem; }
+            .md\:w-3 { width: 0.75rem; }
+            .md\:w-10 { width: 2.5rem; }
+            .md\:h-2 { height: 0.5rem; }
+            .md\:h-3 { height: 0.75rem; }
+            .md\:h-10 { height: 2.5rem; }
+            .md\:col-span-1 { grid-column: span 1 / span 1; }
+            .md\:col-span-2 { grid-column: span 2 / span 2; }
+            .md\:col-span-7 { grid-column: span 7 / span 7; }
+            .md\:col-span-8 { grid-column: span 8 / span 8; }
+            .md\:col-span-12 { grid-column: span 12 / span 12; }
+            .md\:grid-cols-12 { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+        }
+        @media (min-width: 1024px) {
+            .lg\:flex-row { flex-direction: row; }
+            .lg\:items-end { align-items: flex-end; }
+            .lg\:gap-10 { gap: 2.5rem; }
+            .lg\:gap-12 { gap: 3rem; }
+            .lg\:gap-16 { gap: 4rem; }
+            .lg\:pt-20 { padding-top: 5rem; }
+            .lg\:mb-16 { margin-bottom: 4rem; }
+            .lg\:mb-20 { margin-bottom: 5rem; }
+            .lg\:mb-24 { margin-bottom: 6rem; }
+            .lg\:text-5xl { font-size: 3rem; line-height: 1; }
+            .lg\:text-7xl { font-size: 4.5rem; line-height: 1; }
+            .lg\:text-xl { font-size: 1.25rem; line-height: 1.75rem; }
+            .lg\:w-auto { width: auto; }
+            .lg\:col-span-4 { grid-column: span 4 / span 4; }
+            .lg\:col-span-8 { grid-column: span 8 / span 8; }
+            .lg\:grid-cols-12 { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+            .lg\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
+        @media (min-width: 1280px) {
+            .xl\:gap-16 { gap: 4rem; }
+            .xl\:pt-24 { padding-top: 6rem; }
+            .xl\:mb-20 { margin-bottom: 5rem; }
+            .xl\:text-6xl { font-size: 3.75rem; line-height: 1; }
+            .xl\:text-8xl { font-size: 6rem; line-height: 1; }
+            .xl\:text-9xl { font-size: 8rem; line-height: 1; }
+        }
+    </style>
+
+    <!-- Tailwind CSS - Load immediately but async for balanced performance + appearance -->
+    <script>
+        // Load Tailwind CSS immediately but async to maintain good appearance
+        (function() {
+            var s = document.createElement('script');
+            s.src = 'https://cdn.tailwindcss.com';
+            s.async = true; // Async loading - doesn't block HTML parsing
+            document.head.appendChild(s);
+        })();
+    </script>
+
+    <!-- Chart.js - Deferred and lazy loaded when needed -->
+    <script>
+        // Lazy load Chart.js with minimal overhead
+        (function() {
+            var loaded = false;
+            var loading = false;
+
+            window.loadChartJS = function() {
+                if (loaded || loading) return Promise.resolve();
+                loading = true;
+
+                return new Promise(function(resolve, reject) {
+                    var s = document.createElement('script');
+                    s.src = 'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js';
+                    s.onload = function() { loaded = true; resolve(); };
+                    s.onerror = reject;
+                    document.head.appendChild(s);
+                });
+            };
+
+            // Lightweight intersection observer - only set up when idle
+            function setupObserver() {
+                if (!('IntersectionObserver' in window)) {
+                    loadChartJS();
+                    return;
+                }
+
+                var observer = new IntersectionObserver(function(entries) {
+                    for (var i = 0; i < entries.length; i++) {
+                        if (entries[i].isIntersecting) {
+                            loadChartJS();
+                            observer.disconnect();
+                            break;
+                        }
+                    }
+                }, { rootMargin: '100px' });
+
+                var canvases = document.querySelectorAll('canvas');
+                for (var i = 0; i < canvases.length; i++) {
+                    observer.observe(canvases[i]);
+                }
+            }
+
+            // Defer observer setup to idle time
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', function() {
+                    if ('requestIdleCallback' in window) {
+                        requestIdleCallback(setupObserver, { timeout: 2000 });
+                    } else {
+                        setTimeout(setupObserver, 1);
+                    }
+                });
+            } else {
+                if ('requestIdleCallback' in window) {
+                    requestIdleCallback(setupObserver, { timeout: 2000 });
+                } else {
+                    setTimeout(setupObserver, 1);
+                }
+            }
+        })();
+    </script>
 
     <script type="application/ld+json">
     {
@@ -1031,7 +1441,8 @@ $partyMap = [
         </div>
     </section>
 
-    <div id="tracker" class="container-custom pt-16 md:pt-24 lg:pt-20 xl:pt-24">
+    <!-- Main content area with semantic landmark -->
+    <main id="tracker" class="container-custom pt-16 md:pt-24 lg:pt-20 xl:pt-24">
 
         <header class="flex flex-col lg:flex-row justify-between items-start lg:items-end mb-12 lg:mb-16 xl:mb-20 border-b-2 border-white pb-8">
             <div class="mb-8 lg:mb-0">
@@ -1041,8 +1452,8 @@ $partyMap = [
             
             <form method="GET" class="w-full lg:w-auto">
                 <div class="flex flex-col items-start w-full">
-                    <span class="text-[10px] uppercase tracking-widest text-gray-500 mb-1">Zeitraum wählen</span>
-                    <select name="range" onchange="this.form.submit()" class="w-full lg:w-auto hover:text-gray-300 transition-colors">
+                    <label for="time-range-select" class="text-[10px] uppercase tracking-widest text-gray-500 mb-1">Zeitraum wählen</label>
+                    <select id="time-range-select" name="range" onchange="this.form.submit()" class="w-full lg:w-auto hover:text-gray-300 transition-colors" aria-label="Zeitraum für Anfragen auswählen">
                         <option value="1week" <?php echo $timeRange === '1week' ? 'selected' : ''; ?>>LETZTE WOCHE</option>
                         <option value="1month" <?php echo $timeRange === '1month' ? 'selected' : ''; ?>>LETZTER MONAT</option>
                         <option value="3months" <?php echo $timeRange === '3months' ? 'selected' : ''; ?>>3 MONATE</option>
@@ -1355,7 +1766,7 @@ $partyMap = [
             </div>
         </section>
 
-    </div>
+    </main>
 
     <div id="modal-timeline" class="modal-overlay" onclick="closeModalOnOverlay(event, 'timeline')">
         <div class="modal-content" onclick="event.stopPropagation()">
@@ -1446,12 +1857,27 @@ $partyMap = [
 
     <script>
         console.log('=== NGO TRACKER DEBUG START ===');
-        
-        document.addEventListener('DOMContentLoaded', function() {
+
+        // Initialize charts function - called after Chart.js loads
+        function initializeCharts() {
+            // Wait for Chart.js to be available
+            if (typeof Chart === 'undefined') {
+                console.log('Chart.js not loaded yet, waiting...');
+                return;
+            }
+
             // Chart Config - Cleaner, less "techy" more editorial
             Chart.defaults.color = '#555';
             Chart.defaults.borderColor = 'rgba(255,255,255,0.1)';
             Chart.defaults.font.family = "'Inter', sans-serif";
+
+            // Performance optimization: reduce animation duration to minimize layout thrashing
+            Chart.defaults.animation = {
+                duration: 400, // Reduced from default 1000ms
+                easing: 'easeOutQuart'
+            };
+            Chart.defaults.responsive = true;
+            Chart.defaults.maintainAspectRatio = false;
 
             // Data Prep
             const monthlyData = <?php echo json_encode($monthlyData); ?>;
@@ -1459,7 +1885,7 @@ $partyMap = [
             const spamData = <?php echo json_encode($spamCalendarData); ?>;
             const dates = <?php echo json_encode(array_values(array_map(fn($d) => $d->format('d.m.Y'), $allDates))); ?>;
             const allDateKeys = <?php echo json_encode(array_keys($allDates)); ?>;
-            
+
             const partyColors = {
                 'S': '#ef4444', 'V': '#22d3ee', 'F': '#3b82f6',
                 'G': '#22c55e', 'N': '#e879f9', 'OTHER': '#9ca3af'
@@ -1666,6 +2092,21 @@ $partyMap = [
                         closeModal(modalId);
                     }
                 }
+            });
+        }
+
+        // Initialize charts when Chart.js is ready and DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load Chart.js and initialize charts
+            loadChartJS().then(() => {
+                // Small delay to ensure Chart.js is fully initialized
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        initializeCharts();
+                    });
+                });
+            }).catch(err => {
+                console.error('Failed to load Chart.js:', err);
             });
         });
     </script>

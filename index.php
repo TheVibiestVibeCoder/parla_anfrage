@@ -475,8 +475,8 @@ $partyMap = [
     <meta name="twitter:title" content="<?php echo htmlspecialchars($seoTitle); ?>">
     <meta name="twitter:description" content="<?php echo htmlspecialchars($seoDescription); ?>">
 
-    <meta name="theme-color" content="#050505">
-    <meta name="msapplication-TileColor" content="#050505">
+    <meta name="theme-color" content="#111111">
+    <meta name="msapplication-TileColor" content="#111111">
     <meta name="application-name" content="&quot;NGO Business&quot; Tracker">
     <meta name="apple-mobile-web-app-title" content="&quot;NGO Business&quot; Tracker">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -492,7 +492,7 @@ $partyMap = [
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
     <link rel="dns-prefetch" href="https://www.parlament.gv.at">
 
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@300;400;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -589,18 +589,20 @@ $partyMap = [
         ]
     }
     </script>
-    
+     
     <style>
         :root {
-            --bg-color: #050505;
-            --text-color: #f0f0f0;
-            --grid-line: rgba(255, 255, 255, 0.1);
-            --accent: #ffffff;
-            --font-head: 'Bebas Neue', display;
-            --font-body: 'Manrope', sans-serif;
+            --bg-color: #111111;
+            --paper-color: #1a1a1a;
+            --text-color: #e5e5e5;
+            --text-muted: #a3a3a3;
+            --border-color: #333333;
+            
+            --font-head: 'Bebas Neue', sans-serif;
+            --font-body: 'Inter', sans-serif;
             --font-mono: 'JetBrains Mono', monospace;
 
-            /* Party Colors Dark Mode */
+            /* Party Colors - Kept simpler */
             --color-s: #ef4444;
             --color-v: #22d3ee;
             --color-f: #3b82f6;
@@ -618,109 +620,101 @@ $partyMap = [
             color: var(--text-color);
             font-family: var(--font-body);
             -webkit-font-smoothing: antialiased;
+            line-height: 1.6;
         }
 
-        h1, h2, h3 { font-family: var(--font-head); letter-spacing: 1px; text-transform: uppercase; }
+        h1, h2, h3 { 
+            font-family: var(--font-head); 
+            font-weight: 400; /* Bebas Neue is bold by default */
+            letter-spacing: 1px;
+        }
         
         .container-custom {
-            width: 95%; max-width: 1600px; margin: 0 auto; padding: 2rem 1rem;
+            width: 100%; 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            padding: 0 1.5rem;
         }
 
-        /* GRID AESTHETIC */
-        .mono-box {
-            background: rgba(255,255,255,0.02);
-            border: 1px solid var(--grid-line);
-            padding: 1.5rem;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-        
-        .mono-box:hover {
-            border-color: rgba(255,255,255,0.3);
-            background: rgba(255,255,255,0.04);
+        /* INVESTIGATIVE DOSSIER STYLE */
+        .investigative-box {
+            background: var(--bg-color);
+            border-top: 4px solid var(--text-color);
+            border-bottom: 1px solid var(--border-color);
+            padding: 2rem 0;
+            margin-bottom: 3rem;
         }
 
-        .mono-box::before {
-            content: '';
-            position: absolute; top: -1px; left: -1px;
-            width: 10px; height: 10px;
-            border-top: 2px solid var(--accent);
-            border-left: 2px solid var(--accent);
-            opacity: 0.5;
-        }
-
-        /* TYPOGRAPHY OVERRIDES */
-        .stat-value { font-size: 3.5rem; line-height: 1; font-family: var(--font-head); color: var(--accent); }
-        .stat-label { font-size: 0.85rem; text-transform: uppercase; color: #888; letter-spacing: 2px; margin-bottom: 0.5rem; }
-
-        /* FORM ELEMENTS - Updated for more space */
-        select {
-            background: #000;
+        .investigative-header {
+            font-family: var(--font-head);
+            font-size: 2.2rem;
             color: #fff;
-            border: 1px solid #333;
-            /* Increased Padding */
-            padding: 0.75rem 3rem 0.75rem 1.25rem;
-            font-family: var(--font-mono);
-            font-size: 0.9rem;
-            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            line-height: 1;
+        }
+
+        /* TYPOGRAPHY */
+        .stat-value { 
+            font-size: 4rem; 
+            line-height: 1; 
+            font-family: var(--font-head); 
+            color: #fff; 
+        }
+        .stat-label { 
+            font-size: 0.75rem; 
+            text-transform: uppercase; 
+            font-family: var(--font-body);
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            color: var(--text-muted); 
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        /* FORM ELEMENTS */
+        select {
+            background: transparent;
+            color: #fff;
+            border: none;
+            border-bottom: 2px solid #fff;
+            padding: 0.5rem 2rem 0.5rem 0;
+            font-family: var(--font-head);
+            font-size: 1.5rem;
             cursor: pointer;
             appearance: none;
             background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23FFFFFF%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
             background-repeat: no-repeat;
-            background-position: right 1em top 50%;
-            background-size: .65em auto;
-            transition: all 0.2s ease;
+            background-position: right 0 top 50%;
+            background-size: .5em auto;
+            border-radius: 0;
         }
-        select:hover { border-color: #666; }
-        select:focus { outline: 1px solid #fff; border-color: #fff; }
+        select:focus { outline: none; border-color: var(--text-muted); }
 
-        /* LIST ITEMS */
+        /* LIST ITEMS - Editorial Style */
         .result-item {
-            border-bottom: 1px solid var(--grid-line);
-            padding: 1.25rem 0;
-            transition: all 0.2s;
+            border-bottom: 1px solid var(--border-color);
+            padding: 1.5rem 0;
+            transition: background 0.2s;
         }
         .result-item:hover {
-            background: rgba(255,255,255,0.03);
-            padding-left: 1rem;
-            border-left: 2px solid var(--accent);
-        }
-
-        /* SCROLLBAR */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #0a0a0a; }
-        ::-webkit-scrollbar-thumb { background: #333; }
-        ::-webkit-scrollbar-thumb:hover { background: #555; }
-
-        /* Screen Reader Only - Accessibility for SEO */
-        .sr-only {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            white-space: nowrap;
-            border-width: 0;
+            background: #161616;
         }
 
         /* PAGINATION */
         .pag-btn {
-            border: 1px solid var(--grid-line);
+            font-family: var(--font-body);
+            font-weight: 600;
             padding: 0.5rem 1rem;
-            color: #888;
-            font-family: var(--font-mono);
-            font-size: 0.8rem;
-            transition: 0.3s;
+            color: var(--text-muted);
+            border: 1px solid transparent;
         }
         .pag-btn:hover, .pag-btn.active {
-            background: #fff;
-            color: #000;
-            border-color: #fff;
+            color: #fff;
+            border-bottom: 1px solid #fff;
         }
 
-        /* PARTY COLORS */
+        /* PARTY ACCENTS */
         .border-S { border-color: var(--color-s) !important; color: var(--color-s); }
         .border-V { border-color: var(--color-v) !important; color: var(--color-v); }
         .border-F { border-color: var(--color-f) !important; color: var(--color-f); }
@@ -733,97 +727,84 @@ $partyMap = [
         .bg-G { background-color: var(--color-g); }
         .bg-N { background-color: var(--color-n); }
         .bg-OTHER { background-color: var(--color-other); }
+
+        .text-S { color: var(--color-s); }
+        .text-V { color: var(--color-v); }
+        .text-F { color: var(--color-f); }
+        .text-G { color: var(--color-g); }
+        .text-N { color: var(--color-n); }
+
+        /* Screen Reader Only */
+        .sr-only {
+            position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+            overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border-width: 0;
+        }
     </style>
 </head>
-<body>
+<body class="flex flex-col min-h-screen">
 
-    <header class="w-full border-b border-[rgba(255,255,255,0.1)] bg-black">
-        <div class="container-custom">
-            <div class="flex flex-col md:flex-row justify-between items-center py-6">
-                <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 border border-white flex items-center justify-center">
-                        <span class="text-2xl font-bold font-mono text-white">N</span>
-                    </div>
-                    <div>
-                        <h1 class="text-2xl md:text-3xl font-bold" style="font-family: var(--font-head); letter-spacing: 2px;">
-                            "NGO BUSINESS" TRACKER
-                        </h1>
-                        <p class="text-xs font-mono text-gray-500 uppercase tracking-wider">Anfragen Dashboard</p>
-                    </div>
-                </div>
-                <div class="mt-4 md:mt-0">
-                    <div class="flex items-center gap-3">
-                        <div class="text-xs font-mono text-gray-600 text-right">
-                            <div class="text-gray-400">QUELLE:</div>
-                            <div class="text-gray-500">PARLAMENT.GV.AT</div>
-                        </div>
-                        <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                        <div class="text-xs font-mono text-green-500">LIVE</div>
-                    </div>
-                </div>
+    <section class="h-[100vh] min-h-[600px] flex flex-col justify-between items-center text-center bg-black border-b border-white px-4">
+        
+        <div class="w-full pt-6 flex justify-between items-center max-w-[1200px]">
+            <div class="flex items-center gap-3">
+                <div class="w-3 h-3 bg-white"></div>
+                <span class="tracking-widest text-lg font-head text-white">NGO-Business</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="w-2 h-2 bg-red-600 rounded-full animate-pulse"></span>
+                <span class="text-xs font-mono text-red-600 uppercase">Live Update</span>
             </div>
         </div>
-    </header>
 
-    <!-- Hero Opener Section - Full Screen -->
-    <section class="h-screen flex flex-col justify-between items-center text-center px-6 py-8 -mt-6"
-             style="background: #000;">
-
-        <!-- Main Content - Centered -->
-        <div class="flex-1 flex flex-col justify-center items-center max-w-5xl mx-auto w-full">
-            <article itemscope itemtype="https://schema.org/Article">
-                <header>
-                    <h1 class="text-3xl md:text-5xl lg:text-6xl font-bold mb-6 md:mb-10 text-white leading-tight"
-                        style="font-family: var(--font-head); letter-spacing: 2px;"
-                        itemprop="headline">
-                        DAS "NGO-BUSINESS"-NARRATIV DER FPÖ
+        <div class="flex-grow flex flex-col justify-center max-w-4xl mx-auto w-full">
+            <article>
+                <header class="mb-8">
+                    <span class="inline-block border-b border-gray-600 pb-1 mb-4 text-xs font-mono text-gray-400 uppercase tracking-[0.2em]">Die Analyse</span>
+                    <h1 class="text-6xl md:text-8xl lg:text-9xl text-white leading-[0.9] mb-6" style="font-family: 'Bebas Neue', sans-serif;">
+                        Das "NGO-Business"<br>Narrativ der FPÖ
                     </h1>
                 </header>
 
-                <div class="text-base md:text-xl lg:text-2xl text-gray-300 space-y-4 md:space-y-6 leading-relaxed max-w-4xl mx-auto"
-                     itemprop="articleBody">
-                    <p>
-                        Die FPÖ flutet das Parlament zum Thema "NGO-Business". Seit <?php echo $earliestDateFormatted; ?>
+                <div class="space-y-6 max-w-2xl mx-auto text-left md:text-center">
+                    <p class="text-lg md:text-xl text-gray-300 font-sans leading-relaxed">
+                        <span class="text-white font-bold border-b border-gray-600">Datenjournalismus:</span> Die FPÖ flutet das Parlament mit dem Begriff "NGO-Business". Seit <?php echo $earliestDateFormatted; ?>
                         sind <?php echo number_format($totalCount); ?> Anfragen zum Thema NGOs, fast immer mit dem Begriff "NGO-Business" versehen, eingegangen.
                     </p>
 
-                    <p class="pt-2 md:pt-4">
+                    <p class="text-base md:text-lg text-gray-400 font-sans leading-relaxed">
                         Warum? Wichtige NGO-Arbeit wird ganz bewusst in den Kontext von Steuergeld-Verschwendung gerückt,
                         um die Arbeit von Non-Profit-Organisationen zu verunglimpfen.
-                    </p>
-
-                    <p class="pt-4 md:pt-6 font-semibold text-white">
-                        Wir decken auf, was es mit den Anfragen auf sich hat.
+                        <br><br>
+                        <span class="text-white">Wir decken auf, was es mit den Anfragen auf sich hat.</span>
                     </p>
                 </div>
             </article>
         </div>
 
-        <!-- Arrow Down - Always at Bottom of Viewport -->
-        <a href="#tracker" class="cursor-pointer group pb-6 flex-shrink-0">
-            <div class="text-xs md:text-sm font-mono text-gray-400 uppercase tracking-widest mb-3 group-hover:text-white transition-colors">
-                Zum Anfragen-Tracker
-            </div>
-            <div class="flex justify-center">
-                <svg class="w-10 h-10 md:w-12 md:h-12 text-white animate-bounce group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
-                </svg>
-            </div>
-        </a>
+        <div class="pb-8 w-full flex flex-col items-center justify-center">
+             <a href="#tracker" class="group flex flex-col items-center gap-4 cursor-pointer hover:opacity-80 transition-opacity">
+                <span class="text-xs font-mono uppercase tracking-widest text-gray-500 group-hover:text-white transition-colors">Zum Anfragen-Tracker</span>
+                <div class="w-10 h-10 border border-white flex items-center justify-center rounded-full">
+                    <svg class="w-4 h-4 text-white animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+                    </svg>
+                </div>
+            </a>
+        </div>
     </section>
 
-    <div class="container-custom">
+    <div id="tracker" class="container-custom pt-16 md:pt-24">
 
-        <header id="tracker" class="flex flex-col md:flex-row justify-between items-end border-b border-[rgba(255,255,255,0.1)] pb-6 mb-10">
+        <header class="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 border-b-2 border-white pb-6">
             <div>
                 <div class="text-xs font-mono text-gray-500 mb-2">SYSTEM: PARLAMENT_WATCH // TRACKING: NGO_INTERACTIONS</div>
-                <h2 class="text-5xl md:text-7xl text-white leading-none">Anfragen<br><span style="color: #666;">Tracker</span></h2>
+                <h2 class="text-6xl md:text-8xl text-white leading-none">Anfragen Tracker</h2>
             </div>
             
-            <form method="GET" class="mt-6 md:mt-0">
-                <div class="flex items-center gap-4">
-                    <span class="text-xs uppercase tracking-widest text-gray-500 font-bold">Zeitraum</span>
-                    <select name="range" onchange="this.form.submit()" class="px-4 py-2 bg-black border border-gray-700 text-white font-mono text-xs rounded hover:border-gray-500 focus:outline-none focus:border-white transition-colors cursor-pointer">
+            <form method="GET" class="mt-8 md:mt-0 w-full md:w-auto">
+                <div class="flex flex-col items-start">
+                    <span class="text-[10px] uppercase tracking-widest text-gray-500 mb-1">Zeitraum wählen</span>
+                    <select name="range" onchange="this.form.submit()" class="w-full md:w-auto hover:text-gray-300 transition-colors">
                         <option value="1week" <?php echo $timeRange === '1week' ? 'selected' : ''; ?>>LETZTE WOCHE</option>
                         <option value="1month" <?php echo $timeRange === '1month' ? 'selected' : ''; ?>>LETZTER MONAT</option>
                         <option value="3months" <?php echo $timeRange === '3months' ? 'selected' : ''; ?>>3 MONATE</option>
@@ -837,198 +818,166 @@ $partyMap = [
             </form>
         </header>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-4 mb-8">
-            <div class="mono-box">
-                <div class="stat-label">Gesamtanzahl</div>
-                <div class="stat-value"><?php echo number_format($totalCount); ?></div>
-                <div class="text-xs font-mono text-gray-600 mt-2">ANFRAGEN IM ZEITRAUM</div>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-20">
+            
+            <div class="lg:col-span-4 flex flex-col gap-12">
+                <div class="border-l-4 border-white pl-6 py-2">
+                    <div class="stat-label">Gesamtanzahl</div>
+                    <div class="stat-value"><?php echo number_format($totalCount); ?></div>
+                    <div class="text-sm font-sans text-gray-400 mt-2 italic">Anfragen im gewählten Zeitraum erfasst.</div>
+                </div>
+
+                <div>
+                    <div class="stat-label mb-6">Verteilung nach Parteien</div>
+                    <div class="space-y-4">
+                        <?php 
+                        // Sort party stats high to low for better visual list
+                        arsort($partyStats);
+                        foreach ($partyStats as $code => $count): 
+                            if ($count === 0 && $code !== 'OTHER') continue;
+                            $percentage = $totalCount > 0 ? ($count / $totalCount) * 100 : 0;
+                        ?>
+                        <div class="flex items-center gap-4 group">
+                            <div class="w-12 text-sm font-bold text-gray-300"><?php echo isset($partyMap[$code]) ? $partyMap[$code] : $code; ?></div>
+                            <div class="flex-grow h-8 bg-gray-900 relative overflow-hidden">
+                                <div class="h-full bg-<?php echo $code; ?> transition-all duration-1000" style="width: <?php echo $percentage; ?>%;"></div>
+                            </div>
+                            <div class="w-12 text-right font-mono text-xs text-gray-500"><?php echo $count; ?></div>
+                        </div>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
             </div>
 
-            <div class="mono-box lg:col-span-2 flex flex-col justify-between">
-                <div class="stat-label">Verteilung nach Parteien</div>
+            <div class="lg:col-span-8">
+                <div class="investigative-box !border-t-2 !py-0 !border-b-0">
+                    <div class="flex justify-between items-end mb-6">
+                        <h2 class="text-3xl text-white">Zeitlicher Verlauf</h2>
+                    </div>
+                    <div style="height: 350px; width: 100%;">
+                        <canvas id="timelineChart"
+                                role="img"
+                                aria-label="Liniendiagramm: Zeitlicher Verlauf der NGO Business Anfragen"
+                                aria-describedby="timeline-desc"></canvas>
+                        <p id="timeline-desc" class="sr-only">Diagramm zeigt Verlauf der Anfragen über <?php echo $rangeLabel; ?>.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-20">
+            
+            <div class="investigative-box">
+                <h2 class="investigative-header">Kampfbegriffe<br><span class="text-gray-500 text-lg font-sans font-normal">Die Sprache der Anfragen</span></h2>
                 
-                <div class="flex h-full items-end gap-3 mt-4 pb-2" style="min-height: 120px;">
-                    <?php 
-                    $maxVal = max($partyStats) ?: 1; 
-                    // Explicitly define order or iterate current stats (which contains all keys)
-                    // The CSS flex-1 ensures they spread evenly.
-                    foreach ($partyStats as $code => $count): 
-                        // Even if count is 0, we show it to display all parties
-                        $height = ($count > 0) ? ($count / $maxVal) * 100 : 0;
-                        // Min height just for visual marker
-                        $visualHeight = $height == 0 ? 1 : $height; 
-                    ?>
-                        <div class="relative group flex-1 h-full flex flex-col justify-end">
-                            <div class="w-full bg-<?php echo $code; ?> opacity-70 group-hover:opacity-100 transition-all relative" 
-                                 style="height: <?php echo $visualHeight; ?>%; min-height: 2px;">
-                                 <?php if($count > 0): ?>
-                                    <div class="absolute -top-6 w-full text-center text-xs font-mono text-white opacity-0 group-hover:opacity-100 transition-opacity">
-                                        <?php echo $count; ?>
-                                    </div>
-                                 <?php endif; ?>
+                <div class="grid grid-cols-1 gap-4">
+                    <?php foreach ($topKampfbegriffe as $index => $item): ?>
+                        <?php if ($index >= 10) break; // Only show top 10 for cleaner look ?>
+                        <?php
+                        arsort($item['partyBreakdown']);
+                        $dominantParty = array_key_first($item['partyBreakdown']);
+                        ?>
+                        <div class="flex items-baseline justify-between border-b border-gray-800 pb-2 group hover:border-gray-600 transition-colors">
+                            <div class="flex items-baseline gap-3">
+                                <span class="text-xs font-mono text-gray-600">0<?php echo $index + 1; ?></span>
+                                <span class="text-lg md:text-xl font-bold text-white group-hover:text-<?php echo $dominantParty; ?> transition-colors">
+                                    <?php echo htmlspecialchars($item['word']); ?>
+                                </span>
                             </div>
-                            <div class="mt-3 text-xs font-mono text-gray-400 border-t border-gray-800 pt-2 flex flex-col items-center gap-1">
-                                <span class="font-bold text-gray-300"><?php echo isset($partyMap[$code]) ? $partyMap[$code] : $code; ?></span>
-                                <span class="text-[10px] text-gray-600"><?php echo $count; ?></span>
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs font-mono text-gray-500 uppercase">Dominanz:</span>
+                                <span class="text-xs font-bold px-1 bg-<?php echo $dominantParty; ?> text-black">
+                                    <?php echo $partyMap[$dominantParty]; ?>
+                                </span>
+                                <span class="text-sm font-mono text-gray-400 ml-2"><?php echo $item['count']; ?>×</span>
                             </div>
                         </div>
                     <?php endforeach; ?>
                 </div>
             </div>
 
+            <div class="investigative-box">
+                <h2 class="investigative-header">The Flood Wall<br><span class="text-gray-500 text-lg font-sans font-normal">Kumulative Belastung</span></h2>
+                <div style="height: 400px; width: 100%;">
+                    <canvas id="floodWallChart"
+                            role="img"
+                            aria-label="Kumulative Belastungskurve"
+                            aria-describedby="floodwall-desc"></canvas>
+                    <p id="floodwall-desc" class="sr-only">Diagramm zeigt die kumulative Anzahl der Anfragen.</p>
+                </div>
+            </div>
         </div>
 
-        <section class="mono-box mb-8" aria-labelledby="timeline-heading">
-            <div class="flex justify-between items-center mb-6">
-                <h2 id="timeline-heading" class="text-2xl text-white">Zeitlicher Verlauf NGO Business Anfragen</h2>
-                <div class="h-px bg-white w-10"></div>
-            </div>
-            <div style="height: 300px; width: 100%;">
-                <canvas id="timelineChart"
-                        role="img"
-                        aria-label="Liniendiagramm: Zeitlicher Verlauf der NGO Business Anfragen im österreichischen Parlament über <?php echo $rangeLabel; ?>"
-                        aria-describedby="timeline-desc"></canvas>
-                <p id="timeline-desc" class="sr-only">
-                    Dieses Diagramm zeigt die Anzahl der NGO-bezogenen parlamentarischen Anfragen im Zeitverlauf für den Zeitraum <?php echo $rangeLabel; ?>.
-                    Insgesamt wurden <?php echo $totalCount; ?> NGO Business Anfragen erfasst.
-                </p>
-            </div>
-        </section>
-
-        <section class="mono-box mb-8" aria-labelledby="keywords-heading">
-            <div class="flex justify-between items-center mb-6">
-                <h2 id="keywords-heading" class="text-2xl text-white">Top Kampfbegriffe im NGO Business</h2>
-                <div class="h-px bg-white w-10"></div>
-            </div>
-            <div class="text-sm text-gray-400 mb-6 font-mono">
-                Die häufigsten INHALTLICHEN Begriffe aus NGO Business Anfragetiteln (ohne Füllwörter). Zeigt welche Partei den Begriff am meisten nutzt.
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <?php foreach ($topKampfbegriffe as $item): ?>
-                    <?php
-                    // Find the dominant party
-                    arsort($item['partyBreakdown']);
-                    $dominantParty = array_key_first($item['partyBreakdown']);
-                    $dominantCount = $item['partyBreakdown'][$dominantParty];
-                    ?>
-                    <div class="border border-gray-800 bg-black bg-opacity-40 p-4 hover:bg-opacity-60 hover:border-gray-600 transition-all">
-                        <div class="flex justify-between items-start mb-3">
-                            <div class="text-lg font-bold font-mono text-white uppercase">
-                                <?php echo htmlspecialchars($item['word']); ?>
-                            </div>
-                            <div class="text-xs font-mono text-gray-500">
-                                <?php echo $item['count']; ?>×
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between pt-2 border-t border-gray-800">
-                            <div class="text-xs font-mono text-gray-400">
-                                Meist genutzt von:
-                            </div>
-                            <div class="text-sm font-bold font-mono text-white">
-                                <?php echo $partyMap[$dominantParty]; ?> <span class="text-gray-500">(<?php echo $dominantCount; ?>×)</span>
-                            </div>
-                        </div>
-                    </div>
-                <?php endforeach; ?>
-            </div>
-        </section>
-
-        <section class="mono-box mb-8" aria-labelledby="floodwall-heading">
-            <div class="flex justify-between items-center mb-6">
-                <h2 id="floodwall-heading" class="text-2xl text-white">The "Flood Wall" – Kumulative NGO Business Belastungskurve</h2>
-                <div class="h-px bg-white w-10"></div>
-            </div>
-            <div class="text-sm text-gray-400 mb-4 font-mono">
-                Zeigt die kumulative Gesamtlast der NGO Business Anfragen: Wenn eine Partei das Parlament flutet, wird ihre Linie steil nach oben gehen.
-            </div>
-            <div style="height: 400px; width: 100%;">
-                <canvas id="floodWallChart"
-                        role="img"
-                        aria-label="Kumulative Belastungskurve: NGO Business Anfragen pro Partei im Zeitverlauf"
-                        aria-describedby="floodwall-desc"></canvas>
-                <p id="floodwall-desc" class="sr-only">
-                    Dieses Diagramm zeigt die kumulative Anzahl der NGO Business Anfragen pro Partei über den Zeitraum <?php echo $rangeLabel; ?>.
-                    Die Steigung der Linien zeigt die Intensität der parlamentarischen NGO Business Aktivitäten jeder Partei.
-                </p>
-            </div>
-        </section>
-
-        <section class="mono-box mb-8" aria-labelledby="calendar-heading">
-            <div class="flex justify-between items-center mb-6">
-                <h2 id="calendar-heading" class="text-2xl text-white">The "Spam Calendar" – Heatmap NGO Business Intensität</h2>
-                <div class="h-px bg-white w-10"></div>
-            </div>
-            <div class="text-sm text-gray-400 mb-4 font-mono">
-                NGO Business Anfragen kommen in Wellen: Hellere Farben = mehr Anfragen an diesem Tag
-            </div>
-            <div style="height: 400px; width: 100%; overflow-x: auto;">
+        <div class="investigative-box mb-20">
+             <h2 class="investigative-header">Der Kalender<br><span class="text-gray-500 text-lg font-sans font-normal">Intensität nach Tagen</span></h2>
+             <div style="height: 300px; width: 100%;">
                 <canvas id="spamCalendarChart"
                         role="img"
-                        aria-label="Heatmap: Tägliche Intensität der NGO Business Anfragen pro Partei"
+                        aria-label="Heatmap der Anfragen"
                         aria-describedby="calendar-desc"></canvas>
-                <p id="calendar-desc" class="sr-only">
-                    Diese Heatmap visualisiert die tägliche Intensität der NGO Business Anfragen jeder Partei.
-                    Hellere Farben repräsentieren Tage mit höherer Aktivität in parlamentarischen NGO-bezogenen Anfragen.
-                </p>
+                <p id="calendar-desc" class="sr-only">Heatmap der täglichen Anfragen.</p>
             </div>
-        </section>
+        </div>
 
-        <section class="mono-box" aria-labelledby="results-heading">
-            <div class="flex justify-between items-center border-b border-gray-800 pb-4 mb-4">
-                <h2 id="results-heading" class="text-2xl text-white">Gefundene NGO Business Anfragen</h2>
-                <div class="text-xs font-mono text-gray-500">
+        <div class="mb-24">
+            <div class="flex justify-between items-end border-b-4 border-white pb-4 mb-8">
+                <h2 class="text-4xl md:text-6xl text-white">Die Akten</h2>
+                <div class="text-sm font-mono text-gray-500">
                     SEITE <?php echo $page; ?> / <?php echo $totalPages; ?>
                 </div>
             </div>
 
             <?php if (empty($displayResults)): ?>
-                <div class="py-12 text-center">
-                    <h3 class="text-gray-500">KEINE DATEN IN DIESEM BEREICH GEFUNDEN</h3>
+                <div class="py-20 text-center border-b border-gray-800">
+                    <h3 class="text-gray-500 font-sans italic text-xl">Keine Daten in diesem Bereich gefunden.</h3>
                 </div>
             <?php else: ?>
                 <div class="flex flex-col">
-                    <div class="hidden md:grid grid-cols-12 gap-4 text-xs font-mono text-gray-600 pb-2 uppercase tracking-wider">
-                        <div class="col-span-2">Datum / ID</div>
+                    <div class="hidden md:grid grid-cols-12 gap-6 text-xs font-mono text-gray-500 pb-2 uppercase tracking-widest border-b border-gray-800 mb-2">
+                        <div class="col-span-2">Datum</div>
                         <div class="col-span-1">Partei</div>
                         <div class="col-span-7">Betreff</div>
                         <div class="col-span-2 text-right">Status</div>
                     </div>
 
                     <?php foreach ($displayResults as $result): ?>
-                        <div class="result-item grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 items-center group">
+                        <div class="result-item grid grid-cols-1 md:grid-cols-12 gap-3 md:gap-6 items-start group">
                             
-                            <div class="md:col-span-2 font-mono text-xs text-gray-400">
-                                <div class="text-white"><?php echo $result['date']; ?></div>
-                                <div class="text-gray-600"><?php echo $result['number']; ?></div>
+                            <div class="flex justify-between md:hidden mb-1">
+                                <span class="text-xs font-mono text-gray-400"><?php echo $result['date']; ?></span>
+                                <span class="text-xs font-bold text-<?php echo $result['party']; ?>"><?php echo $partyMap[$result['party']]; ?></span>
                             </div>
 
-                            <div class="md:col-span-1">
-                                <span class="border-<?php echo $result['party']; ?> border px-2 py-1 text-xs font-bold font-mono">
+                            <div class="hidden md:block md:col-span-2 font-mono text-sm text-gray-400">
+                                <?php echo $result['date']; ?>
+                                <div class="text-xs text-gray-600 mt-1"><?php echo $result['number']; ?></div>
+                            </div>
+
+                            <div class="hidden md:block md:col-span-1">
+                                <span class="text-sm font-bold text-<?php echo $result['party']; ?>">
                                     <?php echo $partyMap[$result['party']]; ?>
                                 </span>
                             </div>
 
                             <div class="md:col-span-7">
-                                <a href="<?php echo htmlspecialchars($result['link']); ?>" target="_blank" class="text-lg text-gray-300 group-hover:text-white transition-colors leading-tight block">
+                                <a href="<?php echo htmlspecialchars($result['link']); ?>" target="_blank" class="text-base md:text-lg text-white font-sans leading-snug hover:underline decoration-1 underline-offset-4 decoration-gray-500">
                                     <?php echo htmlspecialchars($result['title']); ?>
                                 </a>
                             </div>
 
-                            <div class="md:col-span-2 text-left md:text-right">
+                            <div class="md:col-span-2 flex justify-between md:block md:text-right mt-2 md:mt-0">
                                 <?php if ($result['answered']): ?>
                                     <?php
-                                    // Extract GP code from inquiry link to construct answer link
                                     preg_match('/\/gegenstand\/([^\/]+)\//', $result['link'], $gpMatch);
                                     $gpCode = $gpMatch[1] ?? 'XXVIII';
                                     $answerLink = "https://www.parlament.gv.at/gegenstand/{$gpCode}/AB/{$result['answer_number']}";
                                     ?>
-                                    <a href="<?php echo htmlspecialchars($answerLink); ?>" target="_blank" class="text-xs font-mono text-green-500 hover:text-green-400 transition-colors">
-                                        [ BEANTWORTET ]<br>
-                                        <span class="opacity-50"><?php echo $result['answer_number']; ?>/AB</span>
+                                    <a href="<?php echo htmlspecialchars($answerLink); ?>" target="_blank" class="inline-block border border-green-900 text-green-500 px-2 py-1 text-xs font-mono uppercase hover:bg-green-900 hover:text-white transition-colors">
+                                        Beantwortet
                                     </a>
                                 <?php else: ?>
-                                    <span class="text-xs font-mono text-red-500 animate-pulse">
-                                        [ OFFEN ]
+                                    <span class="inline-block bg-red-900/20 text-red-500 px-2 py-1 text-xs font-mono uppercase">
+                                        Offen
                                     </span>
                                 <?php endif; ?>
                             </div>
@@ -1038,9 +987,9 @@ $partyMap = [
             <?php endif; ?>
 
             <?php if ($totalPages > 1): ?>
-                <div class="flex flex-wrap justify-center gap-2 mt-8 pt-4 border-t border-gray-800">
+                <div class="flex flex-wrap justify-center gap-4 mt-16">
                     <?php if ($page > 1): ?>
-                        <a href="?range=<?php echo $timeRange; ?>&page=<?php echo $page - 1; ?>" class="pag-btn">&lt; ZURÜCK</a>
+                        <a href="?range=<?php echo $timeRange; ?>&page=<?php echo $page - 1; ?>" class="pag-btn">&larr; Zurück</a>
                     <?php endif; ?>
 
                     <?php
@@ -1054,142 +1003,128 @@ $partyMap = [
                     <?php endfor; ?>
 
                     <?php if ($page < $totalPages): ?>
-                        <a href="?range=<?php echo $timeRange; ?>&page=<?php echo $page + 1; ?>" class="pag-btn">WEITER &gt;</a>
+                        <a href="?range=<?php echo $timeRange; ?>&page=<?php echo $page + 1; ?>" class="pag-btn">Weiter &rarr;</a>
                     <?php endif; ?>
                 </div>
             <?php endif; ?>
-        </section>
-
-<section class="mono-box mt-16" itemscope itemtype="https://schema.org/FAQPage" aria-labelledby="faq-heading">
-    <h2 id="faq-heading" class="text-3xl text-white mb-8" style="font-family: var(--font-head); letter-spacing: 1px;">
-        Was steckt hinter den NGO Business Anfragen
-    </h2>
-
-    <div class="space-y-6">
-
-        <div class="border-b border-gray-800 pb-6" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-            <h3 class="text-xl font-bold text-white mb-3" itemprop="name">
-                Was sind parlamentarische Anfragen?
-            </h3>
-            <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-                <p class="text-gray-300 leading-relaxed" itemprop="text">
-                    Parlamentarische Anfragen sind ein offizielles Kontrollinstrument im österreichischen Nationalrat.
-                    Abgeordnete können damit schriftliche Fragen an Ministerien richten, die verpflichtend beantwortet werden müssen.
-                    Sie dienen grundsätzlich der demokratischen Kontrolle der Regierung.
-                </p>
-            </div>
         </div>
 
-        <div class="border-b border-gray-800 pb-6" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-            <h3 class="text-xl font-bold text-white mb-3" itemprop="name">
-                Was könnte die Strategie dahinter sein?
-            </h3>
-            <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-                <p class="text-gray-300 leading-relaxed" itemprop="text">
-                    Die massenhafte Verwendung des Begriffs „NGO Business“ deutet auf eine bewusste politische Strategie hin.
-                    Durch hunderte nahezu identische Anfragen wird ein Narrativ erzeugt, das NGO Arbeit mit
-                    Steuergeldverschwendung, Ideologie und Missbrauch öffentlicher Mittel verknüpft.
-                    Ziel ist weniger Aufklärung als vielmehr Delegitimierung.
-                </p>
-            </div>
-        </div>
+        <section class="mb-24 pt-12 border-t border-gray-800" itemscope itemtype="https://schema.org/FAQPage">
+            <h2 class="text-3xl text-white mb-12 font-head text-center">Hintergrund</h2>
 
-        <div class="border-b border-gray-800 pb-6" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-            <h3 class="text-xl font-bold text-white mb-3" itemprop="name">
-                Wieso ist das relevant?
-            </h3>
-            <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-                <p class="text-gray-300 leading-relaxed" itemprop="text">
-                    Parlamentarische Anfragen erzeugen öffentliche Dokumente, Schlagzeilen und Suchtreffer.
-                    Werden sie strategisch geflutet, entsteht der Eindruck eines systemischen Problems,
-                    selbst wenn keine Rechtswidrigkeit vorliegt.
-                    So kann Vertrauen in Zivilgesellschaft, Wissenschaft und soziale Arbeit gezielt untergraben werden.
-                </p>
-            </div>
-        </div>
-
-        <div class="pb-6" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-            <h3 class="text-xl font-bold text-white mb-3" itemprop="name">
-                Was kannst du tun?
-            </h3>
-            <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-                <p class="text-gray-300 leading-relaxed" itemprop="text">
-                    Red darüber.
-                    Teile die Daten.
-                    Hinterfrage Schlagworte.
-                    Je sichtbarer solche Muster werden, desto schwerer wird es,
-                    parlamentarische Instrumente für politische Stimmungsmache zu missbrauchen.
-                </p>
-            </div>
-        </div>
-
-    </div>
-</section>
-
-
-    </div>
-
-    <footer class="w-full border-t border-[rgba(255,255,255,0.1)] bg-black mt-16">
-        <div class="container-custom">
-            <div class="py-8">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-                    <div>
-                        <h3 class="text-sm font-bold font-mono text-white mb-3 uppercase tracking-wider">Über das NGO Business System</h3>
-                        <p class="text-xs font-mono text-gray-500 leading-relaxed">
-                            Der führende <strong>"NGO Business" Tracker</strong> für Österreich. Echtzeit-Tracking von NGO-bezogenen parlamentarischen Anfragen aus dem österreichischen Parlament.
-                            Professionelle Datenanalyse und Visualisierung für maximale <strong>NGO Transparenz</strong> und demokratische Kontrolle.
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                    <h3 class="text-xl font-bold text-white mb-4 border-l-2 border-white pl-4" itemprop="name">
+                        Was sind parlamentarische Anfragen?
+                    </h3>
+                    <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                        <p class="text-gray-400 leading-relaxed font-sans" itemprop="text">
+                            Parlamentarische Anfragen sind ein offizielles Kontrollinstrument im österreichischen Nationalrat.
+                            Abgeordnete können damit schriftliche Fragen an Ministerien richten, die verpflichtend beantwortet werden müssen.
+                            Sie dienen grundsätzlich der demokratischen Kontrolle der Regierung.
                         </p>
-                        <div class="mt-4 text-xs font-mono text-gray-600">
-                            <strong class="text-gray-400">Keywords:</strong> NGO Business Österreich, Parlamentarische Anfragen NGO, NGO Transparenz, NGO Monitoring, NGO Watch
-                        </div>
-                    </div>
-
-                    <div>
-                        <h3 class="text-sm font-bold font-mono text-white mb-3 uppercase tracking-wider">Datenquelle</h3>
-                        <div class="text-xs font-mono text-gray-500 space-y-2">
-                            <div class="flex items-center gap-2">
-                                <div class="w-1 h-1 bg-green-500"></div>
-                                <span>Parlament.gv.at API</span>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <div class="w-1 h-1 bg-green-500"></div>
-                                <span>Live-Datenabfrage</span>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <div class="w-1 h-1 bg-green-500"></div>
-                                <span>Sichere HTTPS-Verbindung</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div>
-                        <h3 class="text-sm font-bold font-mono text-white mb-3 uppercase tracking-wider">Technologie</h3>
-                        <div class="text-xs font-mono text-gray-500 space-y-1">
-                            <div>PHP <?php echo phpversion(); ?></div>
-                            <div>Chart.js 4.4.0</div>
-                            <div>Tailwind CSS</div>
-                            <div class="pt-2 text-gray-600">
-                                <?php
-                                $timestamp = date('d.m.Y H:i:s');
-                                echo "Zuletzt aktualisiert: {$timestamp}";
-                                ?>
-                            </div>
-                        </div>
                     </div>
                 </div>
 
-                <div class="pt-6 border-t border-[rgba(255,255,255,0.05)] flex flex-col md:flex-row justify-between items-center gap-4">
-                    <div class="text-xs font-mono text-gray-700">
-                        © <?php echo date('Y'); ?> "NGO BUSINESS" TRACKER - Anfragen Dashboard
+                <div itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                    <h3 class="text-xl font-bold text-white mb-4 border-l-2 border-white pl-4" itemprop="name">
+                        Was könnte die Strategie dahinter sein?
+                    </h3>
+                    <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                        <p class="text-gray-400 leading-relaxed font-sans" itemprop="text">
+                            Die massenhafte Verwendung des Begriffs „NGO Business“ deutet auf eine bewusste politische Strategie hin.
+                            Durch hunderte nahezu identische Anfragen wird ein Narrativ erzeugt, das NGO Arbeit mit
+                            Steuergeldverschwendung, Ideologie und Missbrauch öffentlicher Mittel verknüpft.
+                            Ziel ist weniger Aufklärung als vielmehr Delegitimierung.
+                        </p>
                     </div>
-                    <div class="flex items-center gap-4">
-                        <div class="text-xs font-mono text-gray-700">
-                            <strong>SEO:</strong> #1 für NGO Business Tracking
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <div class="w-2 h-2 bg-green-500 rounded-full"></div>
-                            <span class="text-xs font-mono text-green-600">SYSTEM AKTIV</span>
-                        </div>
+                </div>
+
+                <div itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                    <h3 class="text-xl font-bold text-white mb-4 border-l-2 border-white pl-4" itemprop="name">
+                        Wieso ist das relevant?
+                    </h3>
+                    <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                        <p class="text-gray-400 leading-relaxed font-sans" itemprop="text">
+                            Parlamentarische Anfragen erzeugen öffentliche Dokumente, Schlagzeilen und Suchtreffer.
+                            Werden sie strategisch geflutet, entsteht der Eindruck eines systemischen Problems,
+                            selbst wenn keine Rechtswidrigkeit vorliegt.
+                            So kann Vertrauen in Zivilgesellschaft, Wissenschaft und soziale Arbeit gezielt untergraben werden.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="border-b border-gray-800 pb-6 mt-12" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                    <h3 class="text-xl font-bold text-white mb-3" itemprop="name">
+                        Was ist Keyword-Squatting?
+                    </h3>
+                    <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                        <p class="text-gray-300 leading-relaxed" itemprop="text">
+                            Keyword-Squatting beschreibt die gezielte Besetzung eines Begriffs durch massenhafte Wiederholung,
+                            um dessen Bedeutung langfristig zu prägen.
+                            Der Begriff wird so häufig verwendet, dass er in Suchmaschinen,
+                            Medienberichten und öffentlichen Dokumenten automatisch mit einem bestimmten Narrativ verknüpft wird.
+                        </p>
+
+                        <p class="text-gray-300 leading-relaxed mt-4" itemprop="text">
+                            Im Fall von „NGO-Business“ entsteht durch hunderte parlamentarische Anfragen eine künstliche Verbindung
+                            zwischen NGOs und negativ konnotierten Begriffen wie Steuergeld, Ideologie oder Missbrauch,
+                            unabhängig davon, ob es reale Probleme gibt.
+                        </p>
+
+                        <p class="text-gray-300 leading-relaxed mt-4" itemprop="text">
+                            Parlamentsseiten eignen sich dafür besonders gut.
+                            Sie gelten als staatliche Primärquelle, besitzen hohe Glaubwürdigkeit
+                            und werden von Suchmaschinen stark priorisiert.
+                            Jeder dort verwendete Begriff erhält dadurch Sichtbarkeit, Autorität und Dauerhaftigkeit.
+                        </p>
+
+                        <p class="text-gray-300 leading-relaxed mt-4" itemprop="text">
+                            Wird ein Schlagwort systematisch über parlamentarische Dokumente verbreitet,
+                            entsteht ein digitales Archiv politischer Narrative,
+                            das weit über tagespolitische Debatten hinaus wirkt.
+                        </p>
+                    </div>
+                </div>
+
+                <div itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                    <h3 class="text-xl font-bold text-white mb-4 border-l-2 border-white pl-4" itemprop="name">
+                        Was kannst du tun?
+                    </h3>
+                    <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                        <p class="text-gray-400 leading-relaxed font-sans" itemprop="text">
+                            Red darüber. Teile die Daten. Hinterfrage Schlagworte.
+                            Je sichtbarer solche Muster werden, desto schwerer wird es,
+                            parlamentarische Instrumente für politische Stimmungsmache zu missbrauchen.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <footer class="bg-black border-t border-white py-12 mt-auto">
+        <div class="container-custom">
+            <div class="flex flex-col md:flex-row justify-between items-start gap-8">
+                <div class="max-w-md">
+                    <h3 class="text-sm font-bold text-white mb-4 uppercase tracking-wider">Über das Projekt</h3>
+                    <p class="text-xs text-gray-500 leading-relaxed font-sans mb-4">
+                        Der NGO Business Tracker analysiert parlamentarische Anfragen im österreichischen Nationalrat, die gezielt zum Thema NGOs gestellt werden.
+                        <br><br>
+                        Er macht sichtbar, wie oft, von wem und in welchen Mustern das Framing gepusht wird.
+                    </p>
+                    <div class="text-xs font-mono text-gray-600">
+                         © <?php echo date('Y'); ?> "NGO BUSINESS" TRACKER
+                    </div>
+                </div>
+
+                <div class="text-right">
+                    <div class="text-xs font-mono text-gray-500 mb-2">QUELLE: PARLAMENT.GV.AT</div>
+                    <div class="text-xs font-mono text-gray-500 mb-2">LAST UPDATE: <?php echo date('d.m.Y H:i'); ?></div>
+                    <div class="flex items-center justify-end gap-2 mt-4">
+                        <div class="w-2 h-2 bg-green-600 rounded-full"></div>
+                        <span class="text-xs font-mono text-green-600">SYSTEM OPERATIONAL</span>
                     </div>
                 </div>
             </div>
@@ -1197,295 +1132,149 @@ $partyMap = [
     </footer>
 
     <script>
-        // Error logging to console
         console.log('=== NGO TRACKER DEBUG START ===');
-        console.log('Page loaded successfully');
-
-        // Check if Chart.js is loaded
-        if (typeof Chart === 'undefined') {
-            console.error('ERROR: Chart.js not loaded!');
-        } else {
-            console.log('Chart.js loaded successfully');
-        }
-
-        // CRITICAL: Wait for DOM to be fully loaded before initializing charts
+        
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('DOM Content Loaded - initializing charts...');
+            // Chart Config - Cleaner, less "techy" more editorial
+            Chart.defaults.color = '#555';
+            Chart.defaults.borderColor = 'rgba(255,255,255,0.1)';
+            Chart.defaults.font.family = "'Inter', sans-serif";
 
-            // Check if all canvas elements exist
-            const timelineCanvas = document.getElementById('timelineChart');
-            const floodWallCanvas = document.getElementById('floodWallChart');
-            const spamCalendarCanvas = document.getElementById('spamCalendarChart');
+            // Data Prep
+            const monthlyData = <?php echo json_encode($monthlyData); ?>;
+            const floodData = <?php echo json_encode($floodWallData); ?>;
+            const spamData = <?php echo json_encode($spamCalendarData); ?>;
+            const dates = <?php echo json_encode(array_values(array_map(fn($d) => $d->format('d.m.Y'), $allDates))); ?>;
+            const allDateKeys = <?php echo json_encode(array_keys($allDates)); ?>;
+            
+            const partyColors = {
+                'S': '#ef4444', 'V': '#22d3ee', 'F': '#3b82f6',
+                'G': '#22c55e', 'N': '#e879f9', 'OTHER': '#9ca3af'
+            };
+            const partyNames = {
+                'S': 'SPÖ', 'V': 'ÖVP', 'F': 'FPÖ',
+                'G': 'GRÜNE', 'N': 'NEOS', 'OTHER': 'ANDERE'
+            };
 
-            console.log('Canvas elements found:');
-            console.log('- timelineChart:', timelineCanvas ? 'YES' : 'NO');
-            console.log('- floodWallChart:', floodWallCanvas ? 'YES' : 'NO');
-            console.log('- spamCalendarChart:', spamCalendarCanvas ? 'YES' : 'NO');
-
-            // --- CHART CONFIG ---
-            Chart.defaults.color = '#666';
-            Chart.defaults.borderColor = 'rgba(255,255,255,0.05)';
-            Chart.defaults.font.family = "'Manrope', sans-serif";
-
-            // Timeline Chart
-            try {
-            console.log('Initializing Timeline Chart...');
-            const monthLabels = <?php echo json_encode(array_values(array_map(fn($m) => $m['label'], $monthlyData))); ?>;
-            const monthCounts = <?php echo json_encode(array_values(array_map(fn($m) => $m['count'], $monthlyData))); ?>;
-
-            console.log('Month labels:', monthLabels);
-            console.log('Month counts:', monthCounts);
-
-            const ctx = document.getElementById('timelineChart');
-            if (!ctx) {
-                throw new Error('Timeline chart canvas not found!');
-            }
-
-            // Create Gradient
-            const gradient = ctx.getContext('2d').createLinearGradient(0, 0, 0, 300);
-            gradient.addColorStop(0, 'rgba(255, 255, 255, 0.2)');
-            gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
-
-                new Chart(ctx, {
+            // 1. TIMELINE
+            const ctx1 = document.getElementById('timelineChart');
+            if (ctx1) {
+                const labels = Object.values(monthlyData).map(m => m.label);
+                const counts = Object.values(monthlyData).map(m => m.count);
+                
+                new Chart(ctx1, {
                     type: 'line',
                     data: {
-                        labels: monthLabels,
+                        labels: labels,
                         datasets: [{
-                            label: 'ANFRAGEN',
-                            data: monthCounts,
+                            label: 'Anfragen',
+                            data: counts,
                             borderColor: '#ffffff',
-                            backgroundColor: gradient,
-                            borderWidth: 1,
-                            fill: true,
-                            tension: 0,
-                            pointRadius: 3,
-                            pointBackgroundColor: '#000',
-                            pointBorderColor: '#fff'
+                            backgroundColor: 'transparent',
+                            borderWidth: 2,
+                            pointRadius: 0,
+                            pointHoverRadius: 6,
+                            tension: 0.1
                         }]
                     },
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        plugins: {
-                            legend: { display: false },
-                            tooltip: {
-                                backgroundColor: '#000',
-                                titleColor: '#fff',
-                                bodyColor: '#fff',
-                                borderColor: '#333',
-                                borderWidth: 1,
-                                cornerRadius: 0,
-                                displayColors: false,
-                                titleFont: { family: 'Bebas Neue', size: 16 }
-                            }
-                        },
+                        plugins: { legend: { display: false } },
                         scales: {
-                            y: {
-                                beginAtZero: true,
-                                grid: { color: 'rgba(255,255,255,0.05)' },
-                                ticks: { stepSize: 1, font: { family: 'JetBrains Mono', size: 10 } }
-                            },
-                            x: {
+                            y: { beginAtZero: true, grid: { display: true, drawBorder: false } },
+                            x: { 
                                 grid: { display: false },
-                                ticks: { font: { family: 'JetBrains Mono', size: 10 } }
+                                display: true,
+                                ticks: {
+                                    color: '#666',
+                                    font: { family: 'JetBrains Mono', size: 10 },
+                                    autoSkip: true,
+                                    maxRotation: 0
+                                }
                             }
                         }
                     }
                 });
-                console.log('Timeline Chart initialized successfully');
-            } catch (error) {
-                console.error('ERROR initializing Timeline Chart:', error);
-                alert('FEHLER beim Laden des Timeline Charts: ' + error.message);
             }
 
-        // ==========================================
-        // VISUALIZATIONS
-        // ==========================================
-
-        // Party color mapping
-        const partyColors = {
-            'S': '#ef4444',
-            'V': '#22d3ee',
-            'F': '#3b82f6',
-            'G': '#22c55e',
-            'N': '#e879f9',
-            'OTHER': '#9ca3af'
-        };
-
-        const partyNames = {
-            'S': 'SPÖ',
-            'V': 'ÖVP',
-            'F': 'FPÖ',
-            'G': 'GRÜNE',
-            'N': 'NEOS',
-            'OTHER': 'ANDERE'
-        };
-
-        // 1. FLOOD WALL CHART (Cumulative Line Chart with Step Interpolation)
-        try {
-            console.log('Initializing Flood Wall Chart...');
-            const floodWallData = <?php echo json_encode($floodWallData); ?>;
-            const dateLabels = <?php echo json_encode(array_values(array_map(fn($d) => $d->format('d.m.Y'), $allDates))); ?>;
-
-            console.log('Flood wall data:', floodWallData);
-            console.log('Date labels count:', dateLabels.length);
-
-            const floodWallCtx = document.getElementById('floodWallChart');
-            if (!floodWallCtx) {
-                throw new Error('Flood Wall chart canvas not found!');
-            }
-
-                new Chart(floodWallCtx, {
+            // 2. FLOOD WALL
+            const ctx2 = document.getElementById('floodWallChart');
+            if (ctx2) {
+                new Chart(ctx2, {
                     type: 'line',
                     data: {
-                        labels: dateLabels,
-                        datasets: Object.keys(floodWallData).map(party => ({
+                        labels: dates,
+                        datasets: Object.keys(floodData).map(party => ({
                             label: partyNames[party],
-                            data: floodWallData[party].map(d => d.cumulative),
+                            data: floodData[party].map(d => d.cumulative),
                             borderColor: partyColors[party],
-                            backgroundColor: partyColors[party] + '20',
+                            backgroundColor: 'transparent',
                             borderWidth: 2,
-                            fill: false,
-                            stepped: 'before',
                             pointRadius: 0,
-                            pointHoverRadius: 4,
-                            tension: 0
+                            stepped: true
                         }))
                     },
                     options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                interaction: {
-                    mode: 'index',
-                    intersect: false
-                },
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'top',
-                        labels: {
-                            color: '#fff',
-                            font: { family: 'JetBrains Mono', size: 11 },
-                            usePointStyle: true,
-                            padding: 15
-                        }
-                    },
-                    tooltip: {
-                        backgroundColor: '#000',
-                        titleColor: '#fff',
-                        bodyColor: '#fff',
-                        borderColor: '#333',
-                        borderWidth: 1,
-                        cornerRadius: 0,
-                        titleFont: { family: 'Bebas Neue', size: 14 },
-                        bodyFont: { family: 'JetBrains Mono', size: 12 }
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        grid: { color: 'rgba(255,255,255,0.05)' },
-                        ticks: {
-                            stepSize: 10,
-                            font: { family: 'JetBrains Mono', size: 10 },
-                            color: '#666'
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        interaction: { mode: 'index', intersect: false },
+                        plugins: { 
+                            legend: { labels: { color: '#aaa', font: { family: 'Inter' } } }
                         },
-                        title: {
-                            display: true,
-                            text: 'KUMULATIVE ANFRAGEN',
-                            color: '#999',
-                            font: { family: 'Bebas Neue', size: 12 }
-                        }
-                    },
-                    x: {
-                        grid: { display: false },
-                        ticks: {
-                            font: { family: 'JetBrains Mono', size: 9 },
-                            color: '#666',
-                            maxRotation: 45,
-                            minRotation: 45
+                        scales: {
+                            x: { 
+                                display: true,
+                                grid: { display: false },
+                                ticks: {
+                                    color: '#666',
+                                    font: { family: 'JetBrains Mono', size: 10 },
+                                    autoSkip: true,
+                                    maxRotation: 0
+                                }
+                            },
+                            y: { grid: { color: '#222' } }
                         }
                     }
-                    }
-                }
                 });
-                console.log('Flood Wall Chart initialized successfully');
-            } catch (error) {
-                console.error('ERROR initializing Flood Wall Chart:', error);
-                alert('FEHLER beim Laden des Flood Wall Charts: ' + error.message);
             }
 
-        // 2. SPAM CALENDAR (Matrix Heatmap)
-        try {
-            console.log('Initializing Spam Calendar Chart...');
-            const spamCalendarData = <?php echo json_encode($spamCalendarData); ?>;
-            const allDatesForCalendar = <?php echo json_encode(array_keys($allDates)); ?>;
-
-            console.log('Spam calendar data:', spamCalendarData);
-            console.log('Calendar dates count:', allDatesForCalendar.length);
-
-            // Build matrix data
-            const matrixData = [];
-            const partyOrder = ['S', 'V', 'F', 'G', 'N', 'OTHER'];
-
-            partyOrder.forEach((party, partyIndex) => {
-                const partyData = spamCalendarData[party] || [];
-                const dateMap = {};
-                partyData.forEach(item => {
-                    dateMap[item.date] = item.count;
+            // 3. SPAM CALENDAR
+            const ctx3 = document.getElementById('spamCalendarChart');
+            if (ctx3) {
+                const matrixData = [];
+                const pOrder = ['S', 'V', 'F', 'G', 'N', 'OTHER'];
+                
+                pOrder.forEach((party, pIdx) => {
+                    const pData = spamData[party] || [];
+                    const dMap = {};
+                    pData.forEach(i => dMap[i.date] = i.count);
+                    
+                    allDateKeys.forEach((d, dIdx) => {
+                        if (dMap[d]) {
+                            matrixData.push({
+                                x: dIdx, y: pIdx, v: dMap[d], party: party, date: d
+                            });
+                        }
+                    });
                 });
 
-                allDatesForCalendar.forEach((date, dateIndex) => {
-                    const count = dateMap[date] || 0;
-                    if (count > 0) { // Only plot active days
-                        matrixData.push({
-                            x: dateIndex,
-                            y: partyIndex,
-                            v: count,
-                            party: party,
-                            date: date
-                        });
-                    }
-                });
-            });
+                const maxVal = Math.max(...matrixData.map(d => d.v), 1);
 
-            console.log('Matrix data points:', matrixData.length);
-
-            // Find max count for normalization
-            const maxCount = Math.max(...matrixData.map(d => d.v), 1);
-            console.log('Max count:', maxCount);
-
-            const spamCalendarCtx = document.getElementById('spamCalendarChart');
-            if (!spamCalendarCtx) {
-                throw new Error('Spam Calendar chart canvas not found!');
-            }
-
-                new Chart(spamCalendarCtx, {
+                new Chart(ctx3, {
                     type: 'scatter',
                     data: {
                         datasets: [{
-                            data: matrixData.map(d => ({
-                                x: d.x,
-                                y: d.y,
-                                count: d.v,
-                                party: d.party,
-                                date: d.date
-                            })),
-                            backgroundColor: function(context) {
-                                const point = context.raw;
-                                if (!point) return 'rgba(255,255,255,0.1)';
-                                const intensity = point.count / maxCount;
-                                const baseColor = partyColors[point.party];
-                                // Convert hex to rgb and apply opacity
-                                const hex = baseColor.replace('#', '');
-                                const r = parseInt(hex.substring(0,2), 16);
-                                const g = parseInt(hex.substring(2,4), 16);
-                                const b = parseInt(hex.substring(4,6), 16);
-                                return `rgba(${r}, ${g}, ${b}, ${intensity})`;
+                            data: matrixData.map(d => ({ x: d.x, y: d.y, v: d.v, p: d.party, date: d.date })),
+                            backgroundColor: ctx => {
+                                const v = ctx.raw;
+                                if (!v) return '#333';
+                                const c = partyColors[v.p];
+                                // simple opacity hack
+                                const alpha = 0.4 + (v.v / maxVal) * 0.6; 
+                                return c + Math.floor(alpha * 255).toString(16).padStart(2,'0');
                             },
-                            pointRadius: function(context) {
-                                return 8;
-                            },
+                            pointRadius: 5,
                             pointStyle: 'rect'
                         }]
                     },
@@ -1495,71 +1284,41 @@ $partyMap = [
                         plugins: {
                             legend: { display: false },
                             tooltip: {
-                        backgroundColor: '#000',
-                        titleColor: '#fff',
-                        bodyColor: '#fff',
-                        borderColor: '#333',
-                        borderWidth: 1,
-                        cornerRadius: 0,
-                        callbacks: {
-                            title: function(context) {
-                                const point = context[0].raw;
-                                return `${partyNames[point.party]} - ${point.date}`;
-                            },
-                            label: function(context) {
-                                const point = context.raw;
-                                return `${point.count} Anfrage(n)`;
+                                callbacks: {
+                                    label: ctx => `${partyNames[ctx.raw.p]}: ${ctx.raw.v} Anfragen am ${ctx.raw.date}`
+                                }
                             }
                         },
-                        titleFont: { family: 'Bebas Neue', size: 14 },
-                        bodyFont: { family: 'JetBrains Mono', size: 12 }
-                    }
-                },
-                scales: {
-                    x: {
-                        type: 'linear',
-                        min: -0.5,
-                        max: allDatesForCalendar.length - 0.5,
-                        grid: { color: 'rgba(255,255,255,0.05)' },
-                        ticks: {
-                            stepSize: Math.max(1, Math.floor(allDatesForCalendar.length / 20)),
-                            font: { family: 'JetBrains Mono', size: 8 },
-                            color: '#666',
-                            callback: function(value, index) {
-                                if (allDatesForCalendar[value]) {
-                                    const date = new Date(allDatesForCalendar[value]);
-                                    return date.toLocaleDateString('de-DE', { month: 'short', day: 'numeric' });
+                        scales: {
+                            x: { 
+                                display: true,
+                                grid: { display: false },
+                                ticks: {
+                                    callback: function(value, index) {
+                                        // Ensure we have a date for this index
+                                        const dateKey = allDateKeys[value];
+                                        if(dateKey) {
+                                            const parts = dateKey.split('-');
+                                            return `${parts[2]}.${parts[1]}.`;
+                                        }
+                                        return '';
+                                    },
+                                    color: '#666',
+                                    font: { family: 'JetBrains Mono', size: 10 },
+                                    autoSkip: true,
+                                    maxRotation: 0
                                 }
-                                return '';
+                            },
+                            y: { 
+                                min: -0.5, max: 5.5,
+                                ticks: { callback: v => partyNames[pOrder[v]] },
+                                grid: { display: false }
                             }
-                        }
-                    },
-                    y: {
-                        type: 'linear',
-                        min: -0.5,
-                        max: partyOrder.length - 0.5,
-                        grid: { color: 'rgba(255,255,255,0.05)' },
-                        ticks: {
-                            stepSize: 1,
-                            font: { family: 'JetBrains Mono', size: 11 },
-                            color: '#fff',
-                            callback: function(value) {
-                                return partyNames[partyOrder[value]] || '';
-                            }
-                        }
                         }
                     }
-                }
                 });
-                console.log('Spam Calendar Chart initialized successfully');;
-            } catch (error) {
-                console.error('ERROR initializing Spam Calendar Chart:', error);
-                alert('FEHLER beim Laden des Spam Calendar Charts: ' + error.message);
             }
-
-            console.log('=== ALL CHARTS INITIALIZED ===');
-            console.log('=== NGO TRACKER DEBUG END ===');
-        }); // End of DOMContentLoaded event listener
+        });
     </script>
 </body>
 </html>

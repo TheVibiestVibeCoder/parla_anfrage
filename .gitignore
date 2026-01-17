@@ -1,0 +1,17 @@
+# Cache files (but keep directory)
+cache/*.dat
+!cache/.gitkeep
+
+# PHP error logs
+php_errors.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~

@@ -12,6 +12,13 @@ ini_set('memory_limit', '256M');
 ini_set('log_errors', 1);
 ini_set('error_log', __DIR__ . '/php_errors.log');
 
+// PERFORMANCE OPTIMIZATION: Load Cache Manager
+require_once __DIR__ . '/CacheManager.php';
+
+// Initialize cache with 15-minute TTL (900 seconds)
+// This ensures data is fresh while dramatically improving load times
+$cache = new CacheManager(__DIR__ . '/cache', 900);
+
 // Custom error handler to log to console and file
 set_error_handler(function($errno, $errstr, $errfile, $errline) {
     $error = date('[Y-m-d H:i:s] ') . "Error [$errno]: $errstr in $errfile on line $errline\n";
@@ -204,17 +211,39 @@ switch ($timeRange) {
 // FETCH AND FILTER DATA
 // ==========================================
 
-$apiResponse = fetchAllRows($gpCodes);
-$allNGOResults = [];
-$wordFrequency = [];
-$monthlyData = [];
-// Initialize with all parties to ensure they appear in the chart
-$partyStats = ['S' => 0, 'V' => 0, 'F' => 0, 'G' => 0, 'N' => 0, 'OTHER' => 0];
-$answeredCount = 0;
-$pendingCount = 0;
+// CACHE KEY: Unique identifier for this specific data request
+// Includes GP codes and cutoff date to ensure different time ranges are cached separately
+$cacheKey = 'ngo_data_' . md5(serialize($gpCodes) . $cutoffDate->format('Y-m-d'));
 
-if (isset($apiResponse['rows'])) {
-    foreach ($apiResponse['rows'] as $row) {
+// Try to get cached data first - this dramatically speeds up repeated requests
+$cachedData = $cache->get($cacheKey);
+
+if ($cachedData !== null) {
+    // Cache hit! Use the cached data instead of fetching and processing
+    $allNGOResults = $cachedData['allNGOResults'];
+    $wordFrequency = $cachedData['wordFrequency'];
+    $monthlyData = $cachedData['monthlyData'];
+    $partyStats = $cachedData['partyStats'];
+    $answeredCount = $cachedData['answeredCount'];
+    $pendingCount = $cachedData['pendingCount'];
+
+    // Log cache hit for debugging
+    error_log("Cache HIT for key: $cacheKey");
+} else {
+    // Cache miss - fetch and process data, then cache the result
+    error_log("Cache MISS for key: $cacheKey - fetching fresh data");
+
+    $apiResponse = fetchAllRows($gpCodes);
+    $allNGOResults = [];
+    $wordFrequency = [];
+    $monthlyData = [];
+    // Initialize with all parties to ensure they appear in the chart
+    $partyStats = ['S' => 0, 'V' => 0, 'F' => 0, 'G' => 0, 'N' => 0, 'OTHER' => 0];
+    $answeredCount = 0;
+    $pendingCount = 0;
+
+    if (isset($apiResponse['rows'])) {
+        foreach ($apiResponse['rows'] as $row) {
         $rowDateStr = $row[4] ?? '';
         $rowTitle = $row[6] ?? '';
         $rowTopics = $row[22] ?? '[]';
@@ -287,19 +316,33 @@ if (isset($apiResponse['rows'])) {
             'number' => $rowNumber
         ];
     }
+    }
+
+    // Sort results by date (newest first)
+    usort($allNGOResults, function($a, $b) {
+        return $b['date_obj'] <=> $a['date_obj'];
+    });
+
+    // Sort monthly data
+    ksort($monthlyData);
+
+    // Sort word frequency
+    arsort($wordFrequency);
+    $topWords = array_slice($wordFrequency, 0, 50, true);
+
+    // CACHE THE PROCESSED DATA
+    // Store all processed results so subsequent requests are lightning fast
+    $cache->set($cacheKey, [
+        'allNGOResults' => $allNGOResults,
+        'wordFrequency' => $wordFrequency,
+        'monthlyData' => $monthlyData,
+        'partyStats' => $partyStats,
+        'answeredCount' => $answeredCount,
+        'pendingCount' => $pendingCount
+    ]);
+
+    error_log("Data cached successfully for key: $cacheKey");
 }
-
-// Sort results by date (newest first)
-usort($allNGOResults, function($a, $b) {
-    return $b['date_obj'] <=> $a['date_obj'];
-});
-
-// Sort monthly data
-ksort($monthlyData);
-
-// Sort word frequency
-arsort($wordFrequency);
-$topWords = array_slice($wordFrequency, 0, 50, true);
 
 // ==========================================
 // DATA FOR NEW VISUALIZATIONS

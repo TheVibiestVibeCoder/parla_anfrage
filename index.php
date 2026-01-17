@@ -672,7 +672,15 @@ $partyMap = [
             margin-bottom: 1rem;
             line-height: 1;
         }
-        @media (min-width: 768px) {
+        /* Laptop adjustment */
+        @media (min-width: 1024px) {
+            .investigative-header {
+                font-size: 2rem;
+                margin-bottom: 1.25rem;
+            }
+        }
+        /* Large Desktop */
+        @media (min-width: 1280px) {
             .investigative-header {
                 font-size: 2.2rem;
                 margin-bottom: 1.5rem;
@@ -686,7 +694,14 @@ $partyMap = [
             font-family: var(--font-head); 
             color: #fff; 
         }
-        @media (min-width: 768px) {
+        /* Laptop Size - slightly controlled */
+        @media (min-width: 1024px) {
+            .stat-value { 
+                font-size: 3.5rem; 
+            }
+        }
+        /* Large Desktop Size */
+        @media (min-width: 1280px) {
             .stat-value { 
                 font-size: 4rem; 
             }
@@ -722,7 +737,14 @@ $partyMap = [
             border-radius: 0;
             max-width: 100%;
         }
-        @media (min-width: 768px) {
+        /* Laptop */
+        @media (min-width: 1024px) {
+            select {
+                font-size: 1.35rem;
+            }
+        }
+        /* Large Desktop */
+        @media (min-width: 1280px) {
             select {
                 font-size: 1.5rem;
             }
@@ -916,9 +938,9 @@ $partyMap = [
 </head>
 <body class="flex flex-col min-h-screen">
 
-    <section class="h-[100vh] min-h-[600px] flex flex-col justify-between items-center text-center bg-black border-b border-white px-4">
+    <section class="h-[100vh] flex flex-col justify-between items-center text-center bg-black border-b border-white px-4 py-6 md:py-8 lg:py-6">
         
-        <div class="w-full pt-6 flex justify-between items-center max-w-[1200px]">
+        <div class="w-full flex justify-between items-center max-w-[1200px]">
             <div class="flex items-center gap-2 md:gap-3">
                 <div class="w-2 h-2 md:w-3 md:h-3 bg-white"></div>
                 <span class="tracking-widest text-sm md:text-lg font-head text-white">NGO-Business</span>
@@ -933,7 +955,7 @@ $partyMap = [
             <article>
                 <header class="mb-6 md:mb-8">
                     <span class="inline-block border-b border-gray-600 pb-1 mb-4 text-[10px] md:text-xs font-mono text-gray-400 uppercase tracking-[0.2em]">Die Analyse</span>
-                    <h1 class="text-5xl sm:text-6xl md:text-8xl lg:text-9xl text-white leading-[0.9] mb-4 md:mb-6 break-words" style="font-family: 'Bebas Neue', sans-serif;">
+                    <h1 class="text-5xl sm:text-6xl md:text-7xl lg:text-7xl xl:text-9xl text-white leading-[0.9] mb-4 md:mb-6 break-words" style="font-family: 'Bebas Neue', sans-serif;">
                         Das "NGO-Business"<br>Narrativ der FPÖ
                     </h1>
                 </header>
@@ -954,7 +976,7 @@ $partyMap = [
             </article>
         </div>
 
-        <div class="pb-6 md:pb-8 w-full flex flex-col items-center justify-center">
+        <div class="w-full flex flex-col items-center justify-center">
              <a href="#tracker" class="group flex flex-col items-center gap-4 cursor-pointer hover:opacity-80 transition-opacity p-2">
                 <span class="text-[10px] md:text-xs font-mono uppercase tracking-widest text-gray-500 group-hover:text-white transition-colors">Zum Anfragen-Tracker</span>
                 <div class="w-8 h-8 md:w-10 md:h-10 border border-white flex items-center justify-center rounded-full">
@@ -966,12 +988,12 @@ $partyMap = [
         </div>
     </section>
 
-    <div id="tracker" class="container-custom pt-12 md:pt-24">
+    <div id="tracker" class="container-custom pt-12 md:pt-24 lg:pt-16 xl:pt-24">
 
-        <header class="flex flex-col lg:flex-row justify-between items-start lg:items-end mb-12 md:mb-16 border-b-2 border-white pb-6">
+        <header class="flex flex-col lg:flex-row justify-between items-start lg:items-end mb-12 lg:mb-12 xl:mb-16 border-b-2 border-white pb-6">
             <div class="mb-8 lg:mb-0">
                 <div class="text-[10px] md:text-xs font-mono text-gray-500 mb-2">SYSTEM: PARLAMENT_WATCH // TRACKING: NGO_INTERACTIONS</div>
-                <h2 class="text-5xl md:text-8xl text-white leading-none">Anfragen Tracker</h2>
+                <h2 class="text-5xl md:text-6xl lg:text-7xl xl:text-8xl text-white leading-none">Anfragen Tracker</h2>
             </div>
             
             <form method="GET" class="w-full lg:w-auto">
@@ -991,9 +1013,9 @@ $partyMap = [
             </form>
         </header>
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12 mb-16 md:mb-20">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-8 xl:gap-12 mb-12 lg:mb-16 xl:mb-20">
             
-            <div class="lg:col-span-4 flex flex-col gap-8 md:gap-12">
+            <div class="lg:col-span-4 flex flex-col gap-8 lg:gap-8 xl:gap-12">
                 <div class="border-l-4 border-white pl-6 py-2">
                     <div class="stat-label">Gesamtanzahl</div>
                     <div class="stat-value"><?php echo number_format($totalCount); ?></div>
@@ -1041,7 +1063,7 @@ $partyMap = [
             </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 mb-16 md:mb-20">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-8 xl:gap-12 mb-12 lg:mb-16 xl:mb-20">
             
             <div class="investigative-box">
                 <div class="flex items-start mb-4">
@@ -1090,7 +1112,7 @@ $partyMap = [
             </div>
         </div>
 
-        <div class="investigative-box mb-16 md:mb-20">
+        <div class="investigative-box mb-16 lg:mb-16 xl:mb-20">
             <div class="flex items-start mb-4">
                 <h2 class="investigative-header mb-0">Der Kalender<br><span class="text-gray-500 text-base md:text-lg font-sans font-normal">Intensität nach Tagen</span></h2>
                 <button class="info-btn" onclick="openModal('calendar')" aria-label="Information zum Kalender">i</button>
@@ -1106,7 +1128,7 @@ $partyMap = [
 
         <div class="mb-24">
             <div class="flex justify-between items-end border-b-4 border-white pb-4 mb-8">
-                <h2 class="text-4xl md:text-6xl text-white">Die Akten</h2>
+                <h2 class="text-4xl md:text-5xl lg:text-5xl xl:text-6xl text-white">Die Akten</h2>
                 <div class="text-xs md:text-sm font-mono text-gray-500">
                     SEITE <?php echo $page; ?> / <?php echo $totalPages; ?>
                 </div>

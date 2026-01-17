@@ -404,6 +404,19 @@ $displayResults = array_slice($allNGOResults, $offset, $perPage);
 
 $totalCount = count($allNGOResults);
 
+// Find earliest inquiry date (for hero section)
+$earliestDate = null;
+$earliestDateFormatted = '';
+if (!empty($allNGOResults)) {
+    // Since results are sorted newest first, last element is the earliest
+    $earliestInquiry = end($allNGOResults);
+    if (isset($earliestInquiry['date_obj'])) {
+        $earliestDate = $earliestInquiry['date_obj'];
+        // Format as "DD.MM.YYYY" (e.g., "15.01.2024")
+        $earliestDateFormatted = $earliestDate->format('d.m.Y');
+    }
+}
+
 // Party name mapping (German)
 $partyMap = [
     'S' => 'SPÖ',
@@ -586,7 +599,7 @@ $partyMap = [
             --font-head: 'Bebas Neue', display;
             --font-body: 'Manrope', sans-serif;
             --font-mono: 'JetBrains Mono', monospace;
-            
+
             /* Party Colors Dark Mode */
             --color-s: #ef4444;
             --color-v: #22d3ee;
@@ -594,6 +607,10 @@ $partyMap = [
             --color-g: #22c55e;
             --color-n: #e879f9;
             --color-other: #9ca3af;
+        }
+
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
@@ -748,45 +765,56 @@ $partyMap = [
         </div>
     </header>
 
+    <!-- Hero Opener Section - Full Screen -->
+    <section class="h-screen flex flex-col justify-between items-center text-center px-6 py-8 -mt-6"
+             style="background: #000;">
+
+        <!-- Main Content - Centered -->
+        <div class="flex-1 flex flex-col justify-center items-center max-w-5xl mx-auto w-full">
+            <article itemscope itemtype="https://schema.org/Article">
+                <header>
+                    <h1 class="text-3xl md:text-5xl lg:text-6xl font-bold mb-6 md:mb-10 text-white leading-tight"
+                        style="font-family: var(--font-head); letter-spacing: 2px;"
+                        itemprop="headline">
+                        DAS "NGO-BUSINESS"-NARRATIV DER FPÖ
+                    </h1>
+                </header>
+
+                <div class="text-base md:text-xl lg:text-2xl text-gray-300 space-y-4 md:space-y-6 leading-relaxed max-w-4xl mx-auto"
+                     itemprop="articleBody">
+                    <p>
+                        Die FPÖ flutet das Parlament zum Thema "NGO-Business". Seit <?php echo $earliestDateFormatted; ?>
+                        sind <?php echo number_format($totalCount); ?> Anfragen zum Thema NGOs, fast immer mit dem Begriff "NGO-Business" versehen, eingegangen.
+                    </p>
+
+                    <p class="pt-2 md:pt-4">
+                        Warum? Wichtige NGO-Arbeit wird ganz bewusst in den Kontext von Steuergeld-Verschwendung gerückt,
+                        um die Arbeit von Non-Profit-Organisationen zu verunglimpfen.
+                    </p>
+
+                    <p class="pt-4 md:pt-6 font-semibold text-white">
+                        Wir decken auf, was es mit den Anfragen auf sich hat.
+                    </p>
+                </div>
+            </article>
+        </div>
+
+        <!-- Arrow Down - Always at Bottom of Viewport -->
+        <a href="#tracker" class="cursor-pointer group pb-6 flex-shrink-0">
+            <div class="text-xs md:text-sm font-mono text-gray-400 uppercase tracking-widest mb-3 group-hover:text-white transition-colors">
+                Zum Anfragen-Tracker
+            </div>
+            <div class="flex justify-center">
+                <svg class="w-10 h-10 md:w-12 md:h-12 text-white animate-bounce group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+                </svg>
+            </div>
+        </a>
+    </section>
+
     <div class="container-custom">
 
-        <article class="mono-box mb-8" itemscope itemtype="https://schema.org/Article">
-            <header>
-                <h1 class="text-3xl md:text-5xl font-bold mb-4" style="font-family: var(--font-head); letter-spacing: 1px;" itemprop="headline">
-                    Hinter den Kulissen: Das "NGO-Business"
-                </h1>
-            </header>
-            <div class="text-base md:text-lg text-gray-300 space-y-4 leading-relaxed" itemprop="articleBody">
-                
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
-                    <div class="bg-black bg-opacity-40 p-5 border border-gray-800 hover:border-gray-600 transition-colors">
-                        <div class="text-red-500 text-xs font-mono font-bold mb-2 uppercase tracking-widest">[PHASE 1]</div>
-                        <h3 class="text-lg font-bold font-mono text-white mb-2 uppercase">Die Ressourcen-Falle</h3>
-                        <p class="text-sm text-gray-400">
-                            Es lässt sich beobachten, dass Anfragen zu dem Begriff NGO-Business mittlerweile hunderte Anfrage umfassen. Dabei haben sie oft das gleiche Muster und sollen offensichtlich den Informationsraum mit einem gewünschten Narrativ besetzen.
-                        </p>
-                    </div>
-                    
-                    <div class="bg-black bg-opacity-40 p-5 border border-gray-800 hover:border-gray-600 transition-colors">
-                        <div class="text-red-500 text-xs font-mono font-bold mb-2 uppercase tracking-widest">[PHASE 2]</div>
-                        <h3 class="text-lg font-bold font-mono text-white mb-2 uppercase">Data Mining</h3>
-                        <p class="text-sm text-gray-400">
-                            Wir dachten uns: Lasst uns durch das Narrativ sehen. Wir haben daher einen simplen Tracker gebaut, der alle parlamentarischen Anfragen, die mit dem Thema NGOs zu tun haben trackt. Wer sich Daten ansieht, kann schnell einen spannenden Eindruck gewinnen.
-                        </p>
-                    </div>
-
-                    <div class="bg-black bg-opacity-40 p-5 border border-gray-800 hover:border-gray-600 transition-colors">
-                        <div class="text-red-500 text-xs font-mono font-bold mb-2 uppercase tracking-widest">[PHASE 3]</div>
-                        <h3 class="text-lg font-bold font-mono text-white mb-2 uppercase">Keyword Squatting</h3>
-                        <p class="text-sm text-gray-400">
-                            Ist das unweigerliche Resultat. Suchmaschinen indexieren nämlich, wo der Begriff oft vorkommt (sehr simpel gesagt). Je vertrauenswürdiger die Website – desto besser. Das Ergebnis? NGO-Business: Ein Aushängeschild für Informationsmanipulation.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </article>
-
-        <header class="flex flex-col md:flex-row justify-between items-end border-b border-[rgba(255,255,255,0.1)] pb-6 mb-10">
+        <header id="tracker" class="flex flex-col md:flex-row justify-between items-end border-b border-[rgba(255,255,255,0.1)] pb-6 mb-10">
             <div>
                 <div class="text-xs font-mono text-gray-500 mb-2">SYSTEM: PARLAMENT_WATCH // TRACKING: NGO_INTERACTIONS</div>
                 <h2 class="text-5xl md:text-7xl text-white leading-none">Anfragen<br><span style="color: #666;">Tracker</span></h2>
@@ -1032,68 +1060,72 @@ $partyMap = [
             <?php endif; ?>
         </section>
 
+<section class="mono-box mt-16" itemscope itemtype="https://schema.org/FAQPage" aria-labelledby="faq-heading">
+    <h2 id="faq-heading" class="text-3xl text-white mb-8" style="font-family: var(--font-head); letter-spacing: 1px;">
+        Was steckt hinter den NGO Business Anfragen
+    </h2>
 
-        <section class="mono-box mt-16" itemscope itemtype="https://schema.org/FAQPage" aria-labelledby="faq-heading">
-            <h2 id="faq-heading" class="text-3xl text-white mb-8" style="font-family: var(--font-head); letter-spacing: 1px;">
-                Häufig gestellte Fragen zu NGO Business Anfragen
-            </h2>
+    <div class="space-y-6">
 
-            <div class="space-y-6">
-                <div class="border-b border-gray-800 pb-6" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-                    <h3 class="text-xl font-bold text-white mb-3" itemprop="name">Was sind NGO Business Anfragen?</h3>
-                    <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-                        <p class="text-gray-300 leading-relaxed" itemprop="text">
-                            <strong>NGO Business Anfragen</strong> sind parlamentarische Anfragen im österreichischen Nationalrat, die sich mit Nicht-Regierungsorganisationen (NGOs), deren Finanzierung, Aktivitäten und Transparenz befassen. Diese Anfragen werden von Abgeordneten gestellt und vom zuständigen Ministerium beantwortet. Unser NGO Business Tracker ermöglicht Ihnen das Echtzeit-Monitoring aller solcher Anfragen.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="border-b border-gray-800 pb-6" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-                    <h3 class="text-xl font-bold text-white mb-3" itemprop="name">Wie funktioniert der NGO Business Tracker?</h3>
-                    <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-                        <p class="text-gray-300 leading-relaxed" itemprop="text">
-                            Unser NGO Business Tracking System greift in Echtzeit auf die offizielle API des österreichischen Parlaments (parlament.gv.at) zu und filtert automatisch alle Anfragen, die NGO-relevante Begriffe enthalten. Die Daten werden visualisiert und nach Parteien, Zeiträumen und Themen kategorisiert. Sie erhalten so einen vollständigen Überblick über alle NGO Business Aktivitäten im Parlament.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="border-b border-gray-800 pb-6" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-                    <h3 class="text-xl font-bold text-white mb-3" itemprop="name">Welche Parteien stellen NGO Business Anfragen?</h3>
-                    <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-                        <p class="text-gray-300 leading-relaxed" itemprop="text">
-                            Alle im österreichischen Parlament vertretenen Parteien können parlamentarische Anfragen zu NGO Business stellen. Unser Tracker zeigt Anfragen von SPÖ (Sozialdemokratische Partei), ÖVP (Österreichische Volkspartei), FPÖ (Freiheitliche Partei), GRÜNE (Die Grünen) und NEOS (NEOS – Das Neue Österreich). Die Visualisierungen zeigen, welche Partei am aktivsten im Bereich NGO Business ist.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="border-b border-gray-800 pb-6" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-                    <h3 class="text-xl font-bold text-white mb-3" itemprop="name">Warum ist NGO Business Tracking wichtig?</h3>
-                    <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-                        <p class="text-gray-300 leading-relaxed" itemprop="text">
-                            NGO Business Tracking schafft <strong>Transparenz</strong> über die parlamentarische Kontrolle von Nicht-Regierungsorganisationen in Österreich. Bürger, Journalisten und NGOs selbst können nachvollziehen, welche Fragen zu NGO-Finanzierung, NGO-Aktivitäten und NGO-Transparenz gestellt werden. Dies fördert die demokratische Kontrolle und öffentliche Debatte über die Rolle von NGOs in der Gesellschaft.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="border-b border-gray-800 pb-6" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-                    <h3 class="text-xl font-bold text-white mb-3" itemprop="name">Wie aktuell sind die NGO Business Daten?</h3>
-                    <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-                        <p class="text-gray-300 leading-relaxed" itemprop="text">
-                            Die Daten werden in <strong>Echtzeit</strong> von der offiziellen Parlament-API abgerufen. Sobald eine neue NGO-bezogene Anfrage im österreichischen Parlament eingebracht wird, erscheint sie auch in unserem NGO Business Tracker. Die Aktualität ist einer der Hauptvorteile unseres Systems gegenüber traditionellen Recherchemethoden.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="pb-6" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-                    <h3 class="text-xl font-bold text-white mb-3" itemprop="name">Was zeigen die Visualisierungen im NGO Business Tracker?</h3>
-                    <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-                        <p class="text-gray-300 leading-relaxed" itemprop="text">
-                            Unser NGO Business Tracker bietet drei Hauptvisualisierungen: 1) <strong>Zeitlicher Verlauf</strong> - zeigt die Anzahl der NGO Anfragen über Zeit, 2) <strong>Flood Wall</strong> - kumulative Belastungskurve pro Partei, 3) <strong>Spam Calendar</strong> - Heatmap der täglichen Intensität. Zusätzlich analysieren wir die häufigsten Kampfbegriffe in NGO Business Anfragen und zeigen, welche Partei welche Begriffe verwendet.
-                        </p>
-                    </div>
-                </div>
+        <div class="border-b border-gray-800 pb-6" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+            <h3 class="text-xl font-bold text-white mb-3" itemprop="name">
+                Was sind parlamentarische Anfragen?
+            </h3>
+            <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                <p class="text-gray-300 leading-relaxed" itemprop="text">
+                    Parlamentarische Anfragen sind ein offizielles Kontrollinstrument im österreichischen Nationalrat.
+                    Abgeordnete können damit schriftliche Fragen an Ministerien richten, die verpflichtend beantwortet werden müssen.
+                    Sie dienen grundsätzlich der demokratischen Kontrolle der Regierung.
+                </p>
             </div>
-        </section>
+        </div>
+
+        <div class="border-b border-gray-800 pb-6" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+            <h3 class="text-xl font-bold text-white mb-3" itemprop="name">
+                Was könnte die Strategie dahinter sein?
+            </h3>
+            <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                <p class="text-gray-300 leading-relaxed" itemprop="text">
+                    Die massenhafte Verwendung des Begriffs „NGO Business“ deutet auf eine bewusste politische Strategie hin.
+                    Durch hunderte nahezu identische Anfragen wird ein Narrativ erzeugt, das NGO Arbeit mit
+                    Steuergeldverschwendung, Ideologie und Missbrauch öffentlicher Mittel verknüpft.
+                    Ziel ist weniger Aufklärung als vielmehr Delegitimierung.
+                </p>
+            </div>
+        </div>
+
+        <div class="border-b border-gray-800 pb-6" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+            <h3 class="text-xl font-bold text-white mb-3" itemprop="name">
+                Wieso ist das relevant?
+            </h3>
+            <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                <p class="text-gray-300 leading-relaxed" itemprop="text">
+                    Parlamentarische Anfragen erzeugen öffentliche Dokumente, Schlagzeilen und Suchtreffer.
+                    Werden sie strategisch geflutet, entsteht der Eindruck eines systemischen Problems,
+                    selbst wenn keine Rechtswidrigkeit vorliegt.
+                    So kann Vertrauen in Zivilgesellschaft, Wissenschaft und soziale Arbeit gezielt untergraben werden.
+                </p>
+            </div>
+        </div>
+
+        <div class="pb-6" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+            <h3 class="text-xl font-bold text-white mb-3" itemprop="name">
+                Was kannst du tun?
+            </h3>
+            <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                <p class="text-gray-300 leading-relaxed" itemprop="text">
+                    Red darüber.
+                    Teile die Daten.
+                    Hinterfrage Schlagworte.
+                    Je sichtbarer solche Muster werden, desto schwerer wird es,
+                    parlamentarische Instrumente für politische Stimmungsmache zu missbrauchen.
+                </p>
+            </div>
+        </div>
+
+    </div>
+</section>
+
 
     </div>
 

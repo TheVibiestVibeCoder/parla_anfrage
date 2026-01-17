@@ -552,50 +552,262 @@ $partyMap = [
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
     <noscript><link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet"></noscript>
 
-    <!-- Tailwind CSS - kept synchronous as it's critical for layout -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Critical CSS: Inline styles for above-the-fold content to eliminate render blocking -->
+    <style>
+        /* Font-face with swap for immediate text rendering */
+        @font-face {
+            font-family: 'Bebas Neue';
+            font-style: normal;
+            font-weight: 400;
+            font-display: swap;
+            src: url(https://fonts.gstatic.com/s/bebasneue/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuI6fMZhrib2Bg-4.woff2) format('woff2');
+        }
+        @font-face {
+            font-family: 'Inter';
+            font-style: normal;
+            font-weight: 400;
+            font-display: swap;
+            src: url(https://fonts.gstatic.com/s/inter/v24/tDbv2o-flEEny0FZhsfKu5WU5zr3E_BX0zS8.woff2) format('woff2');
+        }
+
+        /* Reset & Base */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        body {
+            background-color: #111111;
+            color: #e5e5e5;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Hero Section Critical Styles */
+        .min-h-screen { min-height: 100vh; }
+        .flex { display: flex; }
+        .flex-col { flex-direction: column; }
+        .items-center { align-items: center; }
+        .justify-between { justify-content: space-between; }
+        .justify-center { justify-content: center; }
+        .text-center { text-align: center; }
+        .gap-2 { gap: 0.5rem; }
+        .gap-3 { gap: 0.75rem; }
+        .gap-4 { gap: 1rem; }
+        .gap-6 { gap: 1.5rem; }
+
+        /* Spacing */
+        .px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+        .py-10 { padding-top: 2.5rem; padding-bottom: 2.5rem; }
+        .py-12 { padding-top: 3rem; padding-bottom: 3rem; }
+        .mb-6 { margin-bottom: 1.5rem; }
+        .mb-8 { margin-bottom: 2rem; }
+        .pb-1 { padding-bottom: 0.25rem; }
+
+        /* Typography */
+        .text-white { color: #ffffff; }
+        .text-gray-300 { color: #d1d5db; }
+        .text-gray-400 { color: #9ca3af; }
+        .text-gray-600 { color: #4b5563; }
+        .text-red-600 { color: #dc2626; }
+        .text-sm { font-size: 0.875rem; }
+        .text-base { font-size: 1rem; }
+        .text-lg { font-size: 1.125rem; }
+        .text-xl { font-size: 1.25rem; }
+        .font-bold { font-weight: 700; }
+        .font-sans { font-family: 'Inter', sans-serif; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+        .leading-relaxed { line-height: 1.625; }
+        .uppercase { text-transform: uppercase; }
+        .tracking-widest { letter-spacing: 0.1em; }
+
+        /* Borders */
+        .border-b { border-bottom-width: 1px; }
+        .border-white { border-color: #ffffff; }
+        .border-gray-600 { border-color: #4b5563; }
+
+        /* Backgrounds */
+        .bg-black { background-color: #000000; }
+        .bg-white { background-color: #ffffff; }
+        .bg-red-600 { background-color: #dc2626; }
+
+        /* Sizing */
+        .w-2 { width: 0.5rem; }
+        .h-2 { height: 0.5rem; }
+        .w-3 { width: 0.75rem; }
+        .h-3 { height: 0.75rem; }
+        .w-1\.5 { width: 0.375rem; }
+        .h-1\.5 { height: 0.375rem; }
+        .w-8 { width: 2rem; }
+        .h-8 { height: 2rem; }
+        .w-full { width: 100%; }
+        .max-w-5xl { max-width: 64rem; }
+        .max-w-3xl { max-width: 48rem; }
+        .mx-auto { margin-left: auto; margin-right: auto; }
+
+        /* Animations */
+        .animate-pulse { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+        .animate-bounce { animation: bounce 1s infinite; }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: .5; }
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(-25%); animation-timing-function: cubic-bezier(0.8, 0, 1, 1); }
+            50% { transform: translateY(0); animation-timing-function: cubic-bezier(0, 0, 0.2, 1); }
+        }
+
+        /* Utilities */
+        .inline-block { display: inline-block; }
+        .rounded-full { border-radius: 9999px; }
+        .space-y-6 > * + * { margin-top: 1.5rem; }
+
+        /* Hero Heading - Critical LCP Element */
+        h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 3rem;
+            line-height: 0.9;
+            color: #ffffff;
+            letter-spacing: -0.025em;
+            font-display: swap; /* Ensure text is visible during font load */
+        }
+
+        /* Additional critical layout utilities */
+        .flex-grow { flex-grow: 1; }
+        .break-words { word-wrap: break-word; overflow-wrap: break-word; }
+        .text-left { text-align: left; }
+        article, header { display: block; }
+
+        /* Responsive adjustments */
+        @media (min-width: 640px) {
+            h1 { font-size: 3.75rem; }
+        }
+        @media (min-width: 768px) {
+            h1 { font-size: 4.5rem; }
+            .py-10 { padding-top: 4rem; padding-bottom: 4rem; }
+            .gap-3 { gap: 0.75rem; }
+            .text-lg { font-size: 1.25rem; }
+            .w-2 { width: 0.5rem; }
+            .h-2 { height: 0.5rem; }
+            .w-3 { width: 0.75rem; }
+            .h-3 { height: 0.75rem; }
+            .text-center { text-align: center; }
+        }
+        @media (min-width: 1024px) {
+            h1 { font-size: 4.5rem; }
+        }
+        @media (min-width: 1280px) {
+            h1 { font-size: 6rem; }
+        }
+
+        /* Performance optimization: Prevent layout shift during load */
+        .text-5xl { font-size: 3rem; line-height: 1; }
+        .text-6xl { font-size: 3.75rem; line-height: 1; }
+        .text-7xl { font-size: 4.5rem; line-height: 1; }
+        .text-9xl { font-size: 8rem; line-height: 1; }
+        @media (min-width: 640px) { .sm\:text-6xl { font-size: 3.75rem; line-height: 1; } }
+        @media (min-width: 768px) { .md\:text-7xl { font-size: 4.5rem; line-height: 1; } }
+        @media (min-width: 1024px) { .lg\:text-7xl { font-size: 4.5rem; line-height: 1; } }
+        @media (min-width: 1280px) { .xl\:text-9xl { font-size: 8rem; line-height: 1; } }
+
+        /* Critical paragraph styles for LCP element */
+        p { margin: 0; }
+        .leading-\[0\.9\] { line-height: 0.9; }
+        .tracking-tight { letter-spacing: -0.025em; }
+        .tracking-\[0\.2em\] { letter-spacing: 0.2em; }
+
+        /* Mobile-specific text sizes */
+        .text-\[10px\] { font-size: 10px; }
+        @media (min-width: 768px) {
+            .md\:text-xs { font-size: 0.75rem; }
+            .md\:text-lg { font-size: 1.125rem; }
+            .md\:text-xl { font-size: 1.25rem; }
+            .md\:text-center { text-align: center; }
+            .md\:mb-10 { margin-bottom: 2.5rem; }
+        }
+    </style>
+
+    <!-- Tailwind CSS - Loaded with low priority to prevent render blocking -->
+    <script>
+        // Load Tailwind CSS with requestIdleCallback for optimal performance
+        (function() {
+            function loadTailwind() {
+                var link = document.createElement('script');
+                link.src = 'https://cdn.tailwindcss.com';
+                link.async = true; // Don't block execution
+                document.head.appendChild(link);
+            }
+
+            // Use requestIdleCallback if available, otherwise use setTimeout
+            if ('requestIdleCallback' in window) {
+                requestIdleCallback(loadTailwind);
+            } else {
+                setTimeout(loadTailwind, 1);
+            }
+        })();
+    </script>
 
     <!-- Chart.js - Deferred and lazy loaded when needed -->
     <script>
-        // Lazy load Chart.js only when charts are visible
-        window.chartJsLoaded = false;
-        window.loadChartJS = function() {
-            if (window.chartJsLoaded) return Promise.resolve();
-            return new Promise((resolve, reject) => {
-                const script = document.createElement('script');
-                script.src = 'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js';
-                script.onload = () => {
-                    window.chartJsLoaded = true;
-                    resolve();
-                };
-                script.onerror = reject;
-                document.head.appendChild(script);
-            });
-        };
+        // Lazy load Chart.js with minimal overhead
+        (function() {
+            var loaded = false;
+            var loading = false;
 
-        // Intersection Observer to detect when chart containers are visible
-        if ('IntersectionObserver' in window) {
-            const chartObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting && !window.chartJsLoaded) {
-                        loadChartJS();
-                        chartObserver.disconnect();
+            window.loadChartJS = function() {
+                if (loaded || loading) return Promise.resolve();
+                loading = true;
+
+                return new Promise(function(resolve, reject) {
+                    var s = document.createElement('script');
+                    s.src = 'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js';
+                    s.onload = function() { loaded = true; resolve(); };
+                    s.onerror = reject;
+                    document.head.appendChild(s);
+                });
+            };
+
+            // Lightweight intersection observer - only set up when idle
+            function setupObserver() {
+                if (!('IntersectionObserver' in window)) {
+                    loadChartJS();
+                    return;
+                }
+
+                var observer = new IntersectionObserver(function(entries) {
+                    for (var i = 0; i < entries.length; i++) {
+                        if (entries[i].isIntersecting) {
+                            loadChartJS();
+                            observer.disconnect();
+                            break;
+                        }
+                    }
+                }, { rootMargin: '100px' });
+
+                var canvases = document.querySelectorAll('canvas');
+                for (var i = 0; i < canvases.length; i++) {
+                    observer.observe(canvases[i]);
+                }
+            }
+
+            // Defer observer setup to idle time
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', function() {
+                    if ('requestIdleCallback' in window) {
+                        requestIdleCallback(setupObserver, { timeout: 2000 });
+                    } else {
+                        setTimeout(setupObserver, 1);
                     }
                 });
-            }, { rootMargin: '50px' });
-
-            // Start observing when DOM is ready
-            if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', () => {
-                    document.querySelectorAll('canvas').forEach(canvas => chartObserver.observe(canvas));
-                });
             } else {
-                document.querySelectorAll('canvas').forEach(canvas => chartObserver.observe(canvas));
+                if ('requestIdleCallback' in window) {
+                    requestIdleCallback(setupObserver, { timeout: 2000 });
+                } else {
+                    setTimeout(setupObserver, 1);
+                }
             }
-        } else {
-            // Fallback for browsers without IntersectionObserver
-            loadChartJS();
-        }
+        })();
     </script>
 
     <script type="application/ld+json">

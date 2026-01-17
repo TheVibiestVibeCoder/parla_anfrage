@@ -537,38 +537,16 @@ $partyMap = [
     <link rel="alternate" hreflang="de" href="<?php echo htmlspecialchars($currentUrl); ?>">
     <link rel="alternate" hreflang="x-default" href="<?php echo htmlspecialchars($canonicalUrl); ?>">
 
-    <?php
-    // PERFORMANCE OPTIMIZATION: Check if local assets exist
-    $useLocalChartJs = file_exists(__DIR__ . '/assets/js/chart.min.js');
-    $useLocalTailwind = file_exists(__DIR__ . '/assets/css/tailwind.min.css');
-
-    // Only preconnect to CDNs we actually need
-    if (!$useLocalTailwind || !$useLocalChartJs) {
-        if (!$useLocalTailwind) echo '<link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin>' . "\n    ";
-        if (!$useLocalChartJs) echo '<link rel="dns-prefetch" href="https://cdn.jsdelivr.net">' . "\n    ";
-    }
-    ?>
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
     <link rel="dns-prefetch" href="https://www.parlament.gv.at">
 
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 
-    <?php if ($useLocalTailwind): ?>
-    <!-- LOCAL TAILWIND CSS (faster!) -->
-    <link rel="stylesheet" href="/assets/css/tailwind.min.css">
-    <?php else: ?>
-    <!-- FALLBACK TO CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <?php endif; ?>
-
-    <?php if ($useLocalChartJs): ?>
-    <!-- LOCAL CHART.JS (faster!) -->
-    <script src="/assets/js/chart.min.js"></script>
-    <?php else: ?>
-    <!-- FALLBACK TO CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    <?php endif; ?>
 
     <script type="application/ld+json">
     {

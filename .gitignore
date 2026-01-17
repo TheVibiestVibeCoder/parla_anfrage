@@ -1,12 +1,6 @@
-# Cache files (but keep directory structure)
+# Cache files (but keep directory)
 cache/*.dat
 !cache/.gitkeep
-
-# Downloaded assets (can be regenerated, but keep directory structure)
-assets/js/chart.min.js
-assets/css/tailwind.min.css
-!assets/js/.gitkeep
-!assets/css/.gitkeep
 
 # PHP error logs
 php_errors.log
@@ -21,7 +15,3 @@ Thumbs.db
 *.swp
 *.swo
 *~
-
-# Temporary files
-*.tmp
-*.temp

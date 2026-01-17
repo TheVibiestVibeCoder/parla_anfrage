@@ -74,7 +74,15 @@ define('STOPWORDS', [
     // Sonstiges
     'mehr', 'weniger', 'sehr', 'auch', 'nicht', 'nur', 'noch', 'schon', 'alle', 'jede', 'jeden', 'jedes',
     'welche', 'welcher', 'welches', 'deren', 'dessen', 'wie', 'was', 'wer', 'wann', 'wo', 'warum',
-    'bzw', 'etc', 'usw', 'dass', 'daß', 'damit', 'dazu', 'davon'
+    'bzw', 'etc', 'usw', 'dass', 'daß', 'damit', 'dazu', 'davon',
+    // Neutrale administrative & geografische Begriffe (sollten nicht als Kampfbegriffe erscheinen)
+    'österreich', 'verein', 'vereine', 'vereinen', 'förderung', 'förderungen', 'finanzierung',
+    'ihres', 'ressort', 'ressorts', 'bundeskanzler', 'bundesminister', 'ministerin',
+    'bereich', 'bereiche', 'bereichs', 'thema', 'themen',
+    'männer', 'frauen', 'personen', 'person',
+    // Weitere neutrale Begriffe
+    'projekt', 'projekte', 'projekts', 'maßnahme', 'maßnahmen',
+    'zeitraum', 'jahr', 'jahre', 'jahren', 'monat', 'monate', 'monaten'
 ]);
 
 // ==========================================
@@ -739,6 +747,110 @@ $partyMap = [
             position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
             overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border-width: 0;
         }
+
+        /* Info Button */
+        .info-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            background: transparent;
+            color: var(--text-muted);
+            font-family: var(--font-mono);
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-left: 8px;
+        }
+        .info-btn:hover {
+            border-color: #fff;
+            color: #fff;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Modal/Popup */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .modal-overlay.active {
+            display: flex;
+        }
+        .modal-content {
+            background: var(--paper-color);
+            border: 2px solid var(--text-color);
+            max-width: 600px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 2rem;
+            position: relative;
+            animation: modalSlideIn 0.3s ease-out;
+        }
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 24px;
+            cursor: pointer;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.2s;
+        }
+        .modal-close:hover {
+            color: #fff;
+        }
+        .modal-title {
+            font-family: var(--font-head);
+            font-size: 2rem;
+            color: #fff;
+            margin-bottom: 1rem;
+            padding-right: 2rem;
+        }
+        .modal-body {
+            font-family: var(--font-body);
+            color: var(--text-muted);
+            line-height: 1.8;
+        }
+        .modal-body p {
+            margin-bottom: 1rem;
+        }
+        .modal-body ul {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .modal-body li {
+            margin-bottom: 0.5rem;
+        }
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
@@ -852,7 +964,10 @@ $partyMap = [
             <div class="lg:col-span-8">
                 <div class="investigative-box !border-t-2 !py-0 !border-b-0">
                     <div class="flex justify-between items-end mb-6">
-                        <h2 class="text-3xl text-white">Zeitlicher Verlauf</h2>
+                        <div class="flex items-center">
+                            <h2 class="text-3xl text-white">Zeitlicher Verlauf</h2>
+                            <button class="info-btn" onclick="openModal('timeline')" aria-label="Information zum zeitlichen Verlauf">i</button>
+                        </div>
                     </div>
                     <div style="height: 350px; width: 100%;">
                         <canvas id="timelineChart"
@@ -868,7 +983,10 @@ $partyMap = [
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-20">
             
             <div class="investigative-box">
-                <h2 class="investigative-header">Kampfbegriffe<br><span class="text-gray-500 text-lg font-sans font-normal">Die Sprache der Anfragen</span></h2>
+                <div class="flex items-start mb-4">
+                    <h2 class="investigative-header mb-0">Kampfbegriffe<br><span class="text-gray-500 text-lg font-sans font-normal">Die Sprache der Anfragen</span></h2>
+                    <button class="info-btn" onclick="openModal('kampfbegriffe')" aria-label="Information zu Kampfbegriffen">i</button>
+                </div>
                 
                 <div class="grid grid-cols-1 gap-4">
                     <?php foreach ($topKampfbegriffe as $index => $item): ?>
@@ -897,7 +1015,10 @@ $partyMap = [
             </div>
 
             <div class="investigative-box">
-                <h2 class="investigative-header">The Flood Wall<br><span class="text-gray-500 text-lg font-sans font-normal">Kumulative Belastung</span></h2>
+                <div class="flex items-start mb-4">
+                    <h2 class="investigative-header mb-0">The Flood Wall<br><span class="text-gray-500 text-lg font-sans font-normal">Kumulative Belastung</span></h2>
+                    <button class="info-btn" onclick="openModal('floodwall')" aria-label="Information zur Flood Wall">i</button>
+                </div>
                 <div style="height: 400px; width: 100%;">
                     <canvas id="floodWallChart"
                             role="img"
@@ -909,7 +1030,10 @@ $partyMap = [
         </div>
 
         <div class="investigative-box mb-20">
-             <h2 class="investigative-header">Der Kalender<br><span class="text-gray-500 text-lg font-sans font-normal">Intensität nach Tagen</span></h2>
+            <div class="flex items-start mb-4">
+                <h2 class="investigative-header mb-0">Der Kalender<br><span class="text-gray-500 text-lg font-sans font-normal">Intensität nach Tagen</span></h2>
+                <button class="info-btn" onclick="openModal('calendar')" aria-label="Information zum Kalender">i</button>
+            </div>
              <div style="height: 300px; width: 100%;">
                 <canvas id="spamCalendarChart"
                         role="img"
@@ -1012,7 +1136,7 @@ $partyMap = [
         <section class="mb-24 pt-12 border-t border-gray-800" itemscope itemtype="https://schema.org/FAQPage">
             <h2 class="text-3xl text-white mb-12 font-head text-center">Hintergrund</h2>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+            <div class="max-w-4xl mx-auto space-y-8">
                 <div itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
                     <h3 class="text-xl font-bold text-white mb-4 border-l-2 border-white pl-4" itemprop="name">
                         Was sind parlamentarische Anfragen?
@@ -1032,7 +1156,7 @@ $partyMap = [
                     </h3>
                     <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
                         <p class="text-gray-400 leading-relaxed font-sans" itemprop="text">
-                            Die massenhafte Verwendung des Begriffs „NGO Business“ deutet auf eine bewusste politische Strategie hin.
+                            Die massenhafte Verwendung des Begriffs „NGO Business" deutet auf eine bewusste politische Strategie hin.
                             Durch hunderte nahezu identische Anfragen wird ein Narrativ erzeugt, das NGO Arbeit mit
                             Steuergeldverschwendung, Ideologie und Missbrauch öffentlicher Mittel verknüpft.
                             Ziel ist weniger Aufklärung als vielmehr Delegitimierung.
@@ -1054,8 +1178,21 @@ $partyMap = [
                     </div>
                 </div>
 
-                <div class="border-b border-gray-800 pb-6 mt-12" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-                    <h3 class="text-xl font-bold text-white mb-3" itemprop="name">
+                <div itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                    <h3 class="text-xl font-bold text-white mb-4 border-l-2 border-white pl-4" itemprop="name">
+                        Was kannst du tun?
+                    </h3>
+                    <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                        <p class="text-gray-400 leading-relaxed font-sans" itemprop="text">
+                            Red darüber. Teile die Daten. Hinterfrage Schlagworte.
+                            Je sichtbarer solche Muster werden, desto schwerer wird es,
+                            parlamentarische Instrumente für politische Stimmungsmache zu missbrauchen.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="border-t border-gray-700 pt-8" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                    <h3 class="text-xl font-bold text-white mb-4 border-l-2 border-white pl-4" itemprop="name">
                         Was ist Keyword-Squatting?
                     </h3>
                     <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
@@ -1067,7 +1204,7 @@ $partyMap = [
                         </p>
 
                         <p class="text-gray-300 leading-relaxed mt-4" itemprop="text">
-                            Im Fall von „NGO-Business“ entsteht durch hunderte parlamentarische Anfragen eine künstliche Verbindung
+                            Im Fall von „NGO-Business" entsteht durch hunderte parlamentarische Anfragen eine künstliche Verbindung
                             zwischen NGOs und negativ konnotierten Begriffen wie Steuergeld, Ideologie oder Missbrauch,
                             unabhängig davon, ob es reale Probleme gibt.
                         </p>
@@ -1086,22 +1223,70 @@ $partyMap = [
                         </p>
                     </div>
                 </div>
-
-                <div itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-                    <h3 class="text-xl font-bold text-white mb-4 border-l-2 border-white pl-4" itemprop="name">
-                        Was kannst du tun?
-                    </h3>
-                    <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-                        <p class="text-gray-400 leading-relaxed font-sans" itemprop="text">
-                            Red darüber. Teile die Daten. Hinterfrage Schlagworte.
-                            Je sichtbarer solche Muster werden, desto schwerer wird es,
-                            parlamentarische Instrumente für politische Stimmungsmache zu missbrauchen.
-                        </p>
-                    </div>
-                </div>
             </div>
         </section>
 
+    </div>
+
+    <!-- Modals für Graph-Informationen -->
+    <div id="modal-timeline" class="modal-overlay" onclick="closeModalOnOverlay(event, 'timeline')">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeModal('timeline')" aria-label="Schließen">&times;</button>
+            <h3 class="modal-title">Zeitlicher Verlauf</h3>
+            <div class="modal-body">
+                <p><strong>Was zeigt diese Grafik?</strong></p>
+                <p>Diese Grafik zeigt, wie viele NGO-bezogene parlamentarische Anfragen im gewählten Zeitraum gestellt wurden.</p>
+                <p><strong>Wie wird sie berechnet?</strong></p>
+                <p>Für jeden Tag oder Monat (je nach gewähltem Zeitraum) werden alle Anfragen gezählt, die NGO-relevante Begriffe enthalten. Die Linie zeigt die Entwicklung über die Zeit.</p>
+                <p><strong>Was bedeutet das?</strong></p>
+                <p>Spitzen in der Kurve zeigen Phasen besonders intensiver Anfrage-Aktivität. So wird sichtbar, wann das Thema "NGO Business" verstärkt im Parlament thematisiert wurde.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-kampfbegriffe" class="modal-overlay" onclick="closeModalOnOverlay(event, 'kampfbegriffe')">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeModal('kampfbegriffe')" aria-label="Schließen">&times;</button>
+            <h3 class="modal-title">Kampfbegriffe</h3>
+            <div class="modal-body">
+                <p><strong>Was zeigt diese Grafik?</strong></p>
+                <p>Diese Liste zeigt die häufigsten politisch aufgeladenen Begriffe aus den Anfragen und welche Partei diese am meisten verwendet.</p>
+                <p><strong>Wie wird sie berechnet?</strong></p>
+                <p>Alle Wörter aus den Anfragen werden analysiert. Neutrale Begriffe wie "Österreich", "Verein" oder "Förderung" werden herausgefiltert. Übrig bleiben gezielte Schlagwörter wie "Steuergeldmillionen", "LGBTIQ-Maßnahmen" oder "NGO-Business". Für jedes Wort wird gezählt, welche Partei es wie oft verwendet hat.</p>
+                <p><strong>Was bedeutet das?</strong></p>
+                <p>Die Liste zeigt, mit welchen Begriffen NGOs gezielt in einen bestimmten Kontext gerückt werden. Die "Dominanz" zeigt, welche Partei ein Wort besonders häufig nutzt, um ihr Narrativ zu formen.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-floodwall" class="modal-overlay" onclick="closeModalOnOverlay(event, 'floodwall')">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeModal('floodwall')" aria-label="Schließen">&times;</button>
+            <h3 class="modal-title">The Flood Wall</h3>
+            <div class="modal-body">
+                <p><strong>Was zeigt diese Grafik?</strong></p>
+                <p>Diese Grafik zeigt die kumulative (aufaddierte) Anzahl der Anfragen jeder Partei über die Zeit.</p>
+                <p><strong>Wie wird sie berechnet?</strong></p>
+                <p>Für jede Partei wird täglich gezählt: Wie viele Anfragen hat diese Partei insgesamt bis zu diesem Tag gestellt? Die Linien steigen also nur an, nie ab. Je steiler die Linie, desto mehr Anfragen wurden in diesem Zeitraum gestellt.</p>
+                <p><strong>Was bedeutet das?</strong></p>
+                <p>Die "Flood Wall" macht sichtbar, wie systematisch und massiv einzelne Parteien das Parlament mit Anfragen zu einem Thema "überfluten". Eine steil ansteigende Linie bedeutet: Hier wird intensiv und kontinuierlich Druck aufgebaut.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-calendar" class="modal-overlay" onclick="closeModalOnOverlay(event, 'calendar')">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeModal('calendar')" aria-label="Schließen">&times;</button>
+            <h3 class="modal-title">Der Kalender</h3>
+            <div class="modal-body">
+                <p><strong>Was zeigt diese Grafik?</strong></p>
+                <p>Diese Heatmap zeigt für jeden Tag, wie viele Anfragen jede Partei gestellt hat. Je intensiver die Farbe, desto mehr Anfragen wurden an diesem Tag eingereicht.</p>
+                <p><strong>Wie wird sie berechnet?</strong></p>
+                <p>Jeder Tag wird als Punkt dargestellt. Die Farbe entspricht der jeweiligen Partei. Die Farbintensität (Helligkeit) zeigt die Anzahl der Anfragen: Dunkel = wenige Anfragen, Hell/Leuchtend = viele Anfragen an diesem Tag.</p>
+                <p><strong>Was bedeutet das?</strong></p>
+                <p>Der Kalender macht "Bulk-Tage" sichtbar - Tage, an denen besonders viele Anfragen auf einmal eingereicht wurden. Solche koordinierten Massen-Einreichungen sind ein Zeichen für strategisches, geplantes Vorgehen.</p>
+            </div>
+        </div>
     </div>
 
     <footer class="bg-black border-t border-white py-12 mt-auto">
@@ -1270,8 +1455,10 @@ $partyMap = [
                                 const v = ctx.raw;
                                 if (!v) return '#333';
                                 const c = partyColors[v.p];
-                                // simple opacity hack
-                                const alpha = 0.4 + (v.v / maxVal) * 0.6; 
+                                // Improved color intensity: wider range from 0.2 to 1.0 for better contrast
+                                // Using exponential curve to make differences more pronounced
+                                const normalizedValue = v.v / maxVal;
+                                const alpha = 0.2 + Math.pow(normalizedValue, 0.7) * 0.8;
                                 return c + Math.floor(alpha * 255).toString(16).padStart(2,'0');
                             },
                             pointRadius: 5,
@@ -1318,6 +1505,40 @@ $partyMap = [
                     }
                 });
             }
+
+            // Modal Functions
+            window.openModal = function(modalId) {
+                const modal = document.getElementById('modal-' + modalId);
+                if (modal) {
+                    modal.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                }
+            };
+
+            window.closeModal = function(modalId) {
+                const modal = document.getElementById('modal-' + modalId);
+                if (modal) {
+                    modal.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            };
+
+            window.closeModalOnOverlay = function(event, modalId) {
+                if (event.target.classList.contains('modal-overlay')) {
+                    closeModal(modalId);
+                }
+            };
+
+            // Close modal on ESC key
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape') {
+                    const activeModal = document.querySelector('.modal-overlay.active');
+                    if (activeModal) {
+                        const modalId = activeModal.id.replace('modal-', '');
+                        closeModal(modalId);
+                    }
+                }
+            });
         });
     </script>
 </body>

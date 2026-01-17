@@ -412,8 +412,8 @@ if (!empty($allNGOResults)) {
     $earliestInquiry = end($allNGOResults);
     if (isset($earliestInquiry['date_obj'])) {
         $earliestDate = $earliestInquiry['date_obj'];
-        // Format as "MM YYYY" (e.g., "01 2024")
-        $earliestDateFormatted = $earliestDate->format('m Y');
+        // Format as "DD.MM.YYYY" (e.g., "15.01.2024")
+        $earliestDateFormatted = $earliestDate->format('d.m.Y');
     }
 }
 
@@ -766,46 +766,46 @@ $partyMap = [
     </header>
 
     <!-- Hero Opener Section - Full Screen -->
-    <section class="min-h-screen flex flex-col justify-between items-center text-center px-6 py-12 -mt-6"
+    <section class="h-screen flex flex-col justify-between items-center text-center px-6 py-8 -mt-6"
              style="background: #000;">
 
         <!-- Main Content - Centered -->
-        <div class="flex-1 flex flex-col justify-center items-center max-w-5xl mx-auto">
+        <div class="flex-1 flex flex-col justify-center items-center max-w-5xl mx-auto w-full">
             <article itemscope itemtype="https://schema.org/Article">
                 <header>
-                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-8 md:mb-12 text-white leading-tight"
+                    <h1 class="text-3xl md:text-5xl lg:text-6xl font-bold mb-6 md:mb-10 text-white leading-tight"
                         style="font-family: var(--font-head); letter-spacing: 2px;"
                         itemprop="headline">
                         DAS "NGO-BUSINESS"-NARRATIV DER FPÖ
                     </h1>
                 </header>
 
-                <div class="text-lg md:text-xl lg:text-2xl text-gray-300 space-y-6 leading-relaxed max-w-4xl mx-auto"
+                <div class="text-base md:text-xl lg:text-2xl text-gray-300 space-y-4 md:space-y-6 leading-relaxed max-w-4xl mx-auto"
                      itemprop="articleBody">
                     <p>
                         Die FPÖ flutet das Parlament zum Thema "NGO-Business". Seit <?php echo $earliestDateFormatted; ?>
-                        sind <?php echo number_format($totalCount); ?> Anfragen mit dem Begriff "NGO-Business" eingegangen.
+                        sind <?php echo number_format($totalCount); ?> Anfragen zum Thema NGOs, fast immer mit dem Begriff "NGO-Business" versehen, eingegangen.
                     </p>
 
-                    <p class="pt-4">
+                    <p class="pt-2 md:pt-4">
                         Warum? Wichtige NGO-Arbeit wird ganz bewusst in den Kontext von Steuergeld-Verschwendung gerückt,
                         um die Arbeit von Non-Profit-Organisationen zu verunglimpfen.
                     </p>
 
-                    <p class="pt-6 font-semibold text-white">
+                    <p class="pt-4 md:pt-6 font-semibold text-white">
                         Wir decken auf, was es mit den Anfragen auf sich hat.
                     </p>
                 </div>
             </article>
         </div>
 
-        <!-- Arrow Down - Bottom of Screen -->
-        <a href="#tracker" class="pb-8 cursor-pointer group">
-            <div class="text-xs md:text-sm font-mono text-gray-400 uppercase tracking-widest mb-4 group-hover:text-white transition-colors">
+        <!-- Arrow Down - Always at Bottom of Viewport -->
+        <a href="#tracker" class="cursor-pointer group pb-6 flex-shrink-0">
+            <div class="text-xs md:text-sm font-mono text-gray-400 uppercase tracking-widest mb-3 group-hover:text-white transition-colors">
                 Zum Anfragen-Tracker
             </div>
             <div class="flex justify-center">
-                <svg class="w-12 h-12 text-white animate-bounce group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-10 h-10 md:w-12 md:h-12 text-white animate-bounce group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
                 </svg>
             </div>

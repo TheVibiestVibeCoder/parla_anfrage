@@ -719,32 +719,180 @@ $partyMap = [
 
         /* Mobile-specific text sizes */
         .text-\[10px\] { font-size: 10px; }
+        .text-xs { font-size: 0.75rem; line-height: 1rem; }
+        .text-2xl { font-size: 1.5rem; line-height: 2rem; }
+        .text-3xl { font-size: 1.875rem; line-height: 2.25rem; }
+        .text-4xl { font-size: 2.25rem; line-height: 2.5rem; }
+
+        /* Additional layout utilities for mobile */
+        .items-start { align-items: flex-start; }
+        .items-baseline { align-items: baseline; }
+        .justify-end { justify-content: flex-end; }
+        .grid { display: grid; }
+        .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+        .hidden { display: none; }
+        .block { display: block; }
+        .relative { position: relative; }
+        .cursor-pointer { cursor: pointer; }
+        .overflow-hidden { overflow: hidden; }
+
+        /* Additional spacing */
+        .gap-8 { gap: 2rem; }
+        .px-2 { padding-left: 0.5rem; padding-right: 0.5rem; }
+        .px-4 { padding-left: 1rem; padding-right: 1rem; }
+        .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+        .py-4 { padding-top: 1rem; padding-bottom: 1rem; }
+        .py-8 { padding-top: 2rem; padding-bottom: 2rem; }
+        .pt-4 { padding-top: 1rem; }
+        .pt-16 { padding-top: 4rem; }
+        .pb-2 { padding-bottom: 0.5rem; }
+        .pb-4 { padding-bottom: 1rem; }
+        .pb-8 { padding-bottom: 2rem; }
+        .pl-4 { padding-left: 1rem; }
+        .pl-6 { padding-left: 1.5rem; }
+        .mb-1 { margin-bottom: 0.25rem; }
+        .mb-2 { margin-bottom: 0.5rem; }
+        .mb-4 { margin-bottom: 1rem; }
+        .mb-12 { margin-bottom: 3rem; }
+        .mb-16 { margin-bottom: 4rem; }
+        .mb-20 { margin-bottom: 5rem; }
+        .mb-24 { margin-bottom: 6rem; }
+        .mt-2 { margin-top: 0.5rem; }
+        .mt-4 { margin-top: 1rem; }
+        .mt-auto { margin-top: auto; }
+        .ml-2 { margin-left: 0.5rem; }
+        .ml-auto { margin-left: auto; }
+
+        /* Additional colors */
+        .text-gray-500 { color: #6b7280; }
+        .text-red-500 { color: #ef4444; }
+        .text-green-500 { color: #22c55e; }
+        .bg-gray-900 { background-color: #111827; }
+
+        /* Additional borders */
+        .border-b-2 { border-bottom-width: 2px; }
+        .border-b-4 { border-bottom-width: 4px; }
+        .border-l-2 { border-left-width: 2px; }
+        .border-l-4 { border-left-width: 4px; }
+        .border-t { border-top-width: 1px; }
+        .border-gray-700 { border-color: #374151; }
+        .border-gray-800 { border-color: #1f2937; }
+        .border-green-900 { border-color: #14532d; }
+
+        /* Additional sizing */
+        .w-12 { width: 3rem; }
+        .max-w-4xl { max-width: 56rem; }
+        .max-w-md { max-width: 28rem; }
+        .max-w-\[1200px\] { max-width: 1200px; }
+
+        /* Additional typography */
+        .font-head { font-family: 'Bebas Neue', sans-serif; }
+        .text-right { text-align: right; }
+        .leading-none { line-height: 1; }
+        .leading-snug { line-height: 1.375; }
+        .italic { font-style: italic; }
+        .break-all { word-break: break-all; }
+
+        /* Additional utilities */
+        .space-y-8 > * + * { margin-top: 2rem; }
+        .space-y-4 > * + * { margin-top: 1rem; }
+        .transition-colors { transition-property: color, background-color, border-color; transition-duration: 150ms; }
+        .container-custom {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* Flexbox wrap and direction */
+        .flex-row { flex-direction: row; }
+        .flex-wrap { flex-wrap: wrap; }
+
+        /* Additional semantic elements */
+        main, section, footer, article, header { display: block; }
+        h2, h3 { font-family: 'Bebas Neue', sans-serif; font-weight: 400; }
+
+        /* Responsive utilities */
+        @media (min-width: 640px) {
+            .sm\:text-6xl { font-size: 3.75rem; line-height: 1; }
+        }
         @media (min-width: 768px) {
-            .md\:text-xs { font-size: 0.75rem; }
-            .md\:text-lg { font-size: 1.125rem; }
-            .md\:text-xl { font-size: 1.25rem; }
-            .md\:text-center { text-align: center; }
+            .container-custom { padding: 0 1.5rem; }
+            .md\:flex { display: flex; }
+            .md\:hidden { display: none; }
+            .md\:block { display: block; }
+            .md\:grid { display: grid; }
+            .md\:flex-row { flex-direction: row; }
+            .md\:gap-3 { gap: 0.75rem; }
+            .md\:gap-6 { gap: 1.5rem; }
+            .md\:gap-10 { gap: 2.5rem; }
+            .md\:py-12 { padding-top: 3rem; padding-bottom: 3rem; }
+            .md\:py-16 { padding-top: 4rem; padding-bottom: 4rem; }
+            .md\:px-0 { padding-left: 0; padding-right: 0; }
+            .md\:pt-24 { padding-top: 6rem; }
+            .md\:mb-6 { margin-bottom: 1.5rem; }
             .md\:mb-10 { margin-bottom: 2.5rem; }
+            .md\:mb-16 { margin-bottom: 4rem; }
+            .md\:text-xs { font-size: 0.75rem; line-height: 1rem; }
+            .md\:text-sm { font-size: 0.875rem; line-height: 1.25rem; }
+            .md\:text-lg { font-size: 1.125rem; line-height: 1.75rem; }
+            .md\:text-xl { font-size: 1.25rem; line-height: 1.75rem; }
+            .md\:text-3xl { font-size: 1.875rem; line-height: 2.25rem; }
+            .md\:text-5xl { font-size: 3rem; line-height: 1; }
+            .md\:text-6xl { font-size: 3.75rem; line-height: 1; }
+            .md\:text-7xl { font-size: 4.5rem; line-height: 1; }
+            .md\:text-center { text-align: center; }
+            .md\:text-right { text-align: right; }
+            .md\:w-2 { width: 0.5rem; }
+            .md\:w-3 { width: 0.75rem; }
+            .md\:w-10 { width: 2.5rem; }
+            .md\:h-2 { height: 0.5rem; }
+            .md\:h-3 { height: 0.75rem; }
+            .md\:h-10 { height: 2.5rem; }
+            .md\:col-span-1 { grid-column: span 1 / span 1; }
+            .md\:col-span-2 { grid-column: span 2 / span 2; }
+            .md\:col-span-7 { grid-column: span 7 / span 7; }
+            .md\:col-span-8 { grid-column: span 8 / span 8; }
+            .md\:col-span-12 { grid-column: span 12 / span 12; }
+            .md\:grid-cols-12 { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+        }
+        @media (min-width: 1024px) {
+            .lg\:flex-row { flex-direction: row; }
+            .lg\:items-end { align-items: flex-end; }
+            .lg\:gap-10 { gap: 2.5rem; }
+            .lg\:gap-12 { gap: 3rem; }
+            .lg\:gap-16 { gap: 4rem; }
+            .lg\:pt-20 { padding-top: 5rem; }
+            .lg\:mb-16 { margin-bottom: 4rem; }
+            .lg\:mb-20 { margin-bottom: 5rem; }
+            .lg\:mb-24 { margin-bottom: 6rem; }
+            .lg\:text-5xl { font-size: 3rem; line-height: 1; }
+            .lg\:text-7xl { font-size: 4.5rem; line-height: 1; }
+            .lg\:text-xl { font-size: 1.25rem; line-height: 1.75rem; }
+            .lg\:w-auto { width: auto; }
+            .lg\:col-span-4 { grid-column: span 4 / span 4; }
+            .lg\:col-span-8 { grid-column: span 8 / span 8; }
+            .lg\:grid-cols-12 { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+            .lg\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
+        @media (min-width: 1280px) {
+            .xl\:gap-16 { gap: 4rem; }
+            .xl\:pt-24 { padding-top: 6rem; }
+            .xl\:mb-20 { margin-bottom: 5rem; }
+            .xl\:text-6xl { font-size: 3.75rem; line-height: 1; }
+            .xl\:text-8xl { font-size: 6rem; line-height: 1; }
+            .xl\:text-9xl { font-size: 8rem; line-height: 1; }
         }
     </style>
 
-    <!-- Tailwind CSS - Loaded with low priority to prevent render blocking -->
+    <!-- Tailwind CSS - Load immediately but async for balanced performance + appearance -->
     <script>
-        // Load Tailwind CSS with requestIdleCallback for optimal performance
+        // Load Tailwind CSS immediately but async to maintain good appearance
         (function() {
-            function loadTailwind() {
-                var link = document.createElement('script');
-                link.src = 'https://cdn.tailwindcss.com';
-                link.async = true; // Don't block execution
-                document.head.appendChild(link);
-            }
-
-            // Use requestIdleCallback if available, otherwise use setTimeout
-            if ('requestIdleCallback' in window) {
-                requestIdleCallback(loadTailwind);
-            } else {
-                setTimeout(loadTailwind, 1);
-            }
+            var s = document.createElement('script');
+            s.src = 'https://cdn.tailwindcss.com';
+            s.async = true; // Async loading - doesn't block HTML parsing
+            document.head.appendChild(s);
         })();
     </script>
 

@@ -424,20 +424,19 @@ $partyMap = [
 
     <?php
     // SEO-Optimized Dynamic Title
-    $seoTitle = "NGO Business Tracker Österreich | " . $rangeLabel . " | Parlamentarische Anfragen Live";
-    $seoDescription = "NGO Business Anfragen im österreichischen Parlament live verfolgen. Echtzeit-Tracking von NGO-bezogenen parlamentarischen Anfragen, Visualisierungen und Analysen. Transparenz über NGO Business Aktivitäten von SPÖ, ÖVP, FPÖ, GRÜNE und NEOS.";
-    $seoKeywords = "ngo business, ngo business österreich, ngo anfragen, parlamentarische anfragen ngo, ngo business tracker, parlament österreich ngo, ngo transparenz, ngo business anfragen, nicht-regierungsorganisationen österreich, ngo watch, ngo-business tracking, parlamentsanfragen ngo, ngo monitoring österreich";
+    $seoTitle = "\"NGO Business\" Tracker Österreich | " . $rangeLabel . " | Parlamentarische Anfragen Live";
+    $seoDescription = "Analyse des Begriffs 'NGO Business' im Parlament. Tracking der Strategie, Ressourcenbindung und Skandalisierung durch parlamentarische Anfragen in Österreich.";
+    $seoKeywords = "ngo business, ngo business österreich, ngo anfragen, parlamentarische anfragen ngo, ngo business tracker, framing ngo, ngo business strategie, parlamentsanfragen";
     $currentUrl = "https://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
     $canonicalUrl = "https://" . $_SERVER['HTTP_HOST'] . strtok($_SERVER["REQUEST_URI"], '?');
     ?>
 
     <title><?php echo htmlspecialchars($seoTitle); ?></title>
 
-    <!-- Primary Meta Tags -->
     <meta name="title" content="<?php echo htmlspecialchars($seoTitle); ?>">
     <meta name="description" content="<?php echo htmlspecialchars($seoDescription); ?>">
     <meta name="keywords" content="<?php echo htmlspecialchars($seoKeywords); ?>">
-    <meta name="author" content="NGO Watch - Data Intelligence System">
+    <meta name="author" content="&quot;NGO Business&quot; Tracker - Anfragen Dashboard">
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
     <meta name="language" content="German">
     <meta name="revisit-after" content="1 days">
@@ -448,59 +447,50 @@ $partyMap = [
     <meta name="geo.position" content="47.516231;14.550072">
     <meta name="ICBM" content="47.516231, 14.550072">
 
-    <!-- Canonical URL -->
     <link rel="canonical" href="<?php echo htmlspecialchars($canonicalUrl); ?>">
 
-    <!-- Open Graph / Facebook Meta Tags -->
     <meta property="og:type" content="website">
-    <meta property="og:site_name" content="NGO Watch - Data Intelligence">
+    <meta property="og:site_name" content="&quot;NGO Business&quot; Tracker - Anfragen Dashboard">
     <meta property="og:url" content="<?php echo htmlspecialchars($currentUrl); ?>">
     <meta property="og:title" content="<?php echo htmlspecialchars($seoTitle); ?>">
     <meta property="og:description" content="<?php echo htmlspecialchars($seoDescription); ?>">
     <meta property="og:locale" content="de_AT">
     <meta property="og:updated_time" content="<?php echo date('c'); ?>">
 
-    <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="<?php echo htmlspecialchars($currentUrl); ?>">
     <meta name="twitter:title" content="<?php echo htmlspecialchars($seoTitle); ?>">
     <meta name="twitter:description" content="<?php echo htmlspecialchars($seoDescription); ?>">
 
-    <!-- Additional SEO Meta Tags -->
     <meta name="theme-color" content="#050505">
     <meta name="msapplication-TileColor" content="#050505">
-    <meta name="application-name" content="NGO Watch">
-    <meta name="apple-mobile-web-app-title" content="NGO Watch">
+    <meta name="application-name" content="&quot;NGO Business&quot; Tracker">
+    <meta name="apple-mobile-web-app-title" content="&quot;NGO Business&quot; Tracker">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-    <!-- hreflang Tags (if you add English version later) -->
     <link rel="alternate" hreflang="de-at" href="<?php echo htmlspecialchars($currentUrl); ?>">
     <link rel="alternate" hreflang="de" href="<?php echo htmlspecialchars($currentUrl); ?>">
     <link rel="alternate" hreflang="x-default" href="<?php echo htmlspecialchars($canonicalUrl); ?>">
 
-    <!-- Performance Optimization: DNS Prefetch & Preconnect -->
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin>
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
     <link rel="dns-prefetch" href="https://www.parlament.gv.at">
 
-    <!-- Fonts with display=swap for better performance -->
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@300;400;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 
-    <!-- Scripts -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
-    <!-- JSON-LD Structured Data for SEO -->
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
         "@graph": [
             {
                 "@type": "Organization",
-                "name": "NGO Watch - Data Intelligence System",
+                "name": "\"NGO Business\" Tracker - Anfragen Dashboard",
                 "url": "<?php echo htmlspecialchars($canonicalUrl); ?>",
                 "logo": "<?php echo htmlspecialchars($canonicalUrl); ?>",
                 "description": "Echtzeit-Tracking und Analyse von NGO-bezogenen parlamentarischen Anfragen im österreichischen Parlament",
@@ -513,7 +503,7 @@ $partyMap = [
             },
             {
                 "@type": "WebSite",
-                "name": "NGO Watch",
+                "name": "\"NGO Business\" Tracker",
                 "url": "<?php echo htmlspecialchars($canonicalUrl); ?>",
                 "description": "<?php echo htmlspecialchars($seoDescription); ?>",
                 "inLanguage": "de-AT",
@@ -547,7 +537,7 @@ $partyMap = [
                 "keywords": "<?php echo htmlspecialchars($seoKeywords); ?>",
                 "creator": {
                     "@type": "Organization",
-                    "name": "NGO Watch"
+                    "name": "\"NGO Business\" Tracker"
                 },
                 "datePublished": "<?php echo date('c', strtotime('-1 year')); ?>",
                 "dateModified": "<?php echo date('c'); ?>",
@@ -730,7 +720,6 @@ $partyMap = [
 </head>
 <body>
 
-    <!-- Main Site Header -->
     <header class="w-full border-b border-[rgba(255,255,255,0.1)] bg-black">
         <div class="container-custom">
             <div class="flex flex-col md:flex-row justify-between items-center py-6">
@@ -740,9 +729,9 @@ $partyMap = [
                     </div>
                     <div>
                         <h1 class="text-2xl md:text-3xl font-bold" style="font-family: var(--font-head); letter-spacing: 2px;">
-                            NGO WATCH
+                            "NGO BUSINESS" TRACKER
                         </h1>
-                        <p class="text-xs font-mono text-gray-500 uppercase tracking-wider">Data Intelligence System</p>
+                        <p class="text-xs font-mono text-gray-500 uppercase tracking-wider">Anfragen Dashboard</p>
                     </div>
                 </div>
                 <div class="mt-4 md:mt-0">
@@ -761,34 +750,39 @@ $partyMap = [
 
     <div class="container-custom">
 
-        <!-- SEO-Optimized Introduction Section -->
         <article class="mono-box mb-8" itemscope itemtype="https://schema.org/Article">
             <header>
-                <h1 class="text-3xl md:text-4xl font-bold mb-4" style="font-family: var(--font-head); letter-spacing: 1px;" itemprop="headline">
-                    NGO Business Tracker Österreich: Parlamentarische Anfragen Live
+                <h1 class="text-3xl md:text-5xl font-bold mb-4" style="font-family: var(--font-head); letter-spacing: 1px;" itemprop="headline">
+                    Hinter den Kulissen: Das "NGO-Business"
                 </h1>
             </header>
-            <div class="text-base md:text-lg text-gray-300 space-y-3 leading-relaxed" itemprop="articleBody">
-                <p>
-                    Willkommen beim führenden <strong>NGO Business Tracker</strong> für Österreich. Unser System ermöglicht Ihnen das Echtzeit-Tracking aller <strong>NGO-bezogenen parlamentarischen Anfragen</strong> im österreichischen Parlament. Mit unserem innovativen NGO Business Monitoring erhalten Sie vollständige Transparenz über alle <strong>ngo business</strong> Aktivitäten der Parlamentsparteien.
-                </p>
-                <p>
-                    <strong>NGO Business Anfragen</strong> sind parlamentarische Anfragen, die sich mit Nicht-Regierungsorganisationen, NGO-Finanzierung, NGO-Transparenz und verwandten Themen befassen. Unsere Plattform aggregiert und visualisiert alle relevanten Daten aus dem österreichischen Parlament in Echtzeit, um Ihnen einen umfassenden Überblick über die <strong>NGO Business</strong> Landschaft zu geben.
-                </p>
-                <section class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
-                    <div class="bg-black bg-opacity-40 p-4 border border-gray-800">
-                        <h3 class="text-sm font-bold font-mono text-white mb-2 uppercase">🔍 Echtzeit NGO Business Tracking</h3>
-                        <p class="text-xs text-gray-400">Live-Daten zu allen NGO-bezogenen Anfragen von SPÖ, ÖVP, FPÖ, GRÜNE und NEOS</p>
+            <div class="text-base md:text-lg text-gray-300 space-y-4 leading-relaxed" itemprop="articleBody">
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
+                    <div class="bg-black bg-opacity-40 p-5 border border-gray-800 hover:border-gray-600 transition-colors">
+                        <div class="text-red-500 text-xs font-mono font-bold mb-2 uppercase tracking-widest">[PHASE 1]</div>
+                        <h3 class="text-lg font-bold font-mono text-white mb-2 uppercase">Die Ressourcen-Falle</h3>
+                        <p class="text-sm text-gray-400">
+                            Es lässt sich beobachten, dass Anfragen zu dem Begriff NGO-Business mittlerweile hunderte Anfrage umfassen. Dabei haben sie oft das gleiche Muster und sollen offensichtlich den Informationsraum mit einem gewünschten Narrativ besetzen.
+                        </p>
                     </div>
-                    <div class="bg-black bg-opacity-40 p-4 border border-gray-800">
-                        <h3 class="text-sm font-bold font-mono text-white mb-2 uppercase">📊 Datenvisualisierung</h3>
-                        <p class="text-xs text-gray-400">Interaktive Charts zeigen Trends, Kampfbegriffe und Parteivergleiche im NGO Business</p>
+                    
+                    <div class="bg-black bg-opacity-40 p-5 border border-gray-800 hover:border-gray-600 transition-colors">
+                        <div class="text-red-500 text-xs font-mono font-bold mb-2 uppercase tracking-widest">[PHASE 2]</div>
+                        <h3 class="text-lg font-bold font-mono text-white mb-2 uppercase">Data Mining</h3>
+                        <p class="text-sm text-gray-400">
+                            Wir dachten uns: Lasst uns durch das Narrativ sehen. Wir haben daher einen simplen Tracker gebaut, der alle parlamentarischen Anfragen, die mit dem Thema NGOs zu tun haben trackt. Wer sich Daten ansieht, kann schnell einen spannenden Eindruck gewinnen.
+                        </p>
                     </div>
-                    <div class="bg-black bg-opacity-40 p-4 border border-gray-800">
-                        <h3 class="text-sm font-bold font-mono text-white mb-2 uppercase">💡 Transparenz & Analyse</h3>
-                        <p class="text-xs text-gray-400">Vollständige Transparenz über NGO-bezogene parlamentarische Aktivitäten</p>
+
+                    <div class="bg-black bg-opacity-40 p-5 border border-gray-800 hover:border-gray-600 transition-colors">
+                        <div class="text-red-500 text-xs font-mono font-bold mb-2 uppercase tracking-widest">[PHASE 3]</div>
+                        <h3 class="text-lg font-bold font-mono text-white mb-2 uppercase">Keyword Squatting</h3>
+                        <p class="text-sm text-gray-400">
+                            Ist das unweigerliche Resultat. Suchmaschinen indexieren nämlich, wo der Begriff oft vorkommt (sehr simpel gesagt). Je vertrauenswürdiger die Website – desto besser. Das Ergebnis? NGO-Business: Ein Aushängeschild für Informationsmanipulation.
+                        </p>
                     </div>
-                </section>
+                </div>
             </div>
         </article>
 
@@ -1039,7 +1033,6 @@ $partyMap = [
         </section>
 
 
-        <!-- FAQ Section for SEO -->
         <section class="mono-box mt-16" itemscope itemtype="https://schema.org/FAQPage" aria-labelledby="faq-heading">
             <h2 id="faq-heading" class="text-3xl text-white mb-8" style="font-family: var(--font-head); letter-spacing: 1px;">
                 Häufig gestellte Fragen zu NGO Business Anfragen
@@ -1104,16 +1097,14 @@ $partyMap = [
 
     </div>
 
-    <!-- Main Site Footer -->
     <footer class="w-full border-t border-[rgba(255,255,255,0.1)] bg-black mt-16">
         <div class="container-custom">
             <div class="py-8">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-                    <!-- About Section -->
                     <div>
                         <h3 class="text-sm font-bold font-mono text-white mb-3 uppercase tracking-wider">Über das NGO Business System</h3>
                         <p class="text-xs font-mono text-gray-500 leading-relaxed">
-                            Der führende <strong>NGO Business Tracker</strong> für Österreich. Echtzeit-Tracking von NGO-bezogenen parlamentarischen Anfragen aus dem österreichischen Parlament.
+                            Der führende <strong>"NGO Business" Tracker</strong> für Österreich. Echtzeit-Tracking von NGO-bezogenen parlamentarischen Anfragen aus dem österreichischen Parlament.
                             Professionelle Datenanalyse und Visualisierung für maximale <strong>NGO Transparenz</strong> und demokratische Kontrolle.
                         </p>
                         <div class="mt-4 text-xs font-mono text-gray-600">
@@ -1121,7 +1112,6 @@ $partyMap = [
                         </div>
                     </div>
 
-                    <!-- Data Source -->
                     <div>
                         <h3 class="text-sm font-bold font-mono text-white mb-3 uppercase tracking-wider">Datenquelle</h3>
                         <div class="text-xs font-mono text-gray-500 space-y-2">
@@ -1140,7 +1130,6 @@ $partyMap = [
                         </div>
                     </div>
 
-                    <!-- Tech Info -->
                     <div>
                         <h3 class="text-sm font-bold font-mono text-white mb-3 uppercase tracking-wider">Technologie</h3>
                         <div class="text-xs font-mono text-gray-500 space-y-1">
@@ -1157,10 +1146,9 @@ $partyMap = [
                     </div>
                 </div>
 
-                <!-- Bottom Bar -->
                 <div class="pt-6 border-t border-[rgba(255,255,255,0.05)] flex flex-col md:flex-row justify-between items-center gap-4">
                     <div class="text-xs font-mono text-gray-700">
-                        © <?php echo date('Y'); ?> NGO WATCH - NGO Business Tracker Österreich // DATA INTELLIGENCE SYSTEM
+                        © <?php echo date('Y'); ?> "NGO BUSINESS" TRACKER - Anfragen Dashboard
                     </div>
                     <div class="flex items-center gap-4">
                         <div class="text-xs font-mono text-gray-700">

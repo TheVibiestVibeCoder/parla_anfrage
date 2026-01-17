@@ -492,7 +492,7 @@ $partyMap = [
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
     <link rel="dns-prefetch" href="https://www.parlament.gv.at">
 
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -598,7 +598,7 @@ $partyMap = [
             --text-muted: #a3a3a3;
             --border-color: #333333;
             
-            --font-head: 'Playfair Display', serif;
+            --font-head: 'Bebas Neue', sans-serif;
             --font-body: 'Inter', sans-serif;
             --font-mono: 'JetBrains Mono', monospace;
 
@@ -625,7 +625,8 @@ $partyMap = [
 
         h1, h2, h3 { 
             font-family: var(--font-head); 
-            font-weight: 700;
+            font-weight: 400; /* Bebas Neue is bold by default */
+            letter-spacing: 1px;
         }
         
         .container-custom {
@@ -646,10 +647,10 @@ $partyMap = [
 
         .investigative-header {
             font-family: var(--font-head);
-            font-size: 1.8rem;
+            font-size: 2.2rem;
             color: #fff;
             margin-bottom: 1.5rem;
-            line-height: 1.2;
+            line-height: 1;
         }
 
         /* TYPOGRAPHY */
@@ -657,7 +658,6 @@ $partyMap = [
             font-size: 4rem; 
             line-height: 1; 
             font-family: var(--font-head); 
-            font-weight: 900;
             color: #fff; 
         }
         .stat-label { 
@@ -680,8 +680,7 @@ $partyMap = [
             border-bottom: 2px solid #fff;
             padding: 0.5rem 2rem 0.5rem 0;
             font-family: var(--font-head);
-            font-size: 1.2rem;
-            font-weight: 700;
+            font-size: 1.5rem;
             cursor: pointer;
             appearance: none;
             background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23FFFFFF%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
@@ -749,7 +748,7 @@ $partyMap = [
         <div class="w-full pt-6 flex justify-between items-center max-w-[1200px]">
             <div class="flex items-center gap-3">
                 <div class="w-3 h-3 bg-white"></div>
-                <span class="font-bold tracking-widest text-xs uppercase font-body">Investigativ</span>
+                <span class="tracking-widest text-lg font-head text-white">NGO-Business</span>
             </div>
             <div class="flex items-center gap-2">
                 <span class="w-2 h-2 bg-red-600 rounded-full animate-pulse"></span>
@@ -761,14 +760,14 @@ $partyMap = [
             <article>
                 <header class="mb-8">
                     <span class="inline-block border-b border-gray-600 pb-1 mb-4 text-xs font-mono text-gray-400 uppercase tracking-[0.2em]">Die Analyse</span>
-                    <h1 class="text-4xl md:text-6xl lg:text-7xl text-white leading-[1.1] mb-6 font-black" style="font-family: 'Playfair Display', serif;">
+                    <h1 class="text-6xl md:text-8xl lg:text-9xl text-white leading-[0.9] mb-6" style="font-family: 'Bebas Neue', sans-serif;">
                         Das "NGO-Business"<br>Narrativ der FPÖ
                     </h1>
                 </header>
 
                 <div class="space-y-6 max-w-2xl mx-auto text-left md:text-center">
-                    <p class="text-lg md:text-xl text-gray-300 font-serif leading-relaxed">
-                        <span class="text-white font-bold border-b border-gray-600">Datenjournalismus:</span> Die FPÖ flutet das Parlament zum Thema "NGO-Business". Seit <?php echo $earliestDateFormatted; ?>
+                    <p class="text-lg md:text-xl text-gray-300 font-sans leading-relaxed">
+                        <span class="text-white font-bold border-b border-gray-600">Datenjournalismus:</span> Die FPÖ flutet das Parlament mit dem Begriff "NGO-Business". Seit <?php echo $earliestDateFormatted; ?>
                         sind <?php echo number_format($totalCount); ?> Anfragen zum Thema NGOs, fast immer mit dem Begriff "NGO-Business" versehen, eingegangen.
                     </p>
 
@@ -799,7 +798,7 @@ $partyMap = [
         <header class="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 border-b-2 border-white pb-6">
             <div>
                 <div class="text-xs font-mono text-gray-500 mb-2">SYSTEM: PARLAMENT_WATCH // TRACKING: NGO_INTERACTIONS</div>
-                <h2 class="text-4xl md:text-6xl text-white font-bold">Anfragen Tracker</h2>
+                <h2 class="text-6xl md:text-8xl text-white leading-none">Anfragen Tracker</h2>
             </div>
             
             <form method="GET" class="mt-8 md:mt-0 w-full md:w-auto">
@@ -825,7 +824,7 @@ $partyMap = [
                 <div class="border-l-4 border-white pl-6 py-2">
                     <div class="stat-label">Gesamtanzahl</div>
                     <div class="stat-value"><?php echo number_format($totalCount); ?></div>
-                    <div class="text-sm font-serif text-gray-400 mt-2 italic">Anfragen im gewählten Zeitraum erfasst.</div>
+                    <div class="text-sm font-sans text-gray-400 mt-2 italic">Anfragen im gewählten Zeitraum erfasst.</div>
                 </div>
 
                 <div>
@@ -853,7 +852,7 @@ $partyMap = [
             <div class="lg:col-span-8">
                 <div class="investigative-box !border-t-2 !py-0 !border-b-0">
                     <div class="flex justify-between items-end mb-6">
-                        <h2 class="text-2xl text-white font-serif">Zeitlicher Verlauf</h2>
+                        <h2 class="text-3xl text-white">Zeitlicher Verlauf</h2>
                     </div>
                     <div style="height: 350px; width: 100%;">
                         <canvas id="timelineChart"
@@ -922,7 +921,7 @@ $partyMap = [
 
         <div class="mb-24">
             <div class="flex justify-between items-end border-b-4 border-white pb-4 mb-8">
-                <h2 class="text-3xl md:text-5xl text-white font-bold">Die Akten</h2>
+                <h2 class="text-4xl md:text-6xl text-white">Die Akten</h2>
                 <div class="text-sm font-mono text-gray-500">
                     SEITE <?php echo $page; ?> / <?php echo $totalPages; ?>
                 </div>
@@ -930,7 +929,7 @@ $partyMap = [
 
             <?php if (empty($displayResults)): ?>
                 <div class="py-20 text-center border-b border-gray-800">
-                    <h3 class="text-gray-500 font-serif italic text-xl">Keine Daten in diesem Bereich gefunden.</h3>
+                    <h3 class="text-gray-500 font-sans italic text-xl">Keine Daten in diesem Bereich gefunden.</h3>
                 </div>
             <?php else: ?>
                 <div class="flex flex-col">
@@ -961,7 +960,7 @@ $partyMap = [
                             </div>
 
                             <div class="md:col-span-7">
-                                <a href="<?php echo htmlspecialchars($result['link']); ?>" target="_blank" class="text-base md:text-lg text-white font-serif leading-snug hover:underline decoration-1 underline-offset-4 decoration-gray-500">
+                                <a href="<?php echo htmlspecialchars($result['link']); ?>" target="_blank" class="text-base md:text-lg text-white font-sans leading-snug hover:underline decoration-1 underline-offset-4 decoration-gray-500">
                                     <?php echo htmlspecialchars($result['title']); ?>
                                 </a>
                             </div>
@@ -1011,7 +1010,7 @@ $partyMap = [
         </div>
 
         <section class="mb-24 pt-12 border-t border-gray-800" itemscope itemtype="https://schema.org/FAQPage">
-            <h2 class="text-3xl text-white mb-12 font-serif text-center">Hintergrund</h2>
+            <h2 class="text-3xl text-white mb-12 font-head text-center">Hintergrund</h2>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
                 <div itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
@@ -1055,6 +1054,39 @@ $partyMap = [
                     </div>
                 </div>
 
+                <div class="border-b border-gray-800 pb-6 mt-12" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                    <h3 class="text-xl font-bold text-white mb-3" itemprop="name">
+                        Was ist Keyword-Squatting?
+                    </h3>
+                    <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                        <p class="text-gray-300 leading-relaxed" itemprop="text">
+                            Keyword-Squatting beschreibt die gezielte Besetzung eines Begriffs durch massenhafte Wiederholung,
+                            um dessen Bedeutung langfristig zu prägen.
+                            Der Begriff wird so häufig verwendet, dass er in Suchmaschinen,
+                            Medienberichten und öffentlichen Dokumenten automatisch mit einem bestimmten Narrativ verknüpft wird.
+                        </p>
+
+                        <p class="text-gray-300 leading-relaxed mt-4" itemprop="text">
+                            Im Fall von „NGO-Business“ entsteht durch hunderte parlamentarische Anfragen eine künstliche Verbindung
+                            zwischen NGOs und negativ konnotierten Begriffen wie Steuergeld, Ideologie oder Missbrauch,
+                            unabhängig davon, ob es reale Probleme gibt.
+                        </p>
+
+                        <p class="text-gray-300 leading-relaxed mt-4" itemprop="text">
+                            Parlamentsseiten eignen sich dafür besonders gut.
+                            Sie gelten als staatliche Primärquelle, besitzen hohe Glaubwürdigkeit
+                            und werden von Suchmaschinen stark priorisiert.
+                            Jeder dort verwendete Begriff erhält dadurch Sichtbarkeit, Autorität und Dauerhaftigkeit.
+                        </p>
+
+                        <p class="text-gray-300 leading-relaxed mt-4" itemprop="text">
+                            Wird ein Schlagwort systematisch über parlamentarische Dokumente verbreitet,
+                            entsteht ein digitales Archiv politischer Narrative,
+                            das weit über tagespolitische Debatten hinaus wirkt.
+                        </p>
+                    </div>
+                </div>
+
                 <div itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
                     <h3 class="text-xl font-bold text-white mb-4 border-l-2 border-white pl-4" itemprop="name">
                         Was kannst du tun?
@@ -1078,8 +1110,9 @@ $partyMap = [
                 <div class="max-w-md">
                     <h3 class="text-sm font-bold text-white mb-4 uppercase tracking-wider">Über das Projekt</h3>
                     <p class="text-xs text-gray-500 leading-relaxed font-sans mb-4">
-                        Der führende "NGO Business" Tracker für Österreich. Echtzeit-Tracking von NGO-bezogenen parlamentarischen Anfragen.
-                        Datenanalyse für Transparenz und demokratische Kontrolle.
+                        Der NGO Business Tracker analysiert parlamentarische Anfragen im österreichischen Nationalrat, die gezielt zum Thema NGOs gestellt werden.
+                        <br><br>
+                        Er macht sichtbar, wie oft, von wem und in welchen Mustern das Framing gepusht wird.
                     </p>
                     <div class="text-xs font-mono text-gray-600">
                          © <?php echo date('Y'); ?> "NGO BUSINESS" TRACKER
@@ -1150,7 +1183,16 @@ $partyMap = [
                         plugins: { legend: { display: false } },
                         scales: {
                             y: { beginAtZero: true, grid: { display: true, drawBorder: false } },
-                            x: { grid: { display: false } }
+                            x: { 
+                                grid: { display: false },
+                                display: true,
+                                ticks: {
+                                    color: '#666',
+                                    font: { family: 'JetBrains Mono', size: 10 },
+                                    autoSkip: true,
+                                    maxRotation: 0
+                                }
+                            }
                         }
                     }
                 });
@@ -1181,7 +1223,16 @@ $partyMap = [
                             legend: { labels: { color: '#aaa', font: { family: 'Inter' } } }
                         },
                         scales: {
-                            x: { display: false },
+                            x: { 
+                                display: true,
+                                grid: { display: false },
+                                ticks: {
+                                    color: '#666',
+                                    font: { family: 'JetBrains Mono', size: 10 },
+                                    autoSkip: true,
+                                    maxRotation: 0
+                                }
+                            },
                             y: { grid: { color: '#222' } }
                         }
                     }
@@ -1239,7 +1290,25 @@ $partyMap = [
                             }
                         },
                         scales: {
-                            x: { display: false },
+                            x: { 
+                                display: true,
+                                grid: { display: false },
+                                ticks: {
+                                    callback: function(value, index) {
+                                        // Ensure we have a date for this index
+                                        const dateKey = allDateKeys[value];
+                                        if(dateKey) {
+                                            const parts = dateKey.split('-');
+                                            return `${parts[2]}.${parts[1]}.`;
+                                        }
+                                        return '';
+                                    },
+                                    color: '#666',
+                                    font: { family: 'JetBrains Mono', size: 10 },
+                                    autoSkip: true,
+                                    maxRotation: 0
+                                }
+                            },
                             y: { 
                                 min: -0.5, max: 5.5,
                                 ticks: { callback: v => partyNames[pOrder[v]] },

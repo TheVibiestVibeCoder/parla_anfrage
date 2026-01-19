@@ -737,7 +737,7 @@ $partyMap = [
                         Das Parlament wird mit Anfragen mit dem Begriff "NGO-Business" im Titel geflutet. Seit <?php echo $earliestDateFormatted; ?> sind <?php echo number_format($totalCount); ?> Anfragen zum Thema NGOs, fast immer mit dem Begriff "NGO-Business" versehen, eingegangen
                     </p>
 
-                    <p class="text-xs md:text-sm lg:text-base text-gray-400 font-sans leading-relaxed">
+                    <p class="text-sm md:text-base lg:text-lg text-gray-300 font-sans leading-relaxed">
                        Warum? Wichtige NGO-Arbeit scheint bewusst in den Kontext von Steuergeld-Verschwendung gerückt zu werden, um die Arbeit von Non-Profit-Organisationen pauschal zu diskreditieren.
                         <br><br>
                         <span class="text-white"> Wir decken auf, was es mit den Anfragen auf sich hat.</span>

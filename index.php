@@ -1197,11 +1197,8 @@ $partyMap = [
             Chart.defaults.borderColor = 'rgba(255,255,255,0.1)';
             Chart.defaults.font.family = "'Inter', sans-serif";
 
-            // Performance optimization: reduce animation duration to minimize layout thrashing
-            Chart.defaults.animation = {
-                duration: 400, // Reduced from default 1000ms
-                easing: 'easeOutQuart'
-            };
+            // Disable animations completely to prevent callback errors
+            Chart.defaults.animation = false;
             Chart.defaults.responsive = true;
             Chart.defaults.maintainAspectRatio = false;
 
@@ -1458,7 +1455,7 @@ $partyMap = [
                                 display: true,
                                 grid: { display: false },
                                 ticks: {
-                                    callback: function(value, index) {
+                                    callback: (value, index) => {
                                         // Ensure we have a date for this index
                                         const dateKey = allDateKeys[value];
                                         if(dateKey) {

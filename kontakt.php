@@ -162,7 +162,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body class="flex flex-col min-h-screen font-sans selection:bg-white selection:text-black">
 
-<header class="w-full fixed top-0 z-50 bg-transparent fixed top-0">
+<header class="w-full absolute top-0 z-50 bg-transparent">
     <div class="container mx-auto px-6 h-16 flex justify-between items-center">
         <a href="index.php" class="flex items-center gap-3 group">
             <div class="w-3 h-3 bg-white group-hover:bg-green-500 transition-colors duration-300"></div>

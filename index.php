@@ -769,7 +769,7 @@ $partyMap = [
             <form method="GET" class="w-full lg:w-auto">
                 <div class="flex flex-col items-start w-full">
                     <label for="time-range-select" class="text-[10px] uppercase tracking-widest text-gray-500 mb-1">Zeitraum wählen</label>
-                    <select id="time-range-select" name="range" onchange="this.form.submit()" class="w-full lg:w-auto hover:text-gray-300 transition-colors" aria-label="Zeitraum für Anfragen auswählen">
+                    <select id="time-range-select" name="range" onchange="this.form.submit()" class="w-full lg:w-auto" aria-label="Zeitraum für Anfragen auswählen">
                         <option value="1week" <?php echo $timeRange === '1week' ? 'selected' : ''; ?>>LETZTE WOCHE</option>
                         <option value="1month" <?php echo $timeRange === '1month' ? 'selected' : ''; ?>>LETZTER MONAT</option>
                         <option value="3months" <?php echo $timeRange === '3months' ? 'selected' : ''; ?>>3 MONATE</option>

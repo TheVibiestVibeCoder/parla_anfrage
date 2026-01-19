@@ -709,18 +709,20 @@ $partyMap = [
 </head>
 <body class="flex flex-col min-h-screen">
 
-    <section class="min-h-screen flex flex-col justify-between items-center text-center bg-black border-b border-white px-4 py-6 md:px-6 md:py-8 lg:py-12">
-        
-        <div class="w-full flex justify-between items-center max-w-[1200px]">
-            <div class="flex items-center gap-2 md:gap-3">
-                <div class="w-2 h-2 md:w-3 md:h-3 bg-white"></div>
-                <span class="tracking-widest text-sm md:text-lg font-head text-white">NGO-Business</span>
-            </div>
+    <header class="w-full border-b border-white/10 backdrop-blur-sm fixed top-0 z-50 bg-black/80">
+        <div class="container mx-auto px-6 h-16 flex justify-between items-center">
+            <a href="index.php" class="flex items-center gap-3 group">
+                <div class="w-3 h-3 bg-white group-hover:bg-green-500 transition-colors duration-300"></div>
+                <span class="font-bebas text-xl md:text-2xl tracking-widest text-white mt-1">NGO-Business Tracker</span>
+            </a>
             <div class="flex items-center gap-2">
                 <span class="w-1.5 h-1.5 md:w-2 md:h-2 bg-red-600 rounded-full animate-pulse"></span>
                 <span class="text-[10px] md:text-xs font-mono text-red-600 uppercase">Live Update</span>
             </div>
         </div>
+    </header>
+
+    <section class="min-h-screen flex flex-col justify-between items-center text-center bg-black border-b border-white px-4 py-6 md:px-6 md:py-8 lg:py-12 pt-24">
 
         <div class="flex-grow flex flex-col justify-center max-w-5xl mx-auto w-full py-4 md:py-8 lg:py-0">
             <article>
@@ -1155,7 +1157,7 @@ $partyMap = [
                         Er macht sichtbar, wie oft, von wem und in welchen Mustern das Framing gepusht wird.
                     </p>
                     <div class="text-xs text-yellow-600 leading-relaxed font-sans mb-4 italic">
-                        Hinweis: Diese Plattform ist eine experimentelle Idee. Fehler können vorkommen.
+                        Hinweis: Diese Plattform ist experimentell. Fehler können vorkommen.
                     </div>
                     <div class="text-xs font-mono text-gray-600">
                           © <?php echo date('Y'); ?> "NGO BUSINESS" TRACKER

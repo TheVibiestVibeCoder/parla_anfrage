@@ -39,6 +39,18 @@
         .font-mono { font-family: var(--font-mono); }
         .font-head { font-family: var(--font-head); }
 
+        .container-custom {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        @media (min-width: 768px) {
+            .container-custom {
+                padding: 0 1.5rem;
+            }
+        }
+
         /* Investigative Box Style from Template */
         .investigative-box {
             border-top: 4px solid #ffffff;
@@ -71,28 +83,30 @@
 </head>
 <body class="flex flex-col min-h-screen">
 
-    <header class="container mx-auto max-w-[1200px] px-4 md:px-6 pt-12 md:pt-16 mb-16">
-        <a href="index.php" class="back-link inline-flex items-center gap-2 text-xs font-mono text-gray-500 hover:text-white transition-colors mb-8 group">
-            <span class="arrow transition-transform duration-200">&larr;</span> ZURÜCK ZUR HAUPTSEITE
-        </a>
-
-        <div class="border-b border-gray-800 pb-8">
-            <div class="flex items-center gap-2 mb-4">
-                <div class="w-2 h-2 bg-red-600 rounded-full animate-pulse"></div>
-                <span class="text-[10px] md:text-xs font-mono uppercase tracking-widest text-red-600">Disinfo Awareness</span>
-            </div>
-            
-            <h1 class="text-6xl md:text-8xl lg:text-9xl text-white leading-[0.9] mb-6">
-                Offenlegung<br><span class="text-gray-600">Impressum</span>
-            </h1>
-
-            <p class="font-mono text-xs md:text-sm text-gray-500 max-w-2xl">
-                Informationen gemäß §5 (1) ECG, § 25 MedienG, § 63 GewO und § 14 UGB.
-            </p>
+    <header class="w-full border-b border-white/10 backdrop-blur-sm fixed top-0 z-50 bg-black/80">
+        <div class="container mx-auto px-6 h-16 flex justify-between items-center">
+            <a href="index.php" class="flex items-center gap-3 group">
+                <div class="w-3 h-3 bg-white group-hover:bg-green-500 transition-colors duration-300"></div>
+                <span class="font-bebas text-xl md:text-2xl tracking-widest text-white mt-1">NGO-Business Tracker</span>
+            </a>
+            <nav>
+                <a href="index.php" class="text-sm font-mono text-gray-500 hover:text-white transition-colors flex items-center gap-2">
+                    <span>←</span> <span class="hidden md:inline">ZURÜCK</span>
+                </a>
+            </nav>
         </div>
     </header>
 
-    <main class="container mx-auto max-w-[1200px] px-4 md:px-6 mb-20 flex-grow">
+    <main class="flex-grow pt-32 pb-20 px-6">
+        <div class="container mx-auto max-w-2xl">
+            <div class="mb-16 md:mb-24">
+                <h1 class="font-bebas text-6xl md:text-8xl lg:text-9xl text-white leading-[0.85] mb-8">
+                    IMPRESSUM
+                </h1>
+                <p class="font-mono text-xs md:text-sm text-gray-500 max-w-2xl">
+                    Informationen gemäß §5 (1) ECG, § 25 MedienG, § 63 GewO und § 14 UGB.
+                </p>
+            </div>
 
         <section class="mb-20">
             <h2 class="text-4xl md:text-5xl text-white mb-8 border-l-4 border-red-600 pl-4">Vereinsdaten</h2>
@@ -167,24 +181,31 @@
     </main>
 
     <footer class="bg-black border-t border-white py-8 md:py-12 mt-auto">
-        <div class="container mx-auto max-w-[1200px] px-4 md:px-6">
-            <div class="flex flex-col md:flex-row justify-between items-end gap-6">
-                <div>
-                    <div class="text-xs font-mono text-gray-500 mb-2 uppercase tracking-widest">Disinfo Awareness</div>
-                    <div class="text-xs text-yellow-600 leading-relaxed font-sans mb-2 italic">
-                        Hinweis: Diese Plattform ist eine experimentelle Idee. Fehler können vorkommen.
+        <div class="container-custom">
+            <div class="flex flex-col md:flex-row justify-between items-start gap-8">
+                <div class="max-w-md">
+                    <h3 class="text-sm font-bold text-white mb-4 uppercase tracking-wider">Über das Projekt</h3>
+                    <p class="text-xs text-gray-500 leading-relaxed font-sans mb-4">
+                        Der NGO Business Tracker analysiert parlamentarische Anfragen im österreichischen Nationalrat, die gezielt zum Thema NGOs gestellt werden.
+                        <br><br>
+                        Er macht sichtbar, wie oft, von wem und in welchen Mustern das Framing gepusht wird.
+                    </p>
+                    <div class="text-xs text-yellow-600 leading-relaxed font-sans mb-4 italic">
+                        Hinweis: Diese Plattform ist experimentell. Fehler können vorkommen.
                     </div>
                     <div class="text-xs font-mono text-gray-600">
-                         © 2026 Disinfo Awareness. Wien, Österreich.
+                          © <?php echo date('Y'); ?> "NGO BUSINESS" TRACKER
                     </div>
                     <div class="mt-2 space-x-4">
                         <a href="impressum.php" class="text-xs font-mono text-gray-500 hover:text-white transition-colors underline">Impressum</a>
                         <a href="kontakt.php" class="text-xs font-mono text-gray-500 hover:text-white transition-colors underline">Kontakt</a>
                     </div>
                 </div>
-                
-                <div class="text-right">
-                    <div class="flex items-center justify-end gap-2">
+
+                <div class="text-left md:text-right w-full md:w-auto">
+                    <div class="text-xs font-mono text-gray-500 mb-2">QUELLE: PARLAMENT.GV.AT</div>
+                    <div class="text-xs font-mono text-gray-500 mb-2">LAST UPDATE: <?php echo date('d.m.Y H:i'); ?></div>
+                    <div class="flex items-center justify-start md:justify-end gap-2 mt-4">
                         <div class="w-2 h-2 bg-green-600 rounded-full"></div>
                         <span class="text-xs font-mono text-green-600">SYSTEM OPERATIONAL</span>
                     </div>

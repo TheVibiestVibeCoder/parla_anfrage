@@ -1677,7 +1677,7 @@ $partyMap = [
                     <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
                         <p class="text-gray-400 leading-relaxed font-sans" itemprop="text">
                             Parlamentarische Anfragen sind ein offizielles Kontrollinstrument im österreichischen Nationalrat. 
-                            Abgeordnete können damit schriftliche Fragen an Ministerien richten, die verpflichtend beantwortet werden müssen. 
+                            Abgeordnete können damit <a href="https://www.parlament.gv.at/recherchieren/gegenstaende/anfragen-und-beantwortungen/" class="text-white hover:text-gray-300 underline">schriftliche Fragen an Ministerien richten</a>, die verpflichtend beantwortet werden müssen. 
                             Sie dienen grundsätzlich der demokratischen Kontrolle der Regierung.
                         </p>
                     </div>
@@ -1726,7 +1726,7 @@ $partyMap = [
 
                 <div class="border-t border-gray-700 pt-8" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
                     <h3 class="text-lg md:text-xl font-bold text-white mb-4 border-l-2 border-white pl-4" itemprop="name">
-                        Was ist <a href="keyword_squatting.php" class="text-white hover:text-gray-300 underline">Keyword-Squatting</a>?
+                        Was ist <a href="https://mediamanipulation.org/definitions/keyword-squatting/" class="text-white hover:text-gray-300 underline">Keyword-Squatting</a>?
                     </h3>
                     <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
                         <p class="text-gray-300 leading-relaxed" itemprop="text">

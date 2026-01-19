@@ -1834,6 +1834,9 @@ $partyMap = [
                     <div class="text-xs font-mono text-gray-600">
                           © <?php echo date('Y'); ?> "NGO BUSINESS" TRACKER
                     </div>
+                    <div class="mt-2">
+                        <a href="impressum.php" class="text-xs font-mono text-gray-500 hover:text-white transition-colors underline">Impressum</a>
+                    </div>
                 </div>
 
                 <div class="text-left md:text-right w-full md:w-auto">

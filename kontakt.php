@@ -116,7 +116,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             background: #333; 
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #555; 
+            background: #555;
+        }
+
+        .container-custom {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        @media (min-width: 768px) {
+            .container-custom {
+                padding: 0 1.5rem;
+            }
         }
 
         /* Input Animations */

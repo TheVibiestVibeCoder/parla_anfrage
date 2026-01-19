@@ -1409,7 +1409,7 @@ $partyMap = [
 
                 <div class="space-y-4 md:space-y-6 max-w-3xl mx-auto text-left md:text-center px-4">
                     <p class="text-sm md:text-base lg:text-lg text-gray-300 font-sans leading-relaxed">
-                        <span class="text-white font-bold border-b border-gray-600">Datenjournalismus:</span> Die FPÖ flutet das Parlament mit dem Begriff "NGO-Business". Seit <?php echo $earliestDateFormatted; ?>
+                        Die FPÖ flutet das Parlament mit dem Begriff "NGO-Business". Seit <?php echo $earliestDateFormatted; ?>
                         sind <?php echo number_format($totalCount); ?> Anfragen zum Thema NGOs, fast immer mit dem Begriff "NGO-Business" versehen, eingegangen.
                     </p>
 

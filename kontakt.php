@@ -72,238 +72,225 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet" href="styles.css">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'bebas': ['"Bebas Neue"', 'cursive'],
+                        'sans': ['"Inter"', 'sans-serif'],
+                        'mono': ['"JetBrains Mono"', 'monospace'],
+                    },
+                    colors: {
+                        'brand-black': '#050505',
+                        'brand-gray': '#1a1a1a',
+                    }
+                }
+            }
+        }
+    </script>
 
     <style>
-        .form-group {
-            margin-bottom: 1.5rem;
+        :root {
+            --bg-color: #000000;
+            --text-color: #ffffff;
+            --border-color: #333333;
+        }
+        
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            -webkit-font-smoothing: antialiased;
         }
 
-        .form-label {
-            display: block;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            font-family: var(--font-body);
-            font-weight: 600;
-            letter-spacing: 0.05em;
-            color: var(--text-muted);
-            margin-bottom: 0.5rem;
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #000; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #333; 
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555; 
         }
 
-        .form-input,
-        .form-textarea {
-            width: 100%;
+        /* Input Animations */
+        .form-input-container {
+            position: relative;
+        }
+        
+        .custom-input {
             background: transparent;
-            color: #fff;
-            border: none;
-            border-bottom: 2px solid var(--border-color);
-            padding: 0.75rem 0;
-            font-family: var(--font-body);
-            font-size: 1rem;
-            transition: border-color 0.2s;
+            border-bottom: 1px solid var(--border-color);
+            transition: all 0.3s ease;
         }
-
-        .form-input:focus,
-        .form-textarea:focus {
-            outline: none;
+        
+        .custom-input:focus {
             border-color: #fff;
+            padding-left: 1rem;
+            background: rgba(255,255,255,0.03);
         }
 
-        .form-textarea {
-            min-height: 150px;
-            resize: vertical;
-            border: 2px solid var(--border-color);
-            padding: 0.75rem;
+        /* Button Hover Effect */
+        .btn-glitch {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.2s ease;
         }
-
-        .form-textarea:focus {
-            border-color: #fff;
-        }
-
-        .form-button {
-            background: #fff;
-            color: #111;
-            border: 2px solid #fff;
-            padding: 0.75rem 2rem;
-            font-family: var(--font-head);
-            font-size: 1.25rem;
-            cursor: pointer;
-            text-transform: uppercase;
-            transition: all 0.2s;
-            letter-spacing: 1px;
-        }
-
-        .form-button:hover {
-            background: transparent;
-            color: #fff;
-        }
-
-        .form-button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .alert {
-            padding: 1rem;
-            margin-bottom: 1.5rem;
-            border-left: 4px solid;
-        }
-
-        .alert-success {
-            background: rgba(34, 197, 94, 0.1);
-            border-color: #22c55e;
-            color: #22c55e;
-        }
-
-        .alert-error {
-            background: rgba(239, 68, 68, 0.1);
-            border-color: #ef4444;
-            color: #ef4444;
+        .btn-glitch:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(255,255,255,0.1);
         }
     </style>
 </head>
-<body class="flex flex-col min-h-screen">
+<body class="flex flex-col min-h-screen font-sans selection:bg-white selection:text-black">
 
-    <!-- Header Navigation -->
-    <header class="bg-black border-b border-white py-4">
-        <div class="container-custom flex justify-between items-center">
-            <a href="index.php" class="flex items-center gap-2 hover:opacity-80 transition-opacity">
-                <div class="w-3 h-3 bg-white"></div>
-                <span class="tracking-widest text-lg font-head text-white">NGO-Business Tracker</span>
+    <header class="w-full border-b border-white/10 backdrop-blur-sm fixed top-0 z-50 bg-black/80">
+        <div class="container mx-auto px-6 h-16 flex justify-between items-center">
+            <a href="index.php" class="flex items-center gap-3 group">
+                <div class="w-3 h-3 bg-white group-hover:bg-green-500 transition-colors duration-300"></div>
+                <span class="font-bebas text-xl md:text-2xl tracking-widest text-white mt-1">NGO-Business Tracker</span>
             </a>
             <nav>
-                <a href="index.php" class="text-sm font-mono text-gray-500 hover:text-white transition-colors">← Zurück</a>
+                <a href="index.php" class="text-sm font-mono text-gray-500 hover:text-white transition-colors flex items-center gap-2">
+                    <span>←</span> <span class="hidden md:inline">ZURÜCK</span>
+                </a>
             </nav>
         </div>
     </header>
 
-    <!-- Main Content -->
-    <main class="container-custom flex-grow py-12 md:py-16">
-        <div class="max-w-3xl mx-auto">
+    <main class="flex-grow pt-32 pb-20 px-6">
+        <div class="container mx-auto max-w-2xl">
 
-            <!-- Page Header -->
-            <div class="mb-12 border-b-2 border-white pb-6">
-                <h1 class="text-5xl md:text-6xl lg:text-7xl text-white leading-none mb-4">Kontakt</h1>
-                <p class="text-lg text-gray-400">
-                    Haben Sie Fragen, Feedback oder Anmerkungen zum NGO Business Tracker?
-                    Wir freuen uns über Ihre Nachricht.
+            <div class="mb-16 md:mb-24">
+                <h1 class="font-bebas text-6xl md:text-8xl lg:text-9xl text-white leading-[0.85] mb-8">
+                    KONTAKT
+                </h1>
+                <div class="h-px w-24 bg-white mb-8"></div>
+                <p class="text-lg md:text-xl text-gray-400 font-light leading-relaxed max-w-xl">
+                    Haben Sie Fragen, Feedback oder Anmerkungen zum NGO Business Tracker? 
+                    Wir freuen uns über Input, um das Bild zu schärfen.
                 </p>
             </div>
 
-            <!-- Success Message -->
             <?php if ($success): ?>
-                <div class="alert alert-success">
-                    <strong>Nachricht gesendet!</strong><br>
-                    Vielen Dank für Ihre Nachricht. Wir werden uns so schnell wie möglich bei Ihnen melden.
+                <div class="mb-12 p-6 border border-green-500/30 bg-green-500/5 backdrop-blur-sm">
+                    <h3 class="font-bebas text-2xl text-green-500 mb-2">NACHRICHT GESENDET</h3>
+                    <p class="text-green-400/80 font-mono text-sm">Vielen Dank. Wir melden uns in Kürze.</p>
                 </div>
             <?php endif; ?>
 
-            <!-- Error Message -->
             <?php if ($error): ?>
-                <div class="alert alert-error">
-                    <strong>Fehler!</strong><br>
-                    <?php echo htmlspecialchars($errorMessage); ?>
+                <div class="mb-12 p-6 border border-red-500/30 bg-red-500/5 backdrop-blur-sm">
+                    <h3 class="font-bebas text-2xl text-red-500 mb-2">FEHLER</h3>
+                    <p class="text-red-400/80 font-mono text-sm"><?php echo htmlspecialchars($errorMessage); ?></p>
                 </div>
             <?php endif; ?>
 
-            <!-- Contact Form -->
-            <form method="POST" action="" class="space-y-6">
+            <form method="POST" action="" class="space-y-12">
 
-                <div class="form-group">
-                    <label for="name" class="form-label">Name *</label>
+                <div class="form-input-container">
+                    <label for="name" class="block font-bebas text-xl md:text-2xl text-gray-500 mb-2 tracking-wide">NAME *</label>
                     <input
                         type="text"
                         id="name"
                         name="name"
-                        class="form-input"
+                        class="custom-input w-full py-4 text-lg md:text-xl font-sans text-white focus:outline-none placeholder-gray-800"
                         required
                         value="<?php echo isset($name) ? htmlspecialchars($name) : ''; ?>"
                         placeholder="Ihr Name"
                     >
                 </div>
 
-                <div class="form-group">
-                    <label for="email" class="form-label">E-Mail *</label>
+                <div class="form-input-container">
+                    <label for="email" class="block font-bebas text-xl md:text-2xl text-gray-500 mb-2 tracking-wide">E-MAIL *</label>
                     <input
                         type="email"
                         id="email"
                         name="email"
-                        class="form-input"
+                        class="custom-input w-full py-4 text-lg md:text-xl font-sans text-white focus:outline-none placeholder-gray-800"
                         required
                         value="<?php echo isset($email) ? htmlspecialchars($email) : ''; ?>"
-                        placeholder="ihre.email@beispiel.at"
+                        placeholder="ihre.email@adresse.at"
                     >
                 </div>
 
-                <div class="form-group">
-                    <label for="subject" class="form-label">Betreff *</label>
+                <div class="form-input-container">
+                    <label for="subject" class="block font-bebas text-xl md:text-2xl text-gray-500 mb-2 tracking-wide">BETREFF *</label>
                     <input
                         type="text"
                         id="subject"
                         name="subject"
-                        class="form-input"
+                        class="custom-input w-full py-4 text-lg md:text-xl font-sans text-white focus:outline-none placeholder-gray-800"
                         required
                         value="<?php echo isset($subject) ? htmlspecialchars($subject) : ''; ?>"
-                        placeholder="Worum geht es?"
+                        placeholder="Kurz zusammengefasst"
                     >
                 </div>
 
-                <div class="form-group">
-                    <label for="message" class="form-label">Nachricht *</label>
+                <div class="form-input-container">
+                    <label for="message" class="block font-bebas text-xl md:text-2xl text-gray-500 mb-2 tracking-wide">NACHRICHT *</label>
                     <textarea
                         id="message"
                         name="message"
-                        class="form-textarea"
+                        rows="6"
+                        class="custom-input w-full py-4 text-lg md:text-xl font-sans text-white focus:outline-none placeholder-gray-800 resize-y min-h-[150px]"
                         required
                         placeholder="Ihre Nachricht an uns..."
                     ><?php echo isset($message) ? htmlspecialchars($message) : ''; ?></textarea>
                 </div>
 
-                <div class="form-group">
-                    <button type="submit" class="form-button">
-                        Nachricht senden
+                <div class="pt-8">
+                    <button type="submit" class="btn-glitch w-full md:w-auto bg-white text-black font-bebas text-2xl md:text-3xl px-12 py-4 hover:bg-transparent hover:text-white border-2 border-white transition-all uppercase tracking-widest">
+                        Nachricht Senden
                     </button>
+                    <p class="mt-4 text-xs font-mono text-gray-600">
+                        * PFLICHTFELDER
+                    </p>
                 </div>
 
-                <p class="text-xs text-gray-500 font-mono">
-                    * Pflichtfelder
-                </p>
             </form>
-
-            <!-- Alternative Contact Info -->
 
         </div>
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-black border-t border-white py-8 md:py-12 mt-auto">
-        <div class="container-custom">
-            <div class="flex flex-col md:flex-row justify-between items-start gap-8">
-                <div class="max-w-md">
-                    <h3 class="text-sm font-bold text-white mb-4 uppercase tracking-wider">Über das Projekt</h3>
-                    <p class="text-xs text-gray-500 leading-relaxed font-sans mb-4">
-                        Der NGO Business Tracker analysiert parlamentarische Anfragen im österreichischen Nationalrat, die gezielt zum Thema NGOs gestellt werden.
-                        <br><br>
-                        Er macht sichtbar, wie oft, von wem und in welchen Mustern das Framing gepusht wird.
+    <footer class="bg-black border-t border-white/10 py-12 md:py-16 mt-auto">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-start gap-12">
+                
+                <div class="max-w-md space-y-6">
+                    <h3 class="font-bebas text-2xl text-white tracking-widest">ÜBER DAS PROJEKT</h3>
+                    <p class="text-sm text-gray-500 leading-relaxed font-sans">
+                        Der NGO Business Tracker analysiert parlamentarische Anfragen im österreichischen Nationalrat. 
+                        Er visualisiert Muster und Netzwerke.
                     </p>
-                    <div class="text-xs font-mono text-gray-600">
-                        © <?php echo date('Y'); ?> "NGO BUSINESS" TRACKER
+                    <div class="text-sm font-mono text-gray-600 pt-4">
+                        © <?php echo date('Y'); ?> NGO BUSINESS TRACKER
                     </div>
-                    <div class="mt-2 space-x-4">
-                        <a href="impressum.php" class="text-xs font-mono text-gray-500 hover:text-white transition-colors underline">Impressum</a>
-                        <a href="kontakt.php" class="text-xs font-mono text-gray-500 hover:text-white transition-colors underline">Kontakt</a>
+                    <div class="flex gap-6">
+                        <a href="impressum.php" class="font-bebas text-lg text-gray-500 hover:text-white transition-colors tracking-wide">IMPRESSUM</a>
+                        <a href="kontakt.php" class="font-bebas text-lg text-white transition-colors tracking-wide underline decoration-1 underline-offset-4">KONTAKT</a>
                     </div>
                 </div>
 
-                <div class="text-left md:text-right w-full md:w-auto">
-                    <div class="text-xs font-mono text-gray-500 mb-2">QUELLE: PARLAMENT.GV.AT</div>
-                    <div class="text-xs font-mono text-gray-500 mb-2">LAST UPDATE: <?php echo date('d.m.Y H:i'); ?></div>
-                    <div class="flex items-center justify-start md:justify-end gap-2 mt-4">
-                        <div class="w-2 h-2 bg-green-600 rounded-full"></div>
-                        <span class="text-xs font-mono text-green-600">SYSTEM OPERATIONAL</span>
+                <div class="w-full md:w-auto flex flex-col items-start md:items-end gap-3">
+                    <div class="text-xs font-mono text-gray-600">QUELLE: PARLAMENT.GV.AT</div>
+                    <div class="text-xs font-mono text-gray-600">LAST UPDATE: <?php echo date('d.m.Y H:i'); ?></div>
+                    
+                    <div class="flex items-center gap-3 mt-4 px-3 py-1.5 border border-green-900/30 bg-green-900/10 rounded-full">
+                        <div class="relative w-2 h-2">
+                            <div class="absolute w-2 h-2 bg-green-500 rounded-full animate-ping opacity-75"></div>
+                            <div class="relative w-2 h-2 bg-green-500 rounded-full"></div>
+                        </div>
+                        <span class="text-xs font-mono text-green-500 tracking-wider">SYSTEM OPERATIONAL</span>
                     </div>
                 </div>
+
             </div>
         </div>
     </footer>

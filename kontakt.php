@@ -184,7 +184,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <!-- Page Header -->
             <div class="mb-12 border-b-2 border-white pb-6">
-                <div class="text-xs font-mono text-gray-500 mb-2">SYSTEM: CONTACT_MODULE</div>
                 <h1 class="text-5xl md:text-6xl lg:text-7xl text-white leading-none mb-4">Kontakt</h1>
                 <p class="text-lg text-gray-400">
                     Haben Sie Fragen, Feedback oder Anmerkungen zum NGO Business Tracker?

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Impressum - NGO Business Tracker</title>
+    <title>Impressum - Disinfo Awareness</title>
 
     <style>
         /* Import Bebas Neue font */
@@ -131,61 +131,75 @@
     <div class="container">
         <a href="index.php" class="back-link">← ZURÜCK ZUR HAUPTSEITE</a>
 
-        <div class="meta-info">RECHTLICHE INFORMATIONEN</div>
+        <div class="meta-info">Disinfo Awareness</div>
         <h1>Offenlegung<br>Impressum</h1>
 
         <p style="margin-top: 1.5rem; margin-bottom: 2rem;">Informationen gemäß §5 (1) ECG, § 25 MedienG, § 63 GewO und § 14 UGB.</p>
 
+        <h2>Vereinsdaten</h2>
+
         <div class="info-block">
-            <h2>Webseitenbetreiber</h2>
-            <p><strong>Disinfo Combat GmbH</strong></p>
+            <h2>Vollständiger Name</h2>
+            <p>Disinfo Awareness - Verein zur Aufklärung über Desinformation und FIMI (Foreign Information Manipulation Interference) zur Stärkung der Informationsresilienz</p>
         </div>
 
         <div class="info-block">
-            <h2>Anschrift</h2>
+            <h2>ZVR-Zahl</h2>
+            <p>1154237575</p>
+        </div>
+
+        <div class="info-block">
+            <h2>Zustellanschrift</h2>
             <p>
-                Hettenkofergasse 34/I<br>
-                1160 Wien<br>
+                Staudingergasse 8/6<br>
+                1200 Wien<br>
                 Österreich
             </p>
         </div>
 
         <div class="info-block">
-            <h2>Firmenbuch</h2>
-            <p>
-                FN 563690 g<br>
-                Handelsgericht Wien
-            </p>
+            <h2>Zuständige Behörde</h2>
+            <p>Landespolizeidirektion Wien, Referat Vereins-, Versammlungs- und Medienrechtsangelegenheiten</p>
         </div>
 
         <div class="info-block">
-            <h2>UID-Nummer</h2>
-            <p>ATU77349503</p>
+            <h2>Kontakt</h2>
+            <p>Zum Kontaktformular</p>
+        </div>
+
+        <h2>Vertretung</h2>
+
+        <div class="info-block">
+            <h2>Obmann</h2>
+            <p>Markus Schwinghammer</p>
         </div>
 
         <div class="info-block">
-            <h2>Aufsichtsbehörde</h2>
-            <p>Magistrat der Stadt Wien</p>
+            <h2>Obmann-Stellvertreter</h2>
+            <p>Mag. Robert Buchhaus</p>
         </div>
 
         <div class="info-block">
-            <h2>Rechtsvorschriften</h2>
-            <p><a href="https://www.ris.bka.gv.at" target="_blank" rel="noopener noreferrer" style="color: #10b981; text-decoration: underline;">www.ris.bka.gv.at</a></p>
+            <h2>Vertretungsregelung</h2>
+            <p>Der/Die Obmann/Obfrau vertritt den Verein nach außen. Der/Die Stellvertreter/in vertritt ihn/sie im Falle der Verhinderung.</p>
         </div>
 
-        <h2>Urheberrecht</h2>
+        <h2>Rechtliches</h2>
+
+        <h3>Urheberrecht</h3>
         <p>Die Inhalte dieser Webseite unterliegen, soweit dies rechtlich möglich ist, diversen Schutzrechten (z.B. dem Urheberrecht). Jegliche Verwendung oder Verbreitung von bereitgestelltem Material, welche urheberrechtlich untersagt ist, bedarf schriftlicher Zustimmung des Webseitenbetreibers.</p>
         <p>Die Urheberrechte Dritter werden vom Betreiber dieser Webseite mit größter Sorgfalt beachtet. Sollten Sie trotzdem auf eine Urheberrechtsverletzung aufmerksam werden, bitten wir um einen entsprechenden Hinweis. Bei Bekanntwerden derartiger Rechtsverletzungen werden wir den betroffenen Inhalt umgehend entfernen.</p>
 
-        <h2>Haftungsausschluss</h2>
+        <h3>Haftungsausschluss</h3>
         <p>Trotz sorgfältiger inhaltlicher Kontrolle übernimmt der Webseitenbetreiber dieser Webseite keine Haftung für die Inhalte externer Links. Für den Inhalt der verlinkten Seiten sind ausschließlich deren Betreiber verantwortlich. Sollten Sie dennoch auf ausgehende Links aufmerksam werden, welche auf eine Webseite mit rechtswidriger Tätigkeit oder Information verweisen, ersuchen wir um dementsprechenden Hinweis, um diese nach § 17 Abs. 2 ECG umgehend zu entfernen.</p>
 
-        <p style="margin-top: 2rem; font-size: 0.75rem; color: #6b7280;">Quelle: Impressum Generator Österreich</p>
+        <h3>Grundlegende Richtung (Blattlinie)</h3>
+        <p>Information über die Tätigkeit des Vereins sowie Förderung der Medienkompetenz und Resilienz gegen Desinformation.</p>
     </div>
 
     <footer>
         <div class="footer-content">
-            © <?php echo date('Y'); ?> "NGO BUSINESS" TRACKER
+            © 2026 Disinfo Awareness. Wien, Österreich.
         </div>
     </footer>
 </body>

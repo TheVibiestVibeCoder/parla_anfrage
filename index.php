@@ -1013,7 +1013,7 @@ $partyMap = [
                     </h3>
                     <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
                         <p class="text-gray-400 leading-relaxed font-sans" itemprop="text">
-                            Die massenhafte Verwendung des Begriffs „NGO Business" deutet auf eine bewusste politische Strategie hin. 
+                            Die massenhafte Verwendung des Begriffs „NGO Business" könnte auf eine bewusste politische Strategie hindeuten. 
                             Durch hunderte nahezu identische Anfragen wird ein Narrativ erzeugt, das NGO Arbeit mit 
                             Steuergeldverschwendung, Ideologie und Missbrauch öffentlicher Mittel verknüpft. 
                             Ziel ist weniger Aufklärung als vielmehr Delegitimierung.
@@ -1042,7 +1042,7 @@ $partyMap = [
                     <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
                         <p class="text-gray-400 leading-relaxed font-sans" itemprop="text">
                             Red darüber. Teile die Daten. Hinterfrage Schlagworte. 
-                            Je sichtbarer solche Muster werden, desto schwerer wird es, 
+                            Je sichtbarer mögliche Muster werden, desto schwerer wird es, 
                             parlamentarische Instrumente für politische Stimmungsmache zu missbrauchen.
                         </p>
                     </div>
@@ -1140,7 +1140,7 @@ $partyMap = [
                 <p><strong>Wie wird sie berechnet?</strong></p>
                 <p>Jeder Tag wird als Punkt dargestellt. Die Farbe entspricht der jeweiligen Partei. Die Farbintensität (Helligkeit) zeigt die Anzahl der Anfragen: Dunkel = wenige Anfragen, Hell/Leuchtend = viele Anfragen an diesem Tag.</p>
                 <p><strong>Was bedeutet das?</strong></p>
-                <p>Der Kalender macht "Bulk-Tage" sichtbar - Tage, an denen besonders viele Anfragen auf einmal eingereicht wurden. Solche koordinierten Massen-Einreichungen sind ein Zeichen für strategisches, geplantes Vorgehen.</p>
+                <p>Der Kalender macht "Bulk-Tage" sichtbar - Tage, an denen besonders viele Anfragen auf einmal eingereicht wurden.</p>
             </div>
         </div>
     </div>

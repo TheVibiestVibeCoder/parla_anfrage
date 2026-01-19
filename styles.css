@@ -248,6 +248,17 @@ p { margin: 0; }
     padding: 0 1rem;
 }
 
+/* Chart.js Canvas Elements - Critical for interactivity */
+canvas {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+    position: relative;
+    pointer-events: auto !important;
+    touch-action: auto !important;
+    cursor: pointer;
+}
+
 /* Flexbox wrap and direction */
 .flex-row { flex-direction: row; }
 .flex-wrap { flex-wrap: wrap; }
@@ -453,22 +464,34 @@ h1, h2, h3 {
 }
 
 /* FORM ELEMENTS */
-select {
-    background: transparent;
-    color: #fff;
-    border: none;
-    border-bottom: 2px solid #fff;
-    padding: 0.5rem 2rem 0.5rem 0;
-    font-family: var(--font-head);
-    font-size: 1.25rem;
+select,
+#time-range-select {
+    background: #000 !important;
+    color: #fff !important;
+    border: 2px solid #fff !important;
+    padding: 0.5rem 2rem 0.5rem 0.75rem !important;
+    font-family: var(--font-head) !important;
+    font-size: 1.25rem !important;
     cursor: pointer;
     appearance: none;
-    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23FFFFFF%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
-    background-repeat: no-repeat;
-    background-position: right 0 top 50%;
-    background-size: .5em auto;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23FFFFFF%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 0.5rem top 50% !important;
+    background-size: .5em auto !important;
     border-radius: 0;
     max-width: 100%;
+}
+select option,
+#time-range-select option {
+    background: #000 !important;
+    color: #fff !important;
+    padding: 0.5rem;
+}
+select:hover,
+#time-range-select:hover {
+    color: #fff !important;
 }
 /* Laptop */
 @media (min-width: 1024px) {

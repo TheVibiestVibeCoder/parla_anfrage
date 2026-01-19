@@ -709,18 +709,20 @@ $partyMap = [
 </head>
 <body class="flex flex-col min-h-screen">
 
-    <section class="min-h-screen flex flex-col justify-between items-center text-center bg-black border-b border-white px-4 py-6 md:px-6 md:py-8 lg:py-12">
-        
-        <div class="w-full flex justify-between items-center max-w-[1200px]">
-            <div class="flex items-center gap-2 md:gap-3">
-                <div class="w-2 h-2 md:w-3 md:h-3 bg-white"></div>
-                <span class="tracking-widest text-sm md:text-lg font-head text-white">NGO-Business</span>
-            </div>
+    <header class="w-full fixed top-0 z-50 bg-transparent">
+        <div class="container mx-auto px-6 h-16 flex justify-between items-center">
+            <a href="index.php" class="flex items-center gap-3 group">
+                <div class="w-3 h-3 bg-white group-hover:bg-green-500 transition-colors duration-300"></div>
+                <span class="font-bebas text-xl md:text-2xl tracking-widest text-white mt-1">NGO-Business Tracker</span>
+            </a>
             <div class="flex items-center gap-2">
                 <span class="w-1.5 h-1.5 md:w-2 md:h-2 bg-red-600 rounded-full animate-pulse"></span>
                 <span class="text-[10px] md:text-xs font-mono text-red-600 uppercase">Live Update</span>
             </div>
         </div>
+    </header>
+
+    <section class="min-h-screen flex flex-col justify-between items-center text-center bg-black border-b border-white px-4 py-6 md:px-6 md:py-8 lg:py-12 pt-24">
 
         <div class="flex-grow flex flex-col justify-center max-w-5xl mx-auto w-full py-4 md:py-8 lg:py-0">
             <article>
@@ -769,7 +771,7 @@ $partyMap = [
             <form method="GET" class="w-full lg:w-auto">
                 <div class="flex flex-col items-start w-full">
                     <label for="time-range-select" class="text-[10px] uppercase tracking-widest text-gray-500 mb-1">Zeitraum wählen</label>
-                    <select id="time-range-select" name="range" onchange="this.form.submit()" class="w-full lg:w-auto hover:text-gray-300 transition-colors" aria-label="Zeitraum für Anfragen auswählen">
+                    <select id="time-range-select" name="range" onchange="this.form.submit()" class="w-full lg:w-auto" style="background: #000 !important; color: #fff !important; border: 2px solid #fff !important; padding: 0.5rem 2rem 0.5rem 0.75rem !important;" aria-label="Zeitraum für Anfragen auswählen">
                         <option value="1week" <?php echo $timeRange === '1week' ? 'selected' : ''; ?>>LETZTE WOCHE</option>
                         <option value="1month" <?php echo $timeRange === '1month' ? 'selected' : ''; ?>>LETZTER MONAT</option>
                         <option value="3months" <?php echo $timeRange === '3months' ? 'selected' : ''; ?>>3 MONATE</option>
@@ -1150,10 +1152,13 @@ $partyMap = [
                 <div class="max-w-md">
                     <h3 class="text-sm font-bold text-white mb-4 uppercase tracking-wider">Über das Projekt</h3>
                     <p class="text-xs text-gray-500 leading-relaxed font-sans mb-4">
-                        Der NGO Business Tracker analysiert parlamentarische Anfragen im österreichischen Nationalrat, die gezielt zum Thema NGOs gestellt werden. 
+                        Der NGO Business Tracker analysiert parlamentarische Anfragen im österreichischen Nationalrat, die gezielt zum Thema NGOs gestellt werden.
                         <br><br>
                         Er macht sichtbar, wie oft, von wem und in welchen Mustern das Framing gepusht wird.
                     </p>
+                    <div class="text-xs text-yellow-600 leading-relaxed font-sans mb-4 italic">
+                        Hinweis: Diese Plattform ist experimentell. Fehler können vorkommen.
+                    </div>
                     <div class="text-xs font-mono text-gray-600">
                           © <?php echo date('Y'); ?> "NGO BUSINESS" TRACKER
                     </div>
@@ -1182,20 +1187,20 @@ $partyMap = [
         function initializeCharts() {
             // Wait for Chart.js to be available
             if (typeof Chart === 'undefined') {
-                console.log('Chart.js not loaded yet, waiting...');
+                console.error('❌ Chart.js not loaded yet, waiting...');
                 return;
             }
+
+            console.log('✅ Chart.js loaded successfully, version:', Chart.version);
+            console.log('🎨 Initializing charts...');
 
             // Chart Config - Cleaner, less "techy" more editorial
             Chart.defaults.color = '#555';
             Chart.defaults.borderColor = 'rgba(255,255,255,0.1)';
             Chart.defaults.font.family = "'Inter', sans-serif";
 
-            // Performance optimization: reduce animation duration to minimize layout thrashing
-            Chart.defaults.animation = {
-                duration: 400, // Reduced from default 1000ms
-                easing: 'easeOutQuart'
-            };
+            // Disable animations completely to prevent callback errors
+            Chart.defaults.animation = false;
             Chart.defaults.responsive = true;
             Chart.defaults.maintainAspectRatio = false;
 
@@ -1220,7 +1225,7 @@ $partyMap = [
             if (ctx1) {
                 const labels = Object.values(monthlyData).map(m => m.label);
                 const counts = Object.values(monthlyData).map(m => m.count);
-                
+
                 new Chart(ctx1, {
                     type: 'line',
                     data: {
@@ -1231,18 +1236,47 @@ $partyMap = [
                             borderColor: '#ffffff',
                             backgroundColor: 'transparent',
                             borderWidth: 2,
-                            pointRadius: 0,
-                            pointHoverRadius: 6,
+                            pointRadius: 3,
+                            pointHoverRadius: 8,
+                            pointHoverBackgroundColor: '#ffffff',
+                            pointHoverBorderColor: '#ffffff',
+                            pointHoverBorderWidth: 3,
                             tension: 0.1
                         }]
                     },
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        plugins: { legend: { display: false } },
+                        interaction: {
+                            mode: 'index',
+                            intersect: false
+                        },
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                enabled: true,
+                                mode: 'index',
+                                intersect: false,
+                                backgroundColor: 'rgba(0, 0, 0, 0.9)',
+                                titleColor: '#fff',
+                                bodyColor: '#fff',
+                                borderColor: '#fff',
+                                borderWidth: 1,
+                                padding: 12,
+                                displayColors: false,
+                                callbacks: {
+                                    title: (tooltipItems) => {
+                                        return 'Datum: ' + tooltipItems[0].label;
+                                    },
+                                    label: (context) => {
+                                        return 'Anfragen: ' + context.parsed.y;
+                                    }
+                                }
+                            }
+                        },
                         scales: {
                             y: { beginAtZero: true, grid: { display: true, drawBorder: false } },
-                            x: { 
+                            x: {
                                 grid: { display: false },
                                 display: true,
                                 ticks: {
@@ -1255,6 +1289,12 @@ $partyMap = [
                         }
                     }
                 });
+                console.log('✅ Timeline Chart initialized with tooltips');
+
+                // Test canvas interactivity
+                ctx1.addEventListener('mousemove', function() {
+                    console.log('👆 Mouse moved over Timeline Chart canvas');
+                }, { once: true });
             }
 
             // 2. FLOOD WALL
@@ -1270,32 +1310,68 @@ $partyMap = [
                             borderColor: partyColors[party],
                             backgroundColor: 'transparent',
                             borderWidth: 2,
-                            pointRadius: 0,
+                            pointRadius: 2,
+                            pointHoverRadius: 6,
+                            pointHoverBackgroundColor: partyColors[party],
+                            pointHoverBorderColor: '#fff',
+                            pointHoverBorderWidth: 2,
                             stepped: true
                         }))
                     },
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        interaction: { mode: 'index', intersect: false },
-                        plugins: { 
-                            legend: { labels: { color: '#aaa', font: { family: 'Inter' } } }
+                        interaction: {
+                            mode: 'index',
+                            intersect: false
+                        },
+                        plugins: {
+                            legend: {
+                                labels: { color: '#aaa', font: { family: 'Inter' } }
+                            },
+                            tooltip: {
+                                enabled: true,
+                                mode: 'index',
+                                intersect: false,
+                                backgroundColor: 'rgba(0, 0, 0, 0.9)',
+                                titleColor: '#fff',
+                                bodyColor: '#fff',
+                                borderColor: '#fff',
+                                borderWidth: 1,
+                                padding: 12,
+                                callbacks: {
+                                    title: (tooltipItems) => {
+                                        return 'Datum: ' + tooltipItems[0].label;
+                                    },
+                                    label: (context) => {
+                                        return context.dataset.label + ': ' + context.parsed.y + ' (kumulativ)';
+                                    }
+                                }
+                            }
                         },
                         scales: {
-                            x: { 
+                            x: {
                                 display: true,
                                 grid: { display: false },
                                 ticks: {
                                     color: '#666',
                                     font: { family: 'JetBrains Mono', size: 10 },
                                     autoSkip: true,
-                                    maxRotation: 0
+                                    maxTicksLimit: 10,
+                                    maxRotation: 0,
+                                    minRotation: 0
                                 }
                             },
                             y: { grid: { color: '#222' } }
                         }
                     }
                 });
+                console.log('✅ Flood Wall Chart initialized with tooltips');
+
+                // Test canvas interactivity
+                ctx2.addEventListener('mousemove', function() {
+                    console.log('👆 Mouse moved over Flood Wall Chart canvas');
+                }, { once: true });
             }
 
             // 3. SPAM CALENDAR
@@ -1303,12 +1379,12 @@ $partyMap = [
             if (ctx3) {
                 const matrixData = [];
                 const pOrder = ['S', 'V', 'F', 'G', 'N', 'OTHER'];
-                
+
                 pOrder.forEach((party, pIdx) => {
                     const pData = spamData[party] || [];
                     const dMap = {};
                     pData.forEach(i => dMap[i.date] = i.count);
-                    
+
                     allDateKeys.forEach((d, dIdx) => {
                         if (dMap[d]) {
                             matrixData.push({
@@ -1335,27 +1411,53 @@ $partyMap = [
                                 const alpha = 0.2 + Math.pow(normalizedValue, 0.7) * 0.8;
                                 return c + Math.floor(alpha * 255).toString(16).padStart(2,'0');
                             },
-                            pointRadius: 5,
-                            pointStyle: 'rect'
+                            pointRadius: 8,
+                            pointHoverRadius: 12,
+                            pointStyle: 'rect',
+                            pointHoverBorderWidth: 2,
+                            pointHoverBorderColor: '#fff'
                         }]
                     },
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
+                        interaction: {
+                            mode: 'point',
+                            intersect: true
+                        },
                         plugins: {
                             legend: { display: false },
                             tooltip: {
+                                enabled: true,
+                                mode: 'point',
+                                intersect: true,
+                                backgroundColor: 'rgba(0, 0, 0, 0.9)',
+                                titleColor: '#fff',
+                                bodyColor: '#fff',
+                                borderColor: '#fff',
+                                borderWidth: 1,
+                                padding: 12,
+                                displayColors: false,
                                 callbacks: {
-                                    label: ctx => `${partyNames[ctx.raw.p]}: ${ctx.raw.v} Anfragen am ${ctx.raw.date}`
+                                    title: (tooltipItems) => {
+                                        const dateKey = tooltipItems[0].raw.date;
+                                        const parts = dateKey.split('-');
+                                        return 'Datum: ' + parts[2] + '.' + parts[1] + '.' + parts[0];
+                                    },
+                                    label: (context) => {
+                                        const partyName = partyNames[context.raw.p];
+                                        const count = context.raw.v;
+                                        return partyName + ': ' + count + ' Anfrage' + (count > 1 ? 'n' : '');
+                                    }
                                 }
                             }
                         },
                         scales: {
-                            x: { 
+                            x: {
                                 display: true,
                                 grid: { display: false },
                                 ticks: {
-                                    callback: function(value, index) {
+                                    callback: (value, index) => {
                                         // Ensure we have a date for this index
                                         const dateKey = allDateKeys[value];
                                         if(dateKey) {
@@ -1370,7 +1472,7 @@ $partyMap = [
                                     maxRotation: 0
                                 }
                             },
-                            y: { 
+                            y: {
                                 min: -0.5, max: 5.5,
                                 ticks: { callback: v => partyNames[pOrder[v]] },
                                 grid: { display: false }
@@ -1378,7 +1480,16 @@ $partyMap = [
                         }
                     }
                 });
+                console.log('✅ Spam Calendar Chart initialized with tooltips');
+
+                // Test canvas interactivity
+                ctx3.addEventListener('mousemove', function() {
+                    console.log('👆 Mouse moved over Spam Calendar Chart canvas');
+                }, { once: true });
             }
+
+            console.log('✅ All charts initialized successfully!');
+            console.log('=== NGO TRACKER DEBUG END ===');
 
             // Modal Functions
             window.openModal = function(modalId) {

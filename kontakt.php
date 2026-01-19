@@ -116,7 +116,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             background: #333; 
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #555; 
+            background: #555;
+        }
+
+        .container-custom {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        @media (min-width: 768px) {
+            .container-custom {
+                padding: 0 1.5rem;
+            }
         }
 
         /* Input Animations */
@@ -259,38 +271,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </main>
 
-    <footer class="bg-black border-t border-white/10 py-12 md:py-16 mt-auto">
-        <div class="container mx-auto px-6">
-            <div class="flex flex-col md:flex-row justify-between items-start gap-12">
-                
-                <div class="max-w-md space-y-6">
-                    <h3 class="font-bebas text-2xl text-white tracking-widest">ÜBER DAS PROJEKT</h3>
-                    <p class="text-sm text-gray-500 leading-relaxed font-sans">
-                        Der NGO Business Tracker analysiert parlamentarische Anfragen im österreichischen Nationalrat. 
-                        Er visualisiert Muster und Netzwerke.
+    <footer class="bg-black border-t border-white py-8 md:py-12 mt-auto">
+        <div class="container-custom">
+            <div class="flex flex-col md:flex-row justify-between items-start gap-8">
+                <div class="max-w-md">
+                    <h3 class="text-sm font-bold text-white mb-4 uppercase tracking-wider">Über das Projekt</h3>
+                    <p class="text-xs text-gray-500 leading-relaxed font-sans mb-4">
+                        Der NGO Business Tracker analysiert parlamentarische Anfragen im österreichischen Nationalrat, die gezielt zum Thema NGOs gestellt werden.
+                        <br><br>
+                        Er macht sichtbar, wie oft, von wem und in welchen Mustern das Framing gepusht wird.
                     </p>
-                    <div class="text-sm font-mono text-gray-600 pt-4">
-                        © <?php echo date('Y'); ?> NGO BUSINESS TRACKER
+                    <div class="text-xs text-yellow-600 leading-relaxed font-sans mb-4 italic">
+                        Hinweis: Diese Plattform ist experimentell. Fehler können vorkommen.
                     </div>
-                    <div class="flex gap-6">
-                        <a href="impressum.php" class="font-bebas text-lg text-gray-500 hover:text-white transition-colors tracking-wide">IMPRESSUM</a>
-                        <a href="kontakt.php" class="font-bebas text-lg text-white transition-colors tracking-wide underline decoration-1 underline-offset-4">KONTAKT</a>
+                    <div class="text-xs font-mono text-gray-600">
+                          © <?php echo date('Y'); ?> "NGO BUSINESS" TRACKER
                     </div>
-                </div>
-
-                <div class="w-full md:w-auto flex flex-col items-start md:items-end gap-3">
-                    <div class="text-xs font-mono text-gray-600">QUELLE: PARLAMENT.GV.AT</div>
-                    <div class="text-xs font-mono text-gray-600">LAST UPDATE: <?php echo date('d.m.Y H:i'); ?></div>
-                    
-                    <div class="flex items-center gap-3 mt-4 px-3 py-1.5 border border-green-900/30 bg-green-900/10 rounded-full">
-                        <div class="relative w-2 h-2">
-                            <div class="absolute w-2 h-2 bg-green-500 rounded-full animate-ping opacity-75"></div>
-                            <div class="relative w-2 h-2 bg-green-500 rounded-full"></div>
-                        </div>
-                        <span class="text-xs font-mono text-green-500 tracking-wider">SYSTEM OPERATIONAL</span>
+                    <div class="mt-2 space-x-4">
+                        <a href="impressum.php" class="text-xs font-mono text-gray-500 hover:text-white transition-colors underline">Impressum</a>
+                        <a href="kontakt.php" class="text-xs font-mono text-gray-500 hover:text-white transition-colors underline">Kontakt</a>
                     </div>
                 </div>
 
+                <div class="text-left md:text-right w-full md:w-auto">
+                    <div class="text-xs font-mono text-gray-500 mb-2">QUELLE: PARLAMENT.GV.AT</div>
+                    <div class="text-xs font-mono text-gray-500 mb-2">LAST UPDATE: <?php echo date('d.m.Y H:i'); ?></div>
+                    <div class="flex items-center justify-start md:justify-end gap-2 mt-4">
+                        <div class="w-2 h-2 bg-green-600 rounded-full"></div>
+                        <span class="text-xs font-mono text-green-600">SYSTEM OPERATIONAL</span>
+                    </div>
+                </div>
             </div>
         </div>
     </footer>

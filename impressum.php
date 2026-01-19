@@ -83,19 +83,17 @@
 </head>
 <body class="flex flex-col min-h-screen">
 
-    <header class="w-full border-b border-white/10 backdrop-blur-sm fixed top-0 z-50 bg-black/80">
-        <div class="container mx-auto px-6 h-16 flex justify-between items-center">
-            <a href="index.php" class="flex items-center gap-3 group">
-                <div class="w-3 h-3 bg-white group-hover:bg-green-500 transition-colors duration-300"></div>
-                <span class="font-bebas text-xl md:text-2xl tracking-widest text-white mt-1">NGO-Business Tracker</span>
-            </a>
-            <nav>
-                <a href="index.php" class="text-sm font-mono text-gray-500 hover:text-white transition-colors flex items-center gap-2">
-                    <span>←</span> <span class="hidden md:inline">ZURÜCK</span>
-                </a>
-            </nav>
-        </div>
-    </header>
+    <header class="w-full absolute top-0 z-50 bg-transparent">
+    <div class="container mx-auto px-6 h-16 flex justify-between items-center">
+        <a href="index.php" class="flex items-center gap-3 group">
+            <div class="w-3 h-3 bg-white group-hover:bg-green-500 transition-colors duration-300"></div>
+            
+            <span class="font-bebas text-xl md:text-2xl tracking-widest text-white mt-1">
+                <span class="md:hidden">NBT</span>
+                <span class="hidden md:inline">NGO-Business Tracker</span>
+            </span>
+        </a>
+</header>
 
     <main class="flex-grow pt-32 pb-20 px-6">
         <div class="container mx-auto max-w-2xl">

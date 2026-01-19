@@ -709,18 +709,17 @@ $partyMap = [
 </head>
 <body class="flex flex-col min-h-screen">
 
-    <header class="w-full fixed top-0 z-50 bg-transparent">
-        <div class="container mx-auto px-6 h-16 flex justify-between items-center">
-            <a href="index.php" class="flex items-center gap-3 group">
-                <div class="w-3 h-3 bg-white group-hover:bg-green-500 transition-colors duration-300"></div>
-                <span class="font-bebas text-xl md:text-2xl tracking-widest text-white mt-1">NGO-Business Tracker</span>
-            </a>
-            <div class="flex items-center gap-2">
-                <span class="w-1.5 h-1.5 md:w-2 md:h-2 bg-red-600 rounded-full animate-pulse"></span>
-                <span class="text-[10px] md:text-xs font-mono text-red-600 uppercase">Live Update</span>
-            </div>
-        </div>
-    </header>
+<header class="w-full absolute top-0 z-50 bg-transparent">
+    <div class="container mx-auto px-6 h-16 flex justify-between items-center">
+        <a href="index.php" class="flex items-center gap-3 group">
+            <div class="w-3 h-3 bg-white group-hover:bg-green-500 transition-colors duration-300"></div>
+            
+            <span class="font-bebas text-xl md:text-2xl tracking-widest text-white mt-1">
+                <span class="md:hidden">NBT</span>
+                <span class="hidden md:inline">NGO-Business Tracker</span>
+            </span>
+        </a>
+</header>
 
     <section class="min-h-screen flex flex-col justify-between items-center text-center bg-black border-b border-white px-4 py-6 md:px-6 md:py-8 lg:py-12 pt-24">
 
@@ -1014,7 +1013,7 @@ $partyMap = [
                     </h3>
                     <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
                         <p class="text-gray-400 leading-relaxed font-sans" itemprop="text">
-                            Die massenhafte Verwendung des Begriffs „NGO Business" deutet auf eine bewusste politische Strategie hin. 
+                            Die massenhafte Verwendung des Begriffs „NGO Business" könnte auf eine bewusste politische Strategie hindeuten. 
                             Durch hunderte nahezu identische Anfragen wird ein Narrativ erzeugt, das NGO Arbeit mit 
                             Steuergeldverschwendung, Ideologie und Missbrauch öffentlicher Mittel verknüpft. 
                             Ziel ist weniger Aufklärung als vielmehr Delegitimierung.
@@ -1043,7 +1042,7 @@ $partyMap = [
                     <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
                         <p class="text-gray-400 leading-relaxed font-sans" itemprop="text">
                             Red darüber. Teile die Daten. Hinterfrage Schlagworte. 
-                            Je sichtbarer solche Muster werden, desto schwerer wird es, 
+                            Je sichtbarer mögliche Muster werden, desto schwerer wird es, 
                             parlamentarische Instrumente für politische Stimmungsmache zu missbrauchen.
                         </p>
                     </div>
@@ -1141,7 +1140,7 @@ $partyMap = [
                 <p><strong>Wie wird sie berechnet?</strong></p>
                 <p>Jeder Tag wird als Punkt dargestellt. Die Farbe entspricht der jeweiligen Partei. Die Farbintensität (Helligkeit) zeigt die Anzahl der Anfragen: Dunkel = wenige Anfragen, Hell/Leuchtend = viele Anfragen an diesem Tag.</p>
                 <p><strong>Was bedeutet das?</strong></p>
-                <p>Der Kalender macht "Bulk-Tage" sichtbar - Tage, an denen besonders viele Anfragen auf einmal eingereicht wurden. Solche koordinierten Massen-Einreichungen sind ein Zeichen für strategisches, geplantes Vorgehen.</p>
+                <p>Der Kalender macht "Bulk-Tage" sichtbar - Tage, an denen besonders viele Anfragen auf einmal eingereicht wurden.</p>
             </div>
         </div>
     </div>

@@ -164,7 +164,7 @@
 
         <div class="info-block">
             <h2>Kontakt</h2>
-            <p>Zum Kontaktformular</p>
+            <p>markus@disinfoawareness.eu</p>
         </div>
 
         <h2>Vertretung</h2>

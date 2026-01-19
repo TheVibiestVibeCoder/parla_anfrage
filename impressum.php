@@ -84,7 +84,7 @@
 <body class="flex flex-col min-h-screen">
 
     <header class="w-full fixed top-0 z-50 bg-transparent">
-    <div class="container mx-auto px-6 h-16 flex justify-between items-center fixed top-0">
+    <div class="container mx-auto px-6 h-16 flex justify-between items-center">
         <a href="index.php" class="flex items-center gap-3 group">
             <div class="w-3 h-3 bg-white group-hover:bg-green-500 transition-colors duration-300"></div>
             
@@ -93,8 +93,7 @@
                 <span class="hidden md:inline">NGO-Business Tracker</span>
             </span>
         </a>
-    </header>
-
+</header>
 
     <main class="flex-grow pt-32 pb-20 px-6">
         <div class="container mx-auto max-w-2xl">

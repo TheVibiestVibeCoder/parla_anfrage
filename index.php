@@ -728,21 +728,19 @@ $partyMap = [
                 <header class="mb-6 md:mb-8">
                     <span class="inline-block border-b border-gray-600 pb-1 mb-4 md:mb-6 text-[10px] md:text-xs font-mono text-gray-400 uppercase tracking-[0.2em]">Die Analyse</span>
                     <h1 class="text-5xl sm:text-6xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-9xl text-white leading-[0.9] mb-4 md:mb-6 break-words tracking-tight" style="font-family: 'Bebas Neue', sans-serif;">
-                        Das "NGO-Business"<br>Narrativ der FPÖ
+                        Das "NGO-Business"<br>Narrativ
                     </h1>
                 </header>
 
                 <div class="space-y-4 md:space-y-6 max-w-3xl mx-auto text-left md:text-center px-4">
                     <p class="text-sm md:text-base lg:text-lg text-gray-300 font-sans leading-relaxed">
-                        Die FPÖ flutet das Parlament mit dem Begriff "NGO-Business". Seit <?php echo $earliestDateFormatted; ?>
-                        sind <?php echo number_format($totalCount); ?> Anfragen zum Thema NGOs, fast immer mit dem Begriff "NGO-Business" versehen, eingegangen.
+                        Das Parlament wird mit Anfragen mit dem Begriff "NGO-Business" im Titel geflutet. Seit <?php echo $earliestDateFormatted; ?> sind <?php echo number_format($totalCount); ?> Anfragen zum Thema NGOs, fast immer mit dem Begriff "NGO-Business" versehen, eingegangen
                     </p>
 
                     <p class="text-xs md:text-sm lg:text-base text-gray-400 font-sans leading-relaxed">
-                        Warum? Wichtige NGO-Arbeit wird ganz bewusst in den Kontext von Steuergeld-Verschwendung gerückt,
-                        um die Arbeit von Non-Profit-Organisationen zu verunglimpfen.
+                       Warum? Wichtige NGO-Arbeit scheint bewusst in den Kontext von Steuergeld-Verschwendung gerückt zu werden, um die Arbeit von Non-Profit-Organisationen pauschal zu diskreditieren.
                         <br><br>
-                        <span class="text-white">Wir decken auf, was es mit den Anfragen auf sich hat.</span>
+                        <span class="text-white"> Wir decken auf, was es mit den Anfragen auf sich hat.</span>
                     </p>
                 </div>
             </article>

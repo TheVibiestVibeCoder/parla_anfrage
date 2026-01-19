@@ -1185,9 +1185,12 @@ $partyMap = [
         function initializeCharts() {
             // Wait for Chart.js to be available
             if (typeof Chart === 'undefined') {
-                console.log('Chart.js not loaded yet, waiting...');
+                console.error('❌ Chart.js not loaded yet, waiting...');
                 return;
             }
+
+            console.log('✅ Chart.js loaded successfully, version:', Chart.version);
+            console.log('🎨 Initializing charts...');
 
             // Chart Config - Cleaner, less "techy" more editorial
             Chart.defaults.color = '#555';
@@ -1287,7 +1290,12 @@ $partyMap = [
                         }
                     }
                 });
-                console.log('Timeline Chart initialized with tooltips');
+                console.log('✅ Timeline Chart initialized with tooltips');
+
+                // Test canvas interactivity
+                ctx1.addEventListener('mousemove', function() {
+                    console.log('👆 Mouse moved over Timeline Chart canvas');
+                }, { once: true });
             }
 
             // 2. FLOOD WALL
@@ -1359,7 +1367,12 @@ $partyMap = [
                         }
                     }
                 });
-                console.log('Flood Wall Chart initialized with tooltips');
+                console.log('✅ Flood Wall Chart initialized with tooltips');
+
+                // Test canvas interactivity
+                ctx2.addEventListener('mousemove', function() {
+                    console.log('👆 Mouse moved over Flood Wall Chart canvas');
+                }, { once: true });
             }
 
             // 3. SPAM CALENDAR
@@ -1468,8 +1481,16 @@ $partyMap = [
                         }
                     }
                 });
-                console.log('Spam Calendar Chart initialized with tooltips');
+                console.log('✅ Spam Calendar Chart initialized with tooltips');
+
+                // Test canvas interactivity
+                ctx3.addEventListener('mousemove', function() {
+                    console.log('👆 Mouse moved over Spam Calendar Chart canvas');
+                }, { once: true });
             }
+
+            console.log('✅ All charts initialized successfully!');
+            console.log('=== NGO TRACKER DEBUG END ===');
 
             // Modal Functions
             window.openModal = function(modalId) {

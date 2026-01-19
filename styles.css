@@ -248,6 +248,17 @@ p { margin: 0; }
     padding: 0 1rem;
 }
 
+/* Chart.js Canvas Elements - Critical for interactivity */
+canvas {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+    position: relative;
+    pointer-events: auto !important;
+    touch-action: auto !important;
+    cursor: pointer;
+}
+
 /* Flexbox wrap and direction */
 .flex-row { flex-direction: row; }
 .flex-wrap { flex-wrap: wrap; }

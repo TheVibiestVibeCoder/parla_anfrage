@@ -1223,7 +1223,7 @@ $partyMap = [
             if (ctx1) {
                 const labels = Object.values(monthlyData).map(m => m.label);
                 const counts = Object.values(monthlyData).map(m => m.count);
-                
+
                 new Chart(ctx1, {
                     type: 'line',
                     data: {
@@ -1234,8 +1234,11 @@ $partyMap = [
                             borderColor: '#ffffff',
                             backgroundColor: 'transparent',
                             borderWidth: 2,
-                            pointRadius: 0,
-                            pointHoverRadius: 6,
+                            pointRadius: 3,
+                            pointHoverRadius: 8,
+                            pointHoverBackgroundColor: '#ffffff',
+                            pointHoverBorderColor: '#ffffff',
+                            pointHoverBorderWidth: 3,
                             tension: 0.1
                         }]
                     },
@@ -1250,6 +1253,8 @@ $partyMap = [
                             legend: { display: false },
                             tooltip: {
                                 enabled: true,
+                                mode: 'index',
+                                intersect: false,
                                 backgroundColor: 'rgba(0, 0, 0, 0.9)',
                                 titleColor: '#fff',
                                 bodyColor: '#fff',
@@ -1282,6 +1287,7 @@ $partyMap = [
                         }
                     }
                 });
+                console.log('Timeline Chart initialized with tooltips');
             }
 
             // 2. FLOOD WALL
@@ -1297,18 +1303,29 @@ $partyMap = [
                             borderColor: partyColors[party],
                             backgroundColor: 'transparent',
                             borderWidth: 2,
-                            pointRadius: 0,
+                            pointRadius: 2,
+                            pointHoverRadius: 6,
+                            pointHoverBackgroundColor: partyColors[party],
+                            pointHoverBorderColor: '#fff',
+                            pointHoverBorderWidth: 2,
                             stepped: true
                         }))
                     },
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        interaction: { mode: 'index', intersect: false },
+                        interaction: {
+                            mode: 'index',
+                            intersect: false
+                        },
                         plugins: {
-                            legend: { labels: { color: '#aaa', font: { family: 'Inter' } } },
+                            legend: {
+                                labels: { color: '#aaa', font: { family: 'Inter' } }
+                            },
                             tooltip: {
                                 enabled: true,
+                                mode: 'index',
+                                intersect: false,
                                 backgroundColor: 'rgba(0, 0, 0, 0.9)',
                                 titleColor: '#fff',
                                 bodyColor: '#fff',
@@ -1342,6 +1359,7 @@ $partyMap = [
                         }
                     }
                 });
+                console.log('Flood Wall Chart initialized with tooltips');
             }
 
             // 3. SPAM CALENDAR
@@ -1349,12 +1367,12 @@ $partyMap = [
             if (ctx3) {
                 const matrixData = [];
                 const pOrder = ['S', 'V', 'F', 'G', 'N', 'OTHER'];
-                
+
                 pOrder.forEach((party, pIdx) => {
                     const pData = spamData[party] || [];
                     const dMap = {};
                     pData.forEach(i => dMap[i.date] = i.count);
-                    
+
                     allDateKeys.forEach((d, dIdx) => {
                         if (dMap[d]) {
                             matrixData.push({
@@ -1381,17 +1399,26 @@ $partyMap = [
                                 const alpha = 0.2 + Math.pow(normalizedValue, 0.7) * 0.8;
                                 return c + Math.floor(alpha * 255).toString(16).padStart(2,'0');
                             },
-                            pointRadius: 5,
-                            pointStyle: 'rect'
+                            pointRadius: 8,
+                            pointHoverRadius: 12,
+                            pointStyle: 'rect',
+                            pointHoverBorderWidth: 2,
+                            pointHoverBorderColor: '#fff'
                         }]
                     },
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
+                        interaction: {
+                            mode: 'point',
+                            intersect: true
+                        },
                         plugins: {
                             legend: { display: false },
                             tooltip: {
                                 enabled: true,
+                                mode: 'point',
+                                intersect: true,
                                 backgroundColor: 'rgba(0, 0, 0, 0.9)',
                                 titleColor: '#fff',
                                 bodyColor: '#fff',
@@ -1414,7 +1441,7 @@ $partyMap = [
                             }
                         },
                         scales: {
-                            x: { 
+                            x: {
                                 display: true,
                                 grid: { display: false },
                                 ticks: {
@@ -1433,7 +1460,7 @@ $partyMap = [
                                     maxRotation: 0
                                 }
                             },
-                            y: { 
+                            y: {
                                 min: -0.5, max: 5.5,
                                 ticks: { callback: v => partyNames[pOrder[v]] },
                                 grid: { display: false }
@@ -1441,6 +1468,7 @@ $partyMap = [
                         }
                     }
                 });
+                console.log('Spam Calendar Chart initialized with tooltips');
             }
 
             // Modal Functions

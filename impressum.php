@@ -112,7 +112,7 @@
 
                 <div class="md:col-span-4 investigative-box border-t-[1px] border-gray-700 pt-6">
                     <span class="data-label">Kontakt</span>
-                    <a href="mailto:kontakt@ngo-business.com" class="data-value hover:text-red-500 transition-colors border-b border-gray-700 pb-1">konakt@ngo-business.com</a>
+                    <a href="mailto:kontakt@ngo-business.com" class="data-value hover:text-red-500 transition-colors border-b border-gray-700 pb-1">kontakt@ngo-business.com</a>
                 </div>
 
                 <div class="md:col-span-4 investigative-box border-t-[1px] border-gray-700 pt-6">

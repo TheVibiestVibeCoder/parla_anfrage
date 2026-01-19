@@ -273,15 +273,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </form>
 
             <!-- Alternative Contact Info -->
-            <div class="mt-16 pt-8 border-t border-gray-800">
-                <h2 class="text-2xl text-white mb-4 font-head">Direkter Kontakt</h2>
-                <p class="text-gray-400 mb-4">
-                    Sie können uns auch direkt per E-Mail erreichen:
-                </p>
-                <a href="mailto:markus@disinfoconsulting.eu" class="text-white hover:text-gray-300 underline font-mono text-sm">
-                    markus@disinfoconsulting.eu
-                </a>
-            </div>
 
         </div>
     </main>

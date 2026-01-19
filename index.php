@@ -178,7 +178,7 @@
                 </div>
 
                 <div>
-                    <h3 class="text-2xl text-white mb-4">Blattlinie</h3>
+                    <h3 class="text-2xl text-white mb-4">Zweck</h3>
                     <div class="text-sm text-gray-400 leading-relaxed border-l-2 border-red-900 pl-4 bg-red-900/10 py-2 pr-2">
                         <p>Information über die Tätigkeit des Vereins sowie Förderung der Medienkompetenz und Resilienz gegen Desinformation.</p>
                     </div>

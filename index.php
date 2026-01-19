@@ -1726,7 +1726,7 @@ $partyMap = [
 
                 <div class="border-t border-gray-700 pt-8" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
                     <h3 class="text-lg md:text-xl font-bold text-white mb-4 border-l-2 border-white pl-4" itemprop="name">
-                        Was ist Keyword-Squatting?
+                        Was ist <a href="keyword_squatting.php" class="text-white hover:text-gray-300 underline">Keyword-Squatting</a>?
                     </h3>
                     <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
                         <p class="text-gray-300 leading-relaxed" itemprop="text">

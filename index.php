@@ -549,17 +549,8 @@ $partyMap = [
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
     <noscript><link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet"></noscript>
 
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="styles.css">
-
-    <script>
-        // Load Tailwind CSS immediately but async to maintain good appearance
-        (function() {
-            var s = document.createElement('script');
-            s.src = 'https://cdn.tailwindcss.com';
-            s.async = true; // Async loading - doesn't block HTML parsing
-            document.head.appendChild(s);
-        })();
-    </script>
 
     <script>
         // Lazy load Chart.js with minimal overhead

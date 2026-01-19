@@ -174,6 +174,10 @@
                     <div class="text-xs font-mono text-gray-600">
                          © 2026 Disinfo Awareness. Wien, Österreich.
                     </div>
+                    <div class="mt-2 space-x-4">
+                        <a href="impressum.php" class="text-xs font-mono text-gray-500 hover:text-white transition-colors underline">Impressum</a>
+                        <a href="kontakt.php" class="text-xs font-mono text-gray-500 hover:text-white transition-colors underline">Kontakt</a>
+                    </div>
                 </div>
                 
                 <div class="text-right">

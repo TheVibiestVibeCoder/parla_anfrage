@@ -1266,10 +1266,10 @@ $partyMap = [
                                 padding: 12,
                                 displayColors: false,
                                 callbacks: {
-                                    title: function(context) {
-                                        return 'Datum: ' + context[0].label;
+                                    title: (tooltipItems) => {
+                                        return 'Datum: ' + tooltipItems[0].label;
                                     },
-                                    label: function(context) {
+                                    label: (context) => {
                                         return 'Anfragen: ' + context.parsed.y;
                                     }
                                 }
@@ -1341,10 +1341,10 @@ $partyMap = [
                                 borderWidth: 1,
                                 padding: 12,
                                 callbacks: {
-                                    title: function(context) {
-                                        return 'Datum: ' + context[0].label;
+                                    title: (tooltipItems) => {
+                                        return 'Datum: ' + tooltipItems[0].label;
                                     },
-                                    label: function(context) {
+                                    label: (context) => {
                                         return context.dataset.label + ': ' + context.parsed.y + ' (kumulativ)';
                                     }
                                 }
@@ -1440,12 +1440,12 @@ $partyMap = [
                                 padding: 12,
                                 displayColors: false,
                                 callbacks: {
-                                    title: function(context) {
-                                        const dateKey = context[0].raw.date;
+                                    title: (tooltipItems) => {
+                                        const dateKey = tooltipItems[0].raw.date;
                                         const parts = dateKey.split('-');
                                         return 'Datum: ' + parts[2] + '.' + parts[1] + '.' + parts[0];
                                     },
-                                    label: function(context) {
+                                    label: (context) => {
                                         const partyName = partyNames[context.raw.p];
                                         const count = context.raw.v;
                                         return partyName + ': ' + count + ' Anfrage' + (count > 1 ? 'n' : '');

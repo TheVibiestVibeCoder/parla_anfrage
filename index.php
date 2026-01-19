@@ -1150,10 +1150,13 @@ $partyMap = [
                 <div class="max-w-md">
                     <h3 class="text-sm font-bold text-white mb-4 uppercase tracking-wider">Über das Projekt</h3>
                     <p class="text-xs text-gray-500 leading-relaxed font-sans mb-4">
-                        Der NGO Business Tracker analysiert parlamentarische Anfragen im österreichischen Nationalrat, die gezielt zum Thema NGOs gestellt werden. 
+                        Der NGO Business Tracker analysiert parlamentarische Anfragen im österreichischen Nationalrat, die gezielt zum Thema NGOs gestellt werden.
                         <br><br>
                         Er macht sichtbar, wie oft, von wem und in welchen Mustern das Framing gepusht wird.
                     </p>
+                    <div class="text-xs text-yellow-600 leading-relaxed font-sans mb-4 italic">
+                        Hinweis: Diese Plattform ist eine experimentelle Idee. Fehler können vorkommen.
+                    </div>
                     <div class="text-xs font-mono text-gray-600">
                           © <?php echo date('Y'); ?> "NGO BUSINESS" TRACKER
                     </div>
@@ -1239,10 +1242,34 @@ $partyMap = [
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        plugins: { legend: { display: false } },
+                        interaction: {
+                            mode: 'index',
+                            intersect: false
+                        },
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                enabled: true,
+                                backgroundColor: 'rgba(0, 0, 0, 0.9)',
+                                titleColor: '#fff',
+                                bodyColor: '#fff',
+                                borderColor: '#fff',
+                                borderWidth: 1,
+                                padding: 12,
+                                displayColors: false,
+                                callbacks: {
+                                    title: function(context) {
+                                        return 'Datum: ' + context[0].label;
+                                    },
+                                    label: function(context) {
+                                        return 'Anfragen: ' + context.parsed.y;
+                                    }
+                                }
+                            }
+                        },
                         scales: {
                             y: { beginAtZero: true, grid: { display: true, drawBorder: false } },
-                            x: { 
+                            x: {
                                 grid: { display: false },
                                 display: true,
                                 ticks: {
@@ -1278,18 +1305,37 @@ $partyMap = [
                         responsive: true,
                         maintainAspectRatio: false,
                         interaction: { mode: 'index', intersect: false },
-                        plugins: { 
-                            legend: { labels: { color: '#aaa', font: { family: 'Inter' } } }
+                        plugins: {
+                            legend: { labels: { color: '#aaa', font: { family: 'Inter' } } },
+                            tooltip: {
+                                enabled: true,
+                                backgroundColor: 'rgba(0, 0, 0, 0.9)',
+                                titleColor: '#fff',
+                                bodyColor: '#fff',
+                                borderColor: '#fff',
+                                borderWidth: 1,
+                                padding: 12,
+                                callbacks: {
+                                    title: function(context) {
+                                        return 'Datum: ' + context[0].label;
+                                    },
+                                    label: function(context) {
+                                        return context.dataset.label + ': ' + context.parsed.y + ' (kumulativ)';
+                                    }
+                                }
+                            }
                         },
                         scales: {
-                            x: { 
+                            x: {
                                 display: true,
                                 grid: { display: false },
                                 ticks: {
                                     color: '#666',
                                     font: { family: 'JetBrains Mono', size: 10 },
                                     autoSkip: true,
-                                    maxRotation: 0
+                                    maxTicksLimit: 10,
+                                    maxRotation: 0,
+                                    minRotation: 0
                                 }
                             },
                             y: { grid: { color: '#222' } }
@@ -1345,8 +1391,25 @@ $partyMap = [
                         plugins: {
                             legend: { display: false },
                             tooltip: {
+                                enabled: true,
+                                backgroundColor: 'rgba(0, 0, 0, 0.9)',
+                                titleColor: '#fff',
+                                bodyColor: '#fff',
+                                borderColor: '#fff',
+                                borderWidth: 1,
+                                padding: 12,
+                                displayColors: false,
                                 callbacks: {
-                                    label: ctx => `${partyNames[ctx.raw.p]}: ${ctx.raw.v} Anfragen am ${ctx.raw.date}`
+                                    title: function(context) {
+                                        const dateKey = context[0].raw.date;
+                                        const parts = dateKey.split('-');
+                                        return 'Datum: ' + parts[2] + '.' + parts[1] + '.' + parts[0];
+                                    },
+                                    label: function(context) {
+                                        const partyName = partyNames[context.raw.p];
+                                        const count = context.raw.v;
+                                        return partyName + ': ' + count + ' Anfrage' + (count > 1 ? 'n' : '');
+                                    }
                                 }
                             }
                         },

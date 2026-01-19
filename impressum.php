@@ -171,6 +171,9 @@
             <div class="flex flex-col md:flex-row justify-between items-end gap-6">
                 <div>
                     <div class="text-xs font-mono text-gray-500 mb-2 uppercase tracking-widest">Disinfo Awareness</div>
+                    <div class="text-xs text-yellow-600 leading-relaxed font-sans mb-2 italic">
+                        Hinweis: Diese Plattform ist eine experimentelle Idee. Fehler können vorkommen.
+                    </div>
                     <div class="text-xs font-mono text-gray-600">
                          © 2026 Disinfo Awareness. Wien, Österreich.
                     </div>

@@ -266,9 +266,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="max-w-md space-y-6">
                     <h3 class="font-bebas text-2xl text-white tracking-widest">ÜBER DAS PROJEKT</h3>
                     <p class="text-sm text-gray-500 leading-relaxed font-sans">
-                        Der NGO Business Tracker analysiert parlamentarische Anfragen im österreichischen Nationalrat. 
+                        Der NGO Business Tracker analysiert parlamentarische Anfragen im österreichischen Nationalrat.
                         Er visualisiert Muster und Netzwerke.
                     </p>
+                    <div class="text-sm text-yellow-600 leading-relaxed font-sans pt-4 italic">
+                        Hinweis: Diese Plattform ist eine experimentelle Idee. Fehler können vorkommen.
+                    </div>
                     <div class="text-sm font-mono text-gray-600 pt-4">
                         © <?php echo date('Y'); ?> NGO BUSINESS TRACKER
                     </div>

@@ -112,7 +112,7 @@
 
                 <div class="md:col-span-4 investigative-box border-t-[1px] border-gray-700 pt-6">
                     <span class="data-label">Kontakt</span>
-                    <a href="mailto:markus@disinfoawareness.eu" class="data-value hover:text-red-500 transition-colors border-b border-gray-700 pb-1">markus@disinfoawareness.eu</a>
+                    <a href="mailto:kontakt@ngo-business.com" class="data-value hover:text-red-500 transition-colors border-b border-gray-700 pb-1">konakt@ngo-business.com</a>
                 </div>
 
                 <div class="md:col-span-4 investigative-box border-t-[1px] border-gray-700 pt-6">
@@ -127,29 +127,6 @@
                 <div class="md:col-span-12 investigative-box border-t-[1px] border-gray-700 pt-6">
                     <span class="data-label">Zuständige Behörde</span>
                     <div class="data-value">Landespolizeidirektion Wien, Referat Vereins-, Versammlungs- und Medienrechtsangelegenheiten</div>
-                </div>
-            </div>
-        </section>
-
-        <section class="mb-20">
-            <h2 class="text-4xl md:text-5xl text-white mb-8 border-l-4 border-white pl-4">Vertretung</h2>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
-                <div class="investigative-box">
-                    <span class="data-label">Obmann</span>
-                    <div class="text-3xl font-head text-white">Markus Schwinghammer</div>
-                </div>
-
-                <div class="investigative-box">
-                    <span class="data-label">Obmann-Stellvertreter</span>
-                    <div class="text-3xl font-head text-white">Mag. Robert Buchhaus</div>
-                </div>
-
-                <div class="md:col-span-2 mt-4 p-6 bg-[#1a1a1a] border-l-2 border-gray-600">
-                    <span class="data-label mb-2 block">Vertretungsregelung</span>
-                    <p class="text-gray-300 font-sans leading-relaxed">
-                        Der/Die Obmann/Obfrau vertritt den Verein nach außen. Der/Die Stellvertreter/in vertritt ihn/sie im Falle der Verhinderung.
-                    </p>
                 </div>
             </div>
         </section>

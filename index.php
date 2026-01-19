@@ -772,7 +772,6 @@ $partyMap = [
 
         <header class="flex flex-col lg:flex-row justify-between items-start lg:items-end mb-12 lg:mb-16 xl:mb-20 border-b-2 border-white pb-8">
             <div class="mb-8 lg:mb-0">
-                <div class="text-[10px] md:text-xs font-mono text-gray-500 mb-2">SYSTEM: PARLAMENT_WATCH // TRACKING: NGO_INTERACTIONS</div>
                 <h2 class="text-5xl md:text-6xl lg:text-7xl xl:text-8xl text-white leading-none">Anfragen Tracker</h2>
             </div>
             

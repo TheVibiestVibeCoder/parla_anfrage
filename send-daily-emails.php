@@ -5,6 +5,19 @@
 // This script should be run via cron at 20:00 daily
 // Example cron: 0 20 * * * /usr/bin/php /path/to/send-daily-emails.php
 
+// SECURITY: Only allow execution via CLI or with secret token
+if (php_sapi_name() !== 'cli') {
+    // Allow web execution only with secret token
+    // IMPORTANT: Change this token to something random and keep it secret!
+    $secretToken = 'a770374e67f3b9b2ab510f4dcd815291';
+    $providedToken = $_GET['token'] ?? '';
+
+    if ($providedToken !== $secretToken) {
+        http_response_code(403);
+        die('Access denied. This script can only be executed via command line or with valid token.');
+    }
+}
+
 require_once __DIR__ . '/MailingListDB.php';
 
 // Error handling
@@ -116,65 +129,90 @@ function getNewEntries() {
 
     if (!$apiResponse || !isset($apiResponse['rows'])) {
         error_log('Failed to fetch data from Parliament API');
+        echo "ERROR: API returned no data or no rows\n";
         return [];
     }
 
     $allRows = $apiResponse['rows'];
     $newEntries = [];
 
-    // Calculate cutoff date (24 hours ago)
-    $cutoffDate = new DateTime('24 hours ago');
+    // Get today's date string in format d.m.Y (e.g., "22.01.2026")
+    $todayStr = date('d.m.Y');
+    echo "Looking for entries from today: $todayStr\n";
+
+    $totalChecked = 0;
+    $todayCount = 0;
+    $ngoCount = 0;
+    $todayNgoCount = 0;
 
     foreach ($allRows as $row) {
-        $title = $row['TITEL'] ?? '';
+        $totalChecked++;
 
-        // Filter by NGO keywords
-        if (!matchesNGOKeywords($title)) {
-            continue;
-        }
+        // Use numeric indices like index.php does
+        $dateStr = $row[4] ?? '';  // Date field
+        $title = $row[6] ?? '';    // Title field
+        $topics = $row[22] ?? '';  // Topics field
 
-        // Parse date
-        $dateStr = $row['DATUM'] ?? '';
+        // Skip if no date
         if (empty($dateStr)) continue;
 
-        try {
-            $entryDate = new DateTime($dateStr);
-        } catch (Exception $e) {
-            continue;
+        // Check if entry is from TODAY - simple string comparison
+        $isToday = ($dateStr === $todayStr);
+        if ($isToday) {
+            $todayCount++;
         }
 
-        // Check if entry is from last 24 hours
-        if ($entryDate < $cutoffDate) {
-            continue;
+        // Check for NGO keywords in title AND topics (like index.php does!)
+        $searchableText = $title . ' ' . $topics;
+        $hasNGO = matchesNGOKeywords($searchableText);
+
+        if ($hasNGO) {
+            $ngoCount++;
         }
 
-        // Extract relevant information
-        $partyCode = getPartyCode($row['PARTIE'] ?? '[]');
-        $nparl = $row['NPARL'] ?? '';
-        $link = !empty($nparl) ? "https://www.parlament.gv.at/gegenstand/XXVIII/$nparl" : '';
+        if ($isToday && $hasNGO) {
+            $todayNgoCount++;
 
-        $newEntries[] = [
-            'date' => $entryDate->format('d.m.Y'),
-            'title' => $title,
-            'party' => $partyCode,
-            'party_name' => PARTY_NAMES[$partyCode],
-            'party_color' => PARTY_COLORS[$partyCode],
-            'link' => $link,
-            'nparl' => $nparl
-        ];
+            // Extract relevant information
+            $partyCode = getPartyCode($row[21] ?? '[]');  // Party field (numeric index 21)
+            $rowLink = $row[14] ?? '';  // Link field (numeric index 14) - relative path
+            $rowNumber = $row[7] ?? '';  // Inquiry number
+
+            // Build full URL like index.php does
+            $fullLink = !empty($rowLink) ? 'https://www.parlament.gv.at' . $rowLink : '';
+
+            $newEntries[] = [
+                'date' => $dateStr,
+                'title' => $title,
+                'party' => $partyCode,
+                'party_name' => PARTY_NAMES[$partyCode],
+                'party_color' => PARTY_COLORS[$partyCode],
+                'link' => $fullLink,
+                'number' => $rowNumber
+            ];
+        }
     }
 
-    // Sort by date (newest first)
+    echo "Checked $totalChecked total rows\n";
+    echo "Entries from today: $todayCount\n";
+    echo "NGO entries (all): $ngoCount\n";
+    echo "NGO entries from today: $todayNgoCount\n";
+
+    // Sort by date (newest first) - but since all are from today, sort by title
     usort($newEntries, function($a, $b) {
-        return strcmp($b['date'], $a['date']);
+        return strcmp($a['title'], $b['title']);
     });
 
     return $newEntries;
 }
 
-function generateEmailHTML($entries) {
+function generateEmailHTML($entries, $recipientEmail) {
     $entryCount = count($entries);
     $date = date('d.m.Y');
+
+    // Generate unsubscribe link with token
+    $unsubToken = hash('sha256', $recipientEmail . 'ngo-unsubscribe-salt-2026');
+    $unsubscribeUrl = 'https://' . ($_SERVER['HTTP_HOST'] ?? 'ngo-business.at') . '/unsubscribe.php?email=' . urlencode($recipientEmail) . '&token=' . $unsubToken;
 
     ob_start();
     ?>
@@ -183,83 +221,76 @@ function generateEmailHTML($entries) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NGO Business Tracker</title>
+    <title>NGO Business Tracker - Täglicher Newsletter</title>
 </head>
-<body style="margin: 0; padding: 0; font-family: 'Inter', Helvetica, Arial, sans-serif; background-color: #000000; color: #ffffff;">
-    <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #000000; width: 100%;">
+<body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #000000; color: #ffffff;">
+    <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #000000;">
         <tr>
-            <td align="center" style="padding: 20px 0;">
-                <table width="600" cellpadding="0" cellspacing="0" style="max-width: 600px; width: 100%; background-color: #000000;">
-                    
+            <td align="center" style="padding: 40px 20px;">
+                <table width="600" cellpadding="0" cellspacing="0" style="max-width: 600px; background-color: #111111; border: 1px solid #333333; border-radius: 8px;">
+                    <!-- Header -->
                     <tr>
-                        <td style="padding: 40px 20px 20px 20px; text-align: center; border-bottom: 2px solid #ffffff;">
-                            <div style="font-family: 'Courier New', Courier, monospace; font-size: 10px; color: #666666; letter-spacing: 2px; margin-bottom: 10px; text-transform: uppercase;">
-                                Tägliches Update &bull; <?php echo $date; ?>
-                            </div>
-                            <h1 style="margin: 0; font-family: 'Impact', 'Arial Narrow', sans-serif; font-size: 42px; line-height: 1; text-transform: uppercase; color: #ffffff; letter-spacing: 1px;">
-                                NGO-Business<br>Tracker
+                        <td style="padding: 30px; text-align: center; border-bottom: 2px solid #3B82F6;">
+                            <h1 style="margin: 0; font-size: 32px; font-weight: bold; letter-spacing: 2px; color: #ffffff;">
+                                "NGO BUSINESS" TRACKER
                             </h1>
+                            <p style="margin: 10px 0 0 0; font-size: 14px; color: #9CA3AF;">
+                                Täglicher Newsletter vom <?php echo $date; ?>
+                            </p>
                         </td>
                     </tr>
 
+                    <!-- Content -->
                     <tr>
-                        <td style="padding: 40px 20px;">
+                        <td style="padding: 30px;">
                             <?php if ($entryCount > 0): ?>
-                                <div style="margin-bottom: 40px; text-align: left;">
-                                    <div style="border-left: 2px solid #ffffff; padding-left: 15px;">
-                                        <p style="margin: 0; font-size: 18px; color: #ffffff; font-weight: bold;">
-                                            <?php echo $entryCount; ?> neue Anfrage<?php echo $entryCount > 1 ? 'n' : ''; ?>
-                                        </p>
-                                        <p style="margin: 5px 0 0 0; font-family: 'Courier New', Courier, monospace; font-size: 12px; color: #888888;">
-                                            DATENSATZ AKTUALISIERT
-                                        </p>
-                                    </div>
-                                </div>
+                                <h2 style="margin: 0 0 20px 0; font-size: 24px; color: #3B82F6;">
+                                    📋 <?php echo $entryCount; ?> neue Anfrage<?php echo $entryCount > 1 ? 'n' : ''; ?> heute
+                                </h2>
 
-                                <?php foreach ($entries as $index => $entry): ?>
-                                    <div style="margin-bottom: 0; padding-bottom: 25px; border-bottom: 1px solid #333333; padding-top: 25px;">
-                                        <div style="font-family: 'Courier New', Courier, monospace; font-size: 11px; color: #666666; margin-bottom: 8px; letter-spacing: 1px;">
-                                            <?php echo $entry['date']; ?> 
-                                            <span style="color: #444;">|</span> 
-                                            <?php echo !empty($entry['nparl']) ? $entry['nparl'] : '---'; ?>
-                                            <span style="color: #444;">|</span> 
-                                            <span style="color: <?php echo $entry['party_color']; ?>; font-weight: bold;">
+                                <p style="margin: 0 0 30px 0; font-size: 14px; line-height: 1.6; color: #E5E5E5;">
+                                    Hier sind die heutigen parlamentarischen Anfragen zum Thema NGO-Business:
+                                </p>
+
+                                <?php foreach ($entries as $entry): ?>
+                                    <div style="margin-bottom: 20px; padding: 20px; background-color: #1a1a1a; border-left: 4px solid <?php echo $entry['party_color']; ?>; border-radius: 4px;">
+                                        <div style="margin-bottom: 10px;">
+                                            <span style="display: inline-block; padding: 4px 12px; background-color: <?php echo $entry['party_color']; ?>; color: #ffffff; font-size: 12px; font-weight: bold; border-radius: 12px;">
                                                 <?php echo htmlspecialchars($entry['party_name']); ?>
+                                            </span>
+                                            <span style="margin-left: 10px; font-size: 12px; color: #9CA3AF;">
+                                                📅 <?php echo htmlspecialchars($entry['date']); ?>
                                             </span>
                                         </div>
 
-                                        <div style="margin-bottom: 15px;">
-                                            <a href="<?php echo htmlspecialchars($entry['link']); ?>" style="text-decoration: none; color: #ffffff; font-size: 16px; line-height: 1.4; font-weight: normal; display: block;">
-                                                <?php echo htmlspecialchars($entry['title']); ?>
-                                            </a>
-                                        </div>
+                                        <p style="margin: 10px 0; font-size: 14px; line-height: 1.5; color: #E5E5E5;">
+                                            <?php echo htmlspecialchars($entry['title']); ?>
+                                        </p>
 
                                         <?php if (!empty($entry['link'])): ?>
-                                            <table cellpadding="0" cellspacing="0">
-                                                <tr>
-                                                    <td>
-                                                        <a href="<?php echo htmlspecialchars($entry['link']); ?>" style="display: inline-block; font-family: 'Courier New', Courier, monospace; font-size: 11px; color: #ffffff; text-decoration: none; border: 1px solid #333333; padding: 5px 10px; text-transform: uppercase;">
-                                                            Dokument öffnen &rarr;
-                                                        </a>
-                                                    </td>
-                                                </tr>
-                                            </table>
+                                            <a href="<?php echo htmlspecialchars($entry['link']); ?>" style="display: inline-block; margin-top: 10px; padding: 8px 16px; background-color: #3B82F6; color: #ffffff; text-decoration: none; font-size: 12px; border-radius: 4px;">
+                                                🔗 Anfrage ansehen
+                                            </a>
                                         <?php endif; ?>
                                     </div>
                                 <?php endforeach; ?>
 
                             <?php else: ?>
-                                <div style="text-align: center; padding: 40px 0; border: 1px solid #222222; background-color: #111111;">
-                                    <h2 style="margin: 0 0 15px 0; font-family: 'Impact', 'Arial Narrow', sans-serif; font-size: 28px; color: #333333; text-transform: uppercase;">
-                                        Keine Aktivitäten
+                                <div style="text-align: center; padding: 40px 20px;">
+                                    <h2 style="margin: 0 0 20px 0; font-size: 28px; color: #3B82F6;">
+                                        😴 Heut war die FPÖ wohl faul...
                                     </h2>
-                                    <p style="margin: 0; font-family: 'Courier New', Courier, monospace; font-size: 12px; color: #666666;">
+
+                                    <p style="margin: 0 0 10px 0; font-size: 16px; line-height: 1.6; color: #E5E5E5;">
                                         <?php
                                         $funnyMessages = [
-                                            "SYSTEM STATUS: SILENT",
-                                            "PARLAMENT: PAUSED",
-                                            "NO DATA DETECTED",
-                                            "ANFRAGE-GENERATOR: OFFLINE"
+                                            "Aber keine Sorge, morgen kommt bestimmt was!",
+                                            "Vielleicht haben sie heute ausnahmsweise Urlaub? 🏖️",
+                                            "Die Anfrage-Maschinerie macht wohl Pause... für einen Tag.",
+                                            "Stille im Parlament – ein seltenes Phänomen! 🦄",
+                                            "Heute mal keine NGO-Panik. Genießen Sie die Ruhe! ☕",
+                                            "Scheint, als hätte heute jemand den Anfrage-Generator ausgesteckt.",
+                                            "Ein Tag ohne NGO-Anfrage ist wie... eigentlich ganz entspannt! 😌"
                                         ];
                                         echo $funnyMessages[array_rand($funnyMessages)];
                                         ?>
@@ -269,28 +300,30 @@ function generateEmailHTML($entries) {
                         </td>
                     </tr>
 
+                    <!-- Footer -->
                     <tr>
-                        <td style="padding: 30px 20px; border-top: 2px solid #ffffff; background-color: #000000;">
-                            <table width="100%" cellpadding="0" cellspacing="0">
-                                <tr>
-                                    <td align="left" style="font-family: 'Courier New', Courier, monospace; font-size: 10px; color: #555555; line-height: 1.6;">
-                                        SYSTEM OPERATIONAL<br>
-                                        <span style="color: #22c55e;">●</span> ONLINE
-                                    </td>
-                                    <td align="right" style="font-family: 'Courier New', Courier, monospace; font-size: 10px; color: #555555; line-height: 1.6;">
-                                        SOURCE: PARLAMENT.GV.AT<br>
-                                        <a href="https://<?php echo $_SERVER['HTTP_HOST'] ?? 'ngo-business.com'; ?>" style="color: #888888; text-decoration: none;">DASHBOARD ÖFFNEN</a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="2" align="center" style="padding-top: 30px; font-family: sans-serif; font-size: 10px; color: #333333;">
-                                        &copy; <?php echo date('Y'); ?> NGO Business Tracker. <a href="https://<?php echo $_SERVER['HTTP_HOST'] ?? 'ngo-business.com'; ?>/impressum.php" style="color: #333333; text-decoration: underline;">Impressum</a>.
-                                    </td>
-                                </tr>
-                            </table>
+                        <td style="padding: 30px; background-color: #0a0a0a; border-top: 1px solid #333333; text-align: center;">
+                            <p style="margin: 0 0 10px 0; font-size: 12px; color: #9CA3AF;">
+                                Mehr Informationen und Statistiken finden Sie auf:
+                            </p>
+                            <a href="https://<?php echo $_SERVER['HTTP_HOST'] ?? 'ngo-business.com'; ?>" style="display: inline-block; margin-bottom: 20px; padding: 10px 20px; background-color: #3B82F6; color: #ffffff; text-decoration: none; font-size: 14px; border-radius: 4px;">
+                                🌐 NGO Business Tracker besuchen
+                            </a>
+
+                            <p style="margin: 20px 0 10px 0; font-size: 11px; color: #666666;">
+                                Sie erhalten diese E-Mail, weil Sie sich für den täglichen Newsletter angemeldet haben.
+                            </p>
+                            <p style="margin: 0 0 10px 0; font-size: 11px; color: #666666;">
+                                <a href="<?php echo htmlspecialchars($unsubscribeUrl); ?>" style="color: #EF4444; text-decoration: underline;">
+                                    Newsletter abbestellen
+                                </a>
+                            </p>
+                            <p style="margin: 0; font-size: 11px; color: #666666;">
+                                © <?php echo date('Y'); ?> NGO Business Tracker |
+                                <a href="https://<?php echo $_SERVER['HTTP_HOST'] ?? 'ngo-business.at'; ?>/impressum.php" style="color: #666666;">Impressum</a>
+                            </p>
                         </td>
                     </tr>
-
                 </table>
             </td>
         </tr>
@@ -303,30 +336,47 @@ function generateEmailHTML($entries) {
 
 function generateEmailSubject($entryCount) {
     if ($entryCount > 0) {
-        return "⚠️ $entryCount neue Anfrage" . ($entryCount > 1 ? 'n' : '') . " | NGO Business Tracker";
+        return "📋 $entryCount neue NGO-Anfrage" . ($entryCount > 1 ? 'n' : '') . " | NGO Business Tracker";
     } else {
-        return "Status: Keine neuen Anfragen | NGO Business Tracker";
+        return "😴 Heute war die FPÖ wohl faul | NGO Business Tracker";
     }
 }
 
-function sendEmailToSubscribers($subscribers, $subject, $htmlBody) {
+function sendEmailToSubscribers($subscribers, $subject, $entries) {
     $successCount = 0;
     $failCount = 0;
+
+    // Use clean sender address
+    $fromEmail = 'noreply@ngo-business.at';
+    $fromName = 'NGO Business Tracker';
+    $replyTo = 'kontakt@ngo-business.at';
 
     $headers = [
         'MIME-Version: 1.0',
         'Content-Type: text/html; charset=UTF-8',
-        'From: NGO Business Tracker <noreply@' . ($_SERVER['HTTP_HOST'] ?? 'ngo-business.com') . '>',
-        'X-Mailer: PHP/' . phpversion()
+        'From: ' . $fromName . ' <' . $fromEmail . '>',
+        'Sender: NGO Business Newsletter <newsletter@ngo-business.at>',  // Override "Absender" field
+        'Reply-To: ' . $replyTo,
+        'X-Mailer: NGO-Business-Tracker/1.0',  // Custom mailer string
+        'X-Priority: 3',
+        'Return-Path: ' . $fromEmail,
+        'Organization: NGO Business Tracker'  // Add organization header
     ];
 
     $headersString = implode("\r\n", $headers);
+
+    // Additional parameters for mail() to set envelope sender
+    $additionalParams = '-fnewsletter@ngo-business.at';
 
     foreach ($subscribers as $subscriber) {
         $email = $subscriber['email'];
 
         try {
-            if (mail($email, $subject, $htmlBody, $headersString)) {
+            // Generate personalized email with unsubscribe link for this specific recipient
+            $htmlBody = generateEmailHTML($entries, $email);
+
+            // Use 5th parameter to set envelope sender (Return-Path)
+            if (mail($email, $subject, $htmlBody, $headersString, $additionalParams)) {
                 $successCount++;
             } else {
                 $failCount++;
@@ -367,21 +417,20 @@ try {
         exit(0);
     }
 
-    // Fetch new entries from last 24 hours
+    // Fetch new entries from today
     echo "Fetching new entries from Parliament API...\n";
     $newEntries = getNewEntries();
     $entryCount = count($newEntries);
 
-    echo "Found $entryCount new entries in the last 24 hours.\n";
+    echo "Found $entryCount new entries from today.\n";
 
-    // Generate email
+    // Generate email subject
     $subject = generateEmailSubject($entryCount);
-    $htmlBody = generateEmailHTML($newEntries);
 
     echo "Sending emails to $subscriberCount subscribers...\n";
 
-    // Send emails
-    $result = sendEmailToSubscribers($subscribers, $subject, $htmlBody);
+    // Send emails (each with personalized unsubscribe link)
+    $result = sendEmailToSubscribers($subscribers, $subject, $newEntries);
 
     echo "Emails sent: {$result['success']} successful, {$result['failed']} failed\n";
 

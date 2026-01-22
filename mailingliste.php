@@ -282,7 +282,7 @@ try {
                         Erhalten Sie täglich Updates über neue parlamentarische Anfragen zum Thema NGO-Business.
                     </p>
                     <div class="stats-badge">
-                        📊 <?php echo number_format($subscriberCount, 0, ',', '.'); ?> Abonnenten
+                        <?php echo number_format($subscriberCount, 0, ',', '.'); ?> Abonnenten
                     </div>
                 </div>
 
@@ -290,10 +290,10 @@ try {
                 <?php if ($success): ?>
                     <div class="alert alert-success">
                         <?php if ($reactivated): ?>
-                            <strong>✅ Willkommen zurück!</strong><br>
+                            <strong>Willkommen zurück!</strong><br>
                             Sie haben sich erfolgreich wieder angemeldet und erhalten ab heute täglich um 20:00 Uhr eine E-Mail mit den neuesten Anfragen – falls vorhanden.
                         <?php else: ?>
-                            <strong>✅ Erfolgreich angemeldet!</strong><br>
+                            <strong>Erfolgreich angemeldet!</strong><br>
                             Sie erhalten ab heute täglich um 20:00 Uhr eine E-Mail mit den neuesten Anfragen – falls vorhanden.
                         <?php endif; ?>
                         Sollte die FPÖ mal faul sein, erhalten Sie eine unterhaltsame Nachricht von uns. 😄
@@ -302,7 +302,7 @@ try {
 
                 <?php if ($error): ?>
                     <div class="alert alert-error">
-                        <strong>❌ Fehler</strong><br>
+                        <strong>Fehler</strong><br>
                         <?php echo htmlspecialchars($errorMessage); ?>
                     </div>
                 <?php endif; ?>
@@ -355,11 +355,11 @@ try {
                         ℹ️ Was Sie erwartet:
                     </h3>
                     <ul class="space-y-2 text-sm text-gray-300 font-sans">
-                        <li>✉️ <strong>Täglich um 20:00 Uhr</strong> erhalten Sie eine E-Mail</li>
-                        <li>📋 <strong>Neue Anfragen</strong> werden übersichtlich zusammengefasst</li>
-                        <li>😄 <strong>Keine neuen Anfragen?</strong> Dann gibt's eine lustige Nachricht</li>
-                        <li>🔒 <strong>Ihre Daten sind sicher</strong> – kein Spam, keine Weitergabe</li>
-                        <li>🚫 <strong>Jederzeit abmelden</strong> – Link in jeder E-Mail</li>
+                        <li><strong>Täglich um 20:00 Uhr</strong> erhalten Sie eine E-Mail</li>
+                        <li><strong>Neue Anfragen</strong> werden übersichtlich zusammengefasst</li>
+                        <li><strong>Keine neuen Anfragen?</strong> Dann gibt's eine lustige Nachricht</li>
+                        <li><strong>Ihre Daten sind sicher</strong> – kein Spam, keine Weitergabe</li>
+                        <li><strong>Jederzeit abmelden</strong> – Link in jeder E-Mail</li>
                     </ul>
                 </div>
 

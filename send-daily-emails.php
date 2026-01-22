@@ -129,58 +129,74 @@ function getNewEntries() {
 
     if (!$apiResponse || !isset($apiResponse['rows'])) {
         error_log('Failed to fetch data from Parliament API');
+        echo "ERROR: API returned no data or no rows\n";
         return [];
     }
 
     $allRows = $apiResponse['rows'];
     $newEntries = [];
 
-    // Get today's date at 00:00 (midnight)
-    $today = new DateTime('today');
-    $todayStr = $today->format('Y-m-d');
+    // Get today's date string in format d.m.Y (e.g., "22.01.2026")
+    $todayStr = date('d.m.Y');
+    echo "Looking for entries from today: $todayStr\n";
+
+    $totalChecked = 0;
+    $todayCount = 0;
+    $ngoCount = 0;
+    $todayNgoCount = 0;
 
     foreach ($allRows as $row) {
-        $title = $row['TITEL'] ?? '';
+        $totalChecked++;
 
-        // Filter by NGO keywords
-        if (!matchesNGOKeywords($title)) {
-            continue;
-        }
+        // Use numeric indices like index.php does
+        $dateStr = $row[4] ?? '';  // Date field
+        $title = $row[6] ?? '';    // Title field
+        $topics = $row[22] ?? '';  // Topics field
 
-        // Parse date
-        $dateStr = $row['DATUM'] ?? '';
+        // Skip if no date
         if (empty($dateStr)) continue;
 
-        try {
-            $entryDate = new DateTime($dateStr);
-        } catch (Exception $e) {
-            continue;
+        // Check if entry is from TODAY - simple string comparison
+        $isToday = ($dateStr === $todayStr);
+        if ($isToday) {
+            $todayCount++;
         }
 
-        // Check if entry is from TODAY (not last 24 hours, but calendar day)
-        if ($entryDate->format('Y-m-d') !== $todayStr) {
-            continue;
+        // Check for NGO keywords in title AND topics (like index.php does!)
+        $searchableText = $title . ' ' . $topics;
+        $hasNGO = matchesNGOKeywords($searchableText);
+
+        if ($hasNGO) {
+            $ngoCount++;
         }
 
-        // Extract relevant information
-        $partyCode = getPartyCode($row['PARTIE'] ?? '[]');
-        $nparl = $row['NPARL'] ?? '';
-        $link = !empty($nparl) ? "https://www.parlament.gv.at/gegenstand/XXVIII/$nparl" : '';
+        if ($isToday && $hasNGO) {
+            $todayNgoCount++;
 
-        $newEntries[] = [
-            'date' => $entryDate->format('d.m.Y'),
-            'title' => $title,
-            'party' => $partyCode,
-            'party_name' => PARTY_NAMES[$partyCode],
-            'party_color' => PARTY_COLORS[$partyCode],
-            'link' => $link,
-            'nparl' => $nparl
-        ];
+            // Extract relevant information
+            $partyCode = getPartyCode($row[21] ?? '[]');  // Party field (numeric index 21)
+            $nparl = $row[14] ?? '';  // Link field (numeric index 14)
+
+            $newEntries[] = [
+                'date' => $dateStr,
+                'title' => $title,
+                'party' => $partyCode,
+                'party_name' => PARTY_NAMES[$partyCode],
+                'party_color' => PARTY_COLORS[$partyCode],
+                'link' => $nparl,
+                'nparl' => $nparl
+            ];
+        }
     }
 
-    // Sort by date (newest first)
+    echo "Checked $totalChecked total rows\n";
+    echo "Entries from today: $todayCount\n";
+    echo "NGO entries (all): $ngoCount\n";
+    echo "NGO entries from today: $todayNgoCount\n";
+
+    // Sort by date (newest first) - but since all are from today, sort by title
     usort($newEntries, function($a, $b) {
-        return strcmp($b['date'], $a['date']);
+        return strcmp($a['title'], $b['title']);
     });
 
     return $newEntries;

@@ -197,7 +197,7 @@
                     <div class="mt-2 space-x-4">
                         <a href="index.php" class="text-xs font-mono text-gray-500 hover:text-white transition-colors underline">Dashboard</a>
                         <a href="kontakt.php" class="text-xs font-mono text-gray-500 hover:text-white transition-colors underline">Kontakt</a>
-                        <a href="mailingliste.php" class="text-xs font-mono text-blue-400 hover:text-blue-300 transition-colors underline">📧 Newsletter</a>
+                        <a href="mailingliste.php" class="text-xs font-mono text-blue-400 hover:text-blue-300 transition-colors underline">Newsletter</a>
                     </div>
                 </div>
 

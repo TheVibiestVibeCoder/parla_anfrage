@@ -366,7 +366,7 @@ try {
                 <!-- Security Note -->
                 <div class="mt-8 text-center">
                     <p class="text-xs text-gray-600 font-mono">
-                        🔐 Diese Seite ist DDoS-geschützt mit Rate-Limiting<br>
+                        Diese Seite ist zur Sicherheit mit einem Rate-Limiting ausgestattet<br>
                         Max. 3 Anmeldeversuche pro Stunde
                     </p>
                 </div>

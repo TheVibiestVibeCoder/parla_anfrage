@@ -145,34 +145,70 @@ class MailingListDB {
     }
 
     /**
-     * Add a new subscriber
+     * Add a new subscriber or reactivate existing one
      */
     public function addSubscriber($email, $ipAddress = null, $userAgent = null) {
         try {
-            // Generate confirmation token
-            $confirmationToken = bin2hex(random_bytes(32));
+            $email = strtolower(trim($email));
 
+            // Check if email already exists
             $stmt = $this->db->prepare("
-                INSERT INTO subscribers (email, confirmation_token, ip_address, user_agent, confirmed)
-                VALUES (:email, :token, :ip, :ua, 1)
+                SELECT id, active FROM subscribers WHERE email = :email
             ");
+            $stmt->execute([':email' => $email]);
+            $existing = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            $stmt->execute([
-                ':email' => strtolower(trim($email)),
-                ':token' => $confirmationToken,
-                ':ip' => $ipAddress,
-                ':ua' => $userAgent
-            ]);
+            if ($existing) {
+                // Email exists
+                if ($existing['active'] == 1) {
+                    // Already active - throw error
+                    throw new Exception('Diese E-Mail-Adresse ist bereits registriert.');
+                } else {
+                    // Inactive - reactivate it
+                    $stmt = $this->db->prepare("
+                        UPDATE subscribers
+                        SET active = 1,
+                            subscribed_at = datetime('now'),
+                            ip_address = :ip,
+                            user_agent = :ua
+                        WHERE email = :email
+                    ");
+                    $stmt->execute([
+                        ':email' => $email,
+                        ':ip' => $ipAddress,
+                        ':ua' => $userAgent
+                    ]);
 
-            return [
-                'success' => true,
-                'token' => $confirmationToken
-            ];
+                    return [
+                        'success' => true,
+                        'token' => null, // Existing token remains
+                        'reactivated' => true
+                    ];
+                }
+            } else {
+                // New subscriber - insert
+                $confirmationToken = bin2hex(random_bytes(32));
+
+                $stmt = $this->db->prepare("
+                    INSERT INTO subscribers (email, confirmation_token, ip_address, user_agent, confirmed)
+                    VALUES (:email, :token, :ip, :ua, 1)
+                ");
+
+                $stmt->execute([
+                    ':email' => $email,
+                    ':token' => $confirmationToken,
+                    ':ip' => $ipAddress,
+                    ':ua' => $userAgent
+                ]);
+
+                return [
+                    'success' => true,
+                    'token' => $confirmationToken,
+                    'reactivated' => false
+                ];
+            }
 
         } catch (PDOException $e) {
-            if (strpos($e->getMessage(), 'UNIQUE constraint failed') !== false) {
-                throw new Exception('Diese E-Mail-Adresse ist bereits registriert.');
-            }
             error_log('Add subscriber error: ' . $e->getMessage());
             throw new Exception('Fehler beim Speichern der E-Mail-Adresse.');
         }

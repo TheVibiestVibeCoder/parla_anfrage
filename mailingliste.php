@@ -7,6 +7,7 @@ require_once __DIR__ . '/MailingListDB.php';
 
 // Initialize variables
 $success = false;
+$reactivated = false;
 $error = false;
 $errorMessage = '';
 $db = null;
@@ -68,6 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     if ($result['success']) {
                         $success = true;
+                        $reactivated = $result['reactivated'] ?? false;
                         $email = ''; // Clear form
                     }
                 } catch (Exception $e) {
@@ -287,8 +289,13 @@ try {
                 <!-- Success/Error Messages -->
                 <?php if ($success): ?>
                     <div class="alert alert-success">
-                        <strong>✅ Erfolgreich angemeldet!</strong><br>
-                        Sie erhalten ab heute täglich um 20:00 Uhr eine E-Mail mit den neuesten Anfragen – falls vorhanden.
+                        <?php if ($reactivated): ?>
+                            <strong>✅ Willkommen zurück!</strong><br>
+                            Sie haben sich erfolgreich wieder angemeldet und erhalten ab heute täglich um 20:00 Uhr eine E-Mail mit den neuesten Anfragen – falls vorhanden.
+                        <?php else: ?>
+                            <strong>✅ Erfolgreich angemeldet!</strong><br>
+                            Sie erhalten ab heute täglich um 20:00 Uhr eine E-Mail mit den neuesten Anfragen – falls vorhanden.
+                        <?php endif; ?>
                         Sollte die FPÖ mal faul sein, erhalten Sie eine unterhaltsame Nachricht von uns. 😄
                     </div>
                 <?php endif; ?>

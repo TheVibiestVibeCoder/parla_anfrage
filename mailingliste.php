@@ -282,7 +282,7 @@ try {
                         Erhalten Sie täglich Updates über neue parlamentarische Anfragen zum Thema NGO-Business.
                     </p>
                     <div class="stats-badge">
-                        <?php echo number_format($subscriberCount, 0, ',', '.'); ?> Abonnenten
+                        <?php echo number_format($subscriberCount, 0, ',', '.'); ?> Abonnent:innen
                     </div>
                 </div>
 

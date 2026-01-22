@@ -175,7 +175,11 @@ function getNewEntries() {
 
             // Extract relevant information
             $partyCode = getPartyCode($row[21] ?? '[]');  // Party field (numeric index 21)
-            $nparl = $row[14] ?? '';  // Link field (numeric index 14)
+            $rowLink = $row[14] ?? '';  // Link field (numeric index 14) - relative path
+            $rowNumber = $row[7] ?? '';  // Inquiry number
+
+            // Build full URL like index.php does
+            $fullLink = !empty($rowLink) ? 'https://www.parlament.gv.at' . $rowLink : '';
 
             $newEntries[] = [
                 'date' => $dateStr,
@@ -183,8 +187,8 @@ function getNewEntries() {
                 'party' => $partyCode,
                 'party_name' => PARTY_NAMES[$partyCode],
                 'party_color' => PARTY_COLORS[$partyCode],
-                'link' => $nparl,
-                'nparl' => $nparl
+                'link' => $fullLink,
+                'number' => $rowNumber
             ];
         }
     }
@@ -342,14 +346,25 @@ function sendEmailToSubscribers($subscribers, $subject, $entries) {
     $successCount = 0;
     $failCount = 0;
 
+    // Use clean sender address
+    $fromEmail = 'noreply@ngo-business.at';
+    $fromName = 'NGO Business Tracker';
+    $replyTo = 'kontakt@ngo-business.at';
+
     $headers = [
         'MIME-Version: 1.0',
         'Content-Type: text/html; charset=UTF-8',
-        'From: NGO Business Tracker <noreply@' . ($_SERVER['HTTP_HOST'] ?? 'ngo-business.at') . '>',
-        'X-Mailer: PHP/' . phpversion()
+        'From: ' . $fromName . ' <' . $fromEmail . '>',
+        'Reply-To: ' . $replyTo,
+        'X-Mailer: PHP/' . phpversion(),
+        'X-Priority: 3',
+        'Return-Path: ' . $fromEmail
     ];
 
     $headersString = implode("\r\n", $headers);
+
+    // Additional parameters for mail() to set envelope sender
+    $additionalParams = '-f' . $fromEmail;
 
     foreach ($subscribers as $subscriber) {
         $email = $subscriber['email'];
@@ -358,7 +373,8 @@ function sendEmailToSubscribers($subscribers, $subject, $entries) {
             // Generate personalized email with unsubscribe link for this specific recipient
             $htmlBody = generateEmailHTML($entries, $email);
 
-            if (mail($email, $subject, $htmlBody, $headersString)) {
+            // Use 5th parameter to set envelope sender (Return-Path)
+            if (mail($email, $subject, $htmlBody, $headersString, $additionalParams)) {
                 $successCount++;
             } else {
                 $failCount++;

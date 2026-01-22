@@ -4,6 +4,12 @@ cache/*.dat
 
 # PHP error logs
 php_errors.log
+email-sender-errors.log
+
+# Mailing list database and runtime files
+mailinglist.db
+mailinglist.db-shm
+mailinglist.db-wal
 
 # OS files
 .DS_Store

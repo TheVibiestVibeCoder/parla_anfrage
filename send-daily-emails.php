@@ -135,8 +135,9 @@ function getNewEntries() {
     $allRows = $apiResponse['rows'];
     $newEntries = [];
 
-    // Calculate cutoff date (24 hours ago)
-    $cutoffDate = new DateTime('24 hours ago');
+    // Get today's date at 00:00 (midnight)
+    $today = new DateTime('today');
+    $todayStr = $today->format('Y-m-d');
 
     foreach ($allRows as $row) {
         $title = $row['TITEL'] ?? '';
@@ -156,8 +157,8 @@ function getNewEntries() {
             continue;
         }
 
-        // Check if entry is from last 24 hours
-        if ($entryDate < $cutoffDate) {
+        // Check if entry is from TODAY (not last 24 hours, but calendar day)
+        if ($entryDate->format('Y-m-d') !== $todayStr) {
             continue;
         }
 
@@ -185,9 +186,13 @@ function getNewEntries() {
     return $newEntries;
 }
 
-function generateEmailHTML($entries) {
+function generateEmailHTML($entries, $recipientEmail) {
     $entryCount = count($entries);
     $date = date('d.m.Y');
+
+    // Generate unsubscribe link with token
+    $unsubToken = hash('sha256', $recipientEmail . 'ngo-unsubscribe-salt-2026');
+    $unsubscribeUrl = 'https://' . ($_SERVER['HTTP_HOST'] ?? 'ngo-business.at') . '/unsubscribe.php?email=' . urlencode($recipientEmail) . '&token=' . $unsubToken;
 
     ob_start();
     ?>
@@ -220,11 +225,11 @@ function generateEmailHTML($entries) {
                         <td style="padding: 30px;">
                             <?php if ($entryCount > 0): ?>
                                 <h2 style="margin: 0 0 20px 0; font-size: 24px; color: #3B82F6;">
-                                    📋 <?php echo $entryCount; ?> neue Anfrage<?php echo $entryCount > 1 ? 'n' : ''; ?> in den letzten 24 Stunden
+                                    📋 <?php echo $entryCount; ?> neue Anfrage<?php echo $entryCount > 1 ? 'n' : ''; ?> heute
                                 </h2>
 
                                 <p style="margin: 0 0 30px 0; font-size: 14px; line-height: 1.6; color: #E5E5E5;">
-                                    Hier ist eine Übersicht der neuesten parlamentarischen Anfragen zum Thema NGO-Business:
+                                    Hier sind die heutigen parlamentarischen Anfragen zum Thema NGO-Business:
                                 </p>
 
                                 <?php foreach ($entries as $entry): ?>
@@ -288,9 +293,14 @@ function generateEmailHTML($entries) {
                             <p style="margin: 20px 0 10px 0; font-size: 11px; color: #666666;">
                                 Sie erhalten diese E-Mail, weil Sie sich für den täglichen Newsletter angemeldet haben.
                             </p>
+                            <p style="margin: 0 0 10px 0; font-size: 11px; color: #666666;">
+                                <a href="<?php echo htmlspecialchars($unsubscribeUrl); ?>" style="color: #EF4444; text-decoration: underline;">
+                                    Newsletter abbestellen
+                                </a>
+                            </p>
                             <p style="margin: 0; font-size: 11px; color: #666666;">
                                 © <?php echo date('Y'); ?> NGO Business Tracker |
-                                <a href="https://<?php echo $_SERVER['HTTP_HOST'] ?? 'ngo-business.com'; ?>/impressum.php" style="color: #666666;">Impressum</a>
+                                <a href="https://<?php echo $_SERVER['HTTP_HOST'] ?? 'ngo-business.at'; ?>/impressum.php" style="color: #666666;">Impressum</a>
                             </p>
                         </td>
                     </tr>
@@ -312,14 +322,14 @@ function generateEmailSubject($entryCount) {
     }
 }
 
-function sendEmailToSubscribers($subscribers, $subject, $htmlBody) {
+function sendEmailToSubscribers($subscribers, $subject, $entries) {
     $successCount = 0;
     $failCount = 0;
 
     $headers = [
         'MIME-Version: 1.0',
         'Content-Type: text/html; charset=UTF-8',
-        'From: NGO Business Tracker <noreply@' . ($_SERVER['HTTP_HOST'] ?? 'ngo-business.com') . '>',
+        'From: NGO Business Tracker <noreply@' . ($_SERVER['HTTP_HOST'] ?? 'ngo-business.at') . '>',
         'X-Mailer: PHP/' . phpversion()
     ];
 
@@ -329,6 +339,9 @@ function sendEmailToSubscribers($subscribers, $subject, $htmlBody) {
         $email = $subscriber['email'];
 
         try {
+            // Generate personalized email with unsubscribe link for this specific recipient
+            $htmlBody = generateEmailHTML($entries, $email);
+
             if (mail($email, $subject, $htmlBody, $headersString)) {
                 $successCount++;
             } else {
@@ -370,21 +383,20 @@ try {
         exit(0);
     }
 
-    // Fetch new entries from last 24 hours
+    // Fetch new entries from today
     echo "Fetching new entries from Parliament API...\n";
     $newEntries = getNewEntries();
     $entryCount = count($newEntries);
 
-    echo "Found $entryCount new entries in the last 24 hours.\n";
+    echo "Found $entryCount new entries from today.\n";
 
-    // Generate email
+    // Generate email subject
     $subject = generateEmailSubject($entryCount);
-    $htmlBody = generateEmailHTML($newEntries);
 
     echo "Sending emails to $subscriberCount subscribers...\n";
 
-    // Send emails
-    $result = sendEmailToSubscribers($subscribers, $subject, $htmlBody);
+    // Send emails (each with personalized unsubscribe link)
+    $result = sendEmailToSubscribers($subscribers, $subject, $newEntries);
 
     echo "Emails sent: {$result['success']} successful, {$result['failed']} failed\n";
 

@@ -221,111 +221,162 @@ function generateEmailHTML($entries, $recipientEmail) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NGO Business Tracker - Täglicher Newsletter</title>
+    <title>NGO Business Tracker - Daily Report</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600&family=JetBrains+Mono:wght@400;700&display=swap');
+    </style>
 </head>
-<body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #000000; color: #ffffff;">
+<body style="margin: 0; padding: 0; font-family: 'Inter', Helvetica, Arial, sans-serif; background-color: #000000; color: #ffffff;">
     <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #000000;">
         <tr>
-            <td align="center" style="padding: 40px 20px;">
-                <table width="600" cellpadding="0" cellspacing="0" style="max-width: 600px; background-color: #111111; border: 1px solid #333333; border-radius: 8px;">
-                    <!-- Header -->
+            <td align="center" style="padding: 20px 10px;">
+                <table width="600" cellpadding="0" cellspacing="0" style="max-width: 600px; width: 100%; background-color: #000000; border: 2px solid #ffffff;">
+                    
                     <tr>
-                        <td style="padding: 30px; text-align: center; border-bottom: 2px solid #3B82F6;">
-                            <h1 style="margin: 0; font-size: 32px; font-weight: bold; letter-spacing: 2px; color: #ffffff;">
-                                "NGO BUSINESS" TRACKER
-                            </h1>
-                            <p style="margin: 10px 0 0 0; font-size: 14px; color: #9CA3AF;">
-                                Täglicher Newsletter vom <?php echo $date; ?>
-                            </p>
+                        <td style="padding: 40px 30px 20px 30px; text-align: left; border-bottom: 2px solid #333333;">
+                            <table width="100%" cellpadding="0" cellspacing="0">
+                                <tr>
+                                    <td valign="middle" style="padding-bottom: 15px;">
+                                        <div style="width: 12px; height: 12px; background-color: #ffffff;"></div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td valign="middle">
+                                        <h1 style="margin: 0; font-family: 'Bebas Neue', Impact, 'Arial Narrow', sans-serif; font-size: 42px; line-height: 1.0; font-weight: normal; color: #ffffff; letter-spacing: 1px; text-transform: uppercase;">
+                                            NGO Business<br>Tracker
+                                        </h1>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-top: 15px;">
+                                        <span style="font-family: 'JetBrains Mono', 'Courier New', Courier, monospace; font-size: 11px; letter-spacing: 2px; color: #666666; text-transform: uppercase;">
+                                            PARLAMENTARISCHE ANFRAGEN // <?php echo $date; ?>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </table>
                         </td>
                     </tr>
 
-                    <!-- Content -->
                     <tr>
                         <td style="padding: 30px;">
+                            
                             <?php if ($entryCount > 0): ?>
-                                <h2 style="margin: 0 0 20px 0; font-size: 24px; color: #3B82F6;">
-                                    📋 <?php echo $entryCount; ?> neue Anfrage<?php echo $entryCount > 1 ? 'n' : ''; ?> heute
-                                </h2>
+                                <div style="margin-bottom: 30px;">
+                                    <span style="display: inline-block; padding: 4px 8px; background-color: #3B82F6; color: #ffffff; font-family: 'JetBrains Mono', 'Courier New', Courier, monospace; font-size: 12px; font-weight: bold; text-transform: uppercase;">
+                                        NEUE DATEN
+                                    </span>
+                                    <h2 style="margin: 15px 0 0 0; font-family: 'Inter', Helvetica, Arial, sans-serif; font-size: 16px; font-weight: normal; color: #cccccc; line-height: 1.5;">
+                                        Das Parlament hat heute <strong style="color: #ffffff;"><?php echo $entryCount; ?> Anfrage<?php echo $entryCount > 1 ? 'n' : ''; ?></strong> zum Thema NGOs veröffentlicht.
+                                    </h2>
+                                </div>
 
-                                <p style="margin: 0 0 30px 0; font-size: 14px; line-height: 1.6; color: #E5E5E5;">
-                                    Hier sind die heutigen parlamentarischen Anfragen zum Thema NGO-Business:
-                                </p>
-
-                                <?php foreach ($entries as $entry): ?>
-                                    <div style="margin-bottom: 20px; padding: 20px; background-color: #1a1a1a; border-left: 4px solid <?php echo $entry['party_color']; ?>; border-radius: 4px;">
-                                        <div style="margin-bottom: 10px;">
-                                            <span style="display: inline-block; padding: 4px 12px; background-color: <?php echo $entry['party_color']; ?>; color: #ffffff; font-size: 12px; font-weight: bold; border-radius: 12px;">
-                                                <?php echo htmlspecialchars($entry['party_name']); ?>
-                                            </span>
-                                            <span style="margin-left: 10px; font-size: 12px; color: #9CA3AF;">
-                                                📅 <?php echo htmlspecialchars($entry['date']); ?>
-                                            </span>
-                                        </div>
-
-                                        <p style="margin: 10px 0; font-size: 14px; line-height: 1.5; color: #E5E5E5;">
-                                            <?php echo htmlspecialchars($entry['title']); ?>
-                                        </p>
-
-                                        <?php if (!empty($entry['link'])): ?>
-                                            <a href="<?php echo htmlspecialchars($entry['link']); ?>" style="display: inline-block; margin-top: 10px; padding: 8px 16px; background-color: #3B82F6; color: #ffffff; text-decoration: none; font-size: 12px; border-radius: 4px;">
-                                                🔗 Anfrage ansehen
-                                            </a>
-                                        <?php endif; ?>
-                                    </div>
+                                <table width="100%" cellpadding="0" cellspacing="0">
+                                <?php foreach ($entries as $index => $entry): ?>
+                                    <tr>
+                                        <td style="padding-bottom: 20px;">
+                                            <div style="border: 1px solid #333333; background-color: #0a0a0a;">
+                                                <table width="100%" cellpadding="0" cellspacing="0">
+                                                    <tr>
+                                                        <td width="6" style="background-color: <?php echo $entry['party_color']; ?>;"></td>
+                                                        
+                                                        <td style="padding: 12px 15px; border-bottom: 1px solid #222222;">
+                                                            <table width="100%" cellpadding="0" cellspacing="0">
+                                                                <tr>
+                                                                    <td align="left">
+                                                                        <span style="font-family: 'JetBrains Mono', 'Courier New', Courier, monospace; font-weight: bold; font-size: 12px; color: <?php echo $entry['party_color']; ?>;">
+                                                                            <?php echo htmlspecialchars($entry['party_name']); ?>
+                                                                        </span>
+                                                                    </td>
+                                                                    <td align="right">
+                                                                        <span style="font-family: 'JetBrains Mono', 'Courier New', Courier, monospace; font-size: 10px; color: #666666;">
+                                                                            <?php echo htmlspecialchars($entry['date']); ?> | <?php echo htmlspecialchars($entry['number']); ?>
+                                                                        </span>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                                
+                                                <table width="100%" cellpadding="0" cellspacing="0">
+                                                    <tr>
+                                                        <td style="padding: 15px;">
+                                                            <a href="<?php echo htmlspecialchars($entry['link']); ?>" style="text-decoration: none; display: block;">
+                                                                <span style="display: block; font-family: 'Inter', Helvetica, Arial, sans-serif; font-size: 15px; font-weight: 600; color: #ffffff; line-height: 1.4; margin-bottom: 10px;">
+                                                                    <?php echo htmlspecialchars($entry['title']); ?>
+                                                                </span>
+                                                                <span style="display: inline-block; font-family: 'JetBrains Mono', 'Courier New', Courier, monospace; font-size: 11px; color: #999999; text-transform: uppercase; border-bottom: 1px solid #333333;">
+                                                                    ZUR ANFRAGE &rarr;
+                                                                </span>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </td>
+                                    </tr>
                                 <?php endforeach; ?>
+                                </table>
 
                             <?php else: ?>
-                                <div style="text-align: center; padding: 40px 20px;">
-                                    <h2 style="margin: 0 0 20px 0; font-size: 28px; color: #3B82F6;">
-                                        😴 Heut war die FPÖ wohl faul...
+                                <div style="text-align: center; padding: 40px 20px; border: 1px dashed #333333;">
+                                    <h2 style="margin: 0 0 15px 0; font-family: 'Bebas Neue', Impact, 'Arial Narrow', sans-serif; font-size: 32px; letter-spacing: 1px; color: #333333;">
+                                        KEINE AKTIVITÄT
                                     </h2>
-
-                                    <p style="margin: 0 0 10px 0; font-size: 16px; line-height: 1.6; color: #E5E5E5;">
+                                    
+                                    <p style="margin: 0; font-family: 'Inter', Helvetica, Arial, sans-serif; font-size: 14px; color: #666666; line-height: 1.6;">
                                         <?php
                                         $funnyMessages = [
-                                            "Aber keine Sorge, morgen kommt bestimmt was!",
-                                            "Vielleicht haben sie heute ausnahmsweise Urlaub? 🏖️",
-                                            "Die Anfrage-Maschinerie macht wohl Pause... für einen Tag.",
-                                            "Stille im Parlament – ein seltenes Phänomen! 🦄",
-                                            "Heute mal keine NGO-Panik. Genießen Sie die Ruhe! ☕",
-                                            "Scheint, als hätte heute jemand den Anfrage-Generator ausgesteckt.",
-                                            "Ein Tag ohne NGO-Anfrage ist wie... eigentlich ganz entspannt! 😌"
+                                            "Aber keine Sorge, morgen kommt bestimmt was.",
+                                            "Vielleicht haben sie heute ausnahmsweise Urlaub?",
+                                            "Die Anfrage-Maschinerie macht wohl Pause.",
+                                            "Stille im Parlament – ein seltenes Phänomen.",
+                                            "Heute mal keine NGO-Panik. Genießen Sie die Ruhe.",
+                                            "Scheint, als hätte heute jemand den Anfrage-Generator ausgesteckt."
                                         ];
                                         echo $funnyMessages[array_rand($funnyMessages)];
                                         ?>
                                     </p>
                                 </div>
                             <?php endif; ?>
-                        </td>
-                    </tr>
 
-                    <!-- Footer -->
-                    <tr>
-                        <td style="padding: 30px; background-color: #0a0a0a; border-top: 1px solid #333333; text-align: center;">
-                            <p style="margin: 0 0 10px 0; font-size: 12px; color: #9CA3AF;">
-                                Mehr Informationen und Statistiken finden Sie auf:
-                            </p>
-                            <a href="https://<?php echo $_SERVER['HTTP_HOST'] ?? 'ngo-business.com'; ?>" style="display: inline-block; margin-bottom: 20px; padding: 10px 20px; background-color: #3B82F6; color: #ffffff; text-decoration: none; font-size: 14px; border-radius: 4px;">
-                                🌐 NGO Business Tracker besuchen
-                            </a>
-
-                            <p style="margin: 20px 0 10px 0; font-size: 11px; color: #666666;">
-                                Sie erhalten diese E-Mail, weil Sie sich für den täglichen Newsletter angemeldet haben.
-                            </p>
-                            <p style="margin: 0 0 10px 0; font-size: 11px; color: #666666;">
-                                <a href="<?php echo htmlspecialchars($unsubscribeUrl); ?>" style="color: #EF4444; text-decoration: underline;">
-                                    Newsletter abbestellen
+                            <div style="margin-top: 30px; text-align: center;">
+                                <a href="https://<?php echo $_SERVER['HTTP_HOST'] ?? 'ngo-business.at'; ?>" style="display: inline-block; padding: 12px 24px; border: 1px solid #ffffff; background-color: transparent; color: #ffffff; text-decoration: none; font-family: 'JetBrains Mono', 'Courier New', Courier, monospace; font-size: 12px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">
+                                    Zum Dashboard
                                 </a>
-                            </p>
-                            <p style="margin: 0; font-size: 11px; color: #666666;">
-                                © <?php echo date('Y'); ?> NGO Business Tracker |
-                                <a href="https://<?php echo $_SERVER['HTTP_HOST'] ?? 'ngo-business.at'; ?>/impressum.php" style="color: #666666;">Impressum</a>
-                            </p>
+                            </div>
+
                         </td>
                     </tr>
+
+                    <tr>
+                        <td style="padding: 20px 30px; background-color: #0a0a0a; border-top: 1px solid #222222; text-align: left;">
+                            <table width="100%" cellpadding="0" cellspacing="0">
+                                <tr>
+                                    <td style="padding-bottom: 10px;">
+                                        <p style="margin: 0; font-family: 'Inter', Helvetica, Arial, sans-serif; font-size: 11px; color: #444444; line-height: 1.4;">
+                                            Dieser Newsletter wurde automatisch generiert. Sie erhalten ihn, weil Sie sich auf dem NGO Business Tracker angemeldet haben.
+                                        </p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <p style="margin: 0; font-family: 'JetBrains Mono', 'Courier New', Courier, monospace; font-size: 10px; color: #333333; text-transform: uppercase;">
+                                            &copy; <?php echo date('Y'); ?> NGO Business Tracker
+                                            <span style="color: #333333; padding: 0 5px;">/</span>
+                                            <a href="https://<?php echo $_SERVER['HTTP_HOST'] ?? 'ngo-business.at'; ?>/impressum.php" style="color: #555555; text-decoration: none;">Impressum</a>
+                                            <span style="color: #333333; padding: 0 5px;">/</span>
+                                            <a href="<?php echo htmlspecialchars($unsubscribeUrl); ?>" style="color: #EF4444; text-decoration: none;">Abmelden</a>
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
                 </table>
-            </td>
+                </td>
         </tr>
     </table>
 </body>

@@ -5,6 +5,19 @@
 // This script should be run via cron at 20:00 daily
 // Example cron: 0 20 * * * /usr/bin/php /path/to/send-daily-emails.php
 
+// SECURITY: Only allow execution via CLI or with secret token
+if (php_sapi_name() !== 'cli') {
+    // Allow web execution only with secret token
+    // IMPORTANT: Change this token to something random and keep it secret!
+    $secretToken = 'a770374e67f3b9b2ab510f4dcd815291';
+    $providedToken = $_GET['token'] ?? '';
+
+    if ($providedToken !== $secretToken) {
+        http_response_code(403);
+        die('Access denied. This script can only be executed via command line or with valid token.');
+    }
+}
+
 require_once __DIR__ . '/MailingListDB.php';
 
 // Error handling

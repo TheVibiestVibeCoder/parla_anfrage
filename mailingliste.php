@@ -337,8 +337,6 @@ try {
                             <span class="text-sm text-gray-300 font-sans leading-relaxed">
                                 Ich stimme zu, dass meine E-Mail-Adresse zum Versand des täglichen Newsletters
                                 gespeichert und verarbeitet wird. Ich kann mich jederzeit wieder abmelden.
-                                Die <a href="impressum.php" class="text-blue-400 hover:text-blue-300 underline">Datenschutzerklärung</a>
-                                habe ich zur Kenntnis genommen.
                                 <span class="text-red-400">*</span>
                             </span>
                         </label>

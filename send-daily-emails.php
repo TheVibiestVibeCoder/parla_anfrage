@@ -355,16 +355,18 @@ function sendEmailToSubscribers($subscribers, $subject, $entries) {
         'MIME-Version: 1.0',
         'Content-Type: text/html; charset=UTF-8',
         'From: ' . $fromName . ' <' . $fromEmail . '>',
+        'Sender: NGO Business Newsletter <newsletter@ngo-business.at>',  // Override "Absender" field
         'Reply-To: ' . $replyTo,
-        'X-Mailer: PHP/' . phpversion(),
+        'X-Mailer: NGO-Business-Tracker/1.0',  // Custom mailer string
         'X-Priority: 3',
-        'Return-Path: ' . $fromEmail
+        'Return-Path: ' . $fromEmail,
+        'Organization: NGO Business Tracker'  // Add organization header
     ];
 
     $headersString = implode("\r\n", $headers);
 
     // Additional parameters for mail() to set envelope sender
-    $additionalParams = '-f' . $fromEmail;
+    $additionalParams = '-fnewsletter@ngo-business.at';
 
     foreach ($subscribers as $subscriber) {
         $email = $subscriber['email'];

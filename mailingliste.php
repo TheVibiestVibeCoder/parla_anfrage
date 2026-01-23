@@ -291,7 +291,7 @@ try {
                         </li>
                         <li class="flex gap-3 items-start">
                             <span class="font-mono text-xs text-gray-500 mt-1">03</span>
-                            <span class="text-sm text-gray-300 font-sans"><strong>Zero Spam:</strong> Keine Anfragen = Keine E-Mail (oder eine kurze Statusmeldung).</span>
+                            <span class="text-sm text-gray-300 font-sans"><strong>Zero Spam:</strong> Keine Anfragen = Eine kurze Statusmeldung.</span>
                         </li>
                     </ul>
                 </div>

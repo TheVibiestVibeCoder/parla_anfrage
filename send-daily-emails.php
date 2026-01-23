@@ -329,11 +329,11 @@ function generateEmailHTML($entries, $recipientEmail) {
                                         <?php
                                         $funnyMessages = [
                                             "Aber keine Sorge, morgen kommt bestimmt was.",
-                                            "Vielleicht haben sie heute ausnahmsweise Urlaub?",
-                                            "Die Anfrage-Maschinerie macht wohl Pause.",
-                                            "Stille im Parlament – ein seltenes Phänomen.",
-                                            "Heute mal keine NGO-Panik. Genießen Sie die Ruhe.",
-                                            "Scheint, als hätte heute jemand den Anfrage-Generator ausgesteckt."
+                                            "Vielleicht ist ja heut wo ein Bierzelt?",
+                                            "Da hat wohl wer die Deadline vergessen ...",
+                                            "Heut ist noch nicht aller Tage, die Anfragen kommen wieder, keine Frage.",
+                                            "Heute scheinen NGOs alles richtig gemacht zu haben.",
+                                            "Scheint, als wär ChatGPT wohl down heut."
                                         ];
                                         echo $funnyMessages[array_rand($funnyMessages)];
                                         ?>
@@ -389,7 +389,7 @@ function generateEmailSubject($entryCount) {
     if ($entryCount > 0) {
         return "📋 $entryCount neue NGO-Anfrage" . ($entryCount > 1 ? 'n' : '') . " | NGO Business Tracker";
     } else {
-        return "😴 Heute war die FPÖ wohl faul | NGO Business Tracker";
+        return "Heute war man wohl zu faul | NGO Business Tracker";
     }
 }
 

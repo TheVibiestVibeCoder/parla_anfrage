@@ -328,6 +328,36 @@ if ($cachedData !== null) {
         return $a['timestamp'] <=> $b['timestamp'];
     });
 
+    // Fill in missing time periods to ensure even spacing on X-axis
+    $useDays = in_array($timeRange, ['1week', '1month']);
+    $filledMonthlyData = [];
+    $currentDate = clone $cutoffDate;
+    $now = new DateTime();
+
+    while ($currentDate <= $now) {
+        $timeKey = $useDays ? $currentDate->format('Y-m-d') : $currentDate->format('Y-m');
+
+        if (isset($monthlyData[$timeKey])) {
+            // Use existing data
+            $filledMonthlyData[$timeKey] = $monthlyData[$timeKey];
+        } else {
+            // Add missing period with count 0
+            $filledMonthlyData[$timeKey] = [
+                'count' => 0,
+                'label' => $useDays ? $currentDate->format('d.m.') : $currentDate->format('m.Y'),
+                'timestamp' => $currentDate->getTimestamp()
+            ];
+        }
+
+        // Increment by 1 day or 1 month depending on granularity
+        if ($useDays) {
+            $currentDate->modify('+1 day');
+        } else {
+            $currentDate->modify('+1 month');
+        }
+    }
+    $monthlyData = $filledMonthlyData;
+
     // Sort word frequency
     arsort($wordFrequency);
     $topWords = array_slice($wordFrequency, 0, 50, true);
@@ -375,6 +405,23 @@ foreach ($allNGOResults as $result) {
 uasort($allDates, function($a, $b) {
     return $a <=> $b;
 });
+
+// Fill in missing dates to ensure even spacing on X-axis
+// Use full date range from cutoffDate to now for consistent timeline
+$filledDates = [];
+$currentDate = clone $cutoffDate;
+$now = new DateTime();
+
+while ($currentDate <= $now) {
+    $dateKey = $currentDate->format('Y-m-d');
+    if (isset($allDates[$dateKey])) {
+        $filledDates[$dateKey] = $allDates[$dateKey];
+    } else {
+        $filledDates[$dateKey] = clone $currentDate;
+    }
+    $currentDate->modify('+1 day');
+}
+$allDates = $filledDates;
 
 // Calculate cumulative sums for each party
 foreach (['S', 'V', 'F', 'G', 'N', 'OTHER'] as $party) {

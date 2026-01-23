@@ -229,6 +229,36 @@ if ($cachedData !== null) {
 
     // Log cache hit for debugging
     error_log("Cache HIT for key: $cacheKey");
+
+    // Fill in missing time periods even for cached data to ensure even spacing
+    $useDays = in_array($timeRange, ['1week', '1month']);
+    $filledMonthlyData = [];
+    $currentDate = clone $cutoffDate;
+    $now = new DateTime();
+
+    while ($currentDate <= $now) {
+        $timeKey = $useDays ? $currentDate->format('Y-m-d') : $currentDate->format('Y-m');
+
+        if (isset($monthlyData[$timeKey])) {
+            // Use existing data
+            $filledMonthlyData[$timeKey] = $monthlyData[$timeKey];
+        } else {
+            // Add missing period with count 0
+            $filledMonthlyData[$timeKey] = [
+                'count' => 0,
+                'label' => $useDays ? $currentDate->format('d.m.') : $currentDate->format('m.Y'),
+                'timestamp' => $currentDate->getTimestamp()
+            ];
+        }
+
+        // Increment by 1 day or 1 month depending on granularity
+        if ($useDays) {
+            $currentDate->modify('+1 day');
+        } else {
+            $currentDate->modify('+1 month');
+        }
+    }
+    $monthlyData = $filledMonthlyData;
 } else {
     // Cache miss - fetch and process data, then cache the result
     error_log("Cache MISS for key: $cacheKey - fetching fresh data");

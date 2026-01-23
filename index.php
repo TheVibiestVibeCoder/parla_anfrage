@@ -280,7 +280,7 @@ if ($cachedData !== null) {
         if (!isset($monthlyData[$timeKey])) {
             $monthlyData[$timeKey] = [
                 'count' => 0,
-                'label' => $useDays ? $rowDate->format('d.m.') : $rowDate->format('M Y'),
+                'label' => $useDays ? $rowDate->format('d.m.') : $rowDate->format('m.Y'),
                 'timestamp' => $rowDate->getTimestamp()
             ];
         }
@@ -323,8 +323,10 @@ if ($cachedData !== null) {
         return $b['date_obj'] <=> $a['date_obj'];
     });
 
-    // Sort monthly data
-    ksort($monthlyData);
+    // Sort monthly data by timestamp (chronological order)
+    uasort($monthlyData, function($a, $b) {
+        return $a['timestamp'] <=> $b['timestamp'];
+    });
 
     // Sort word frequency
     arsort($wordFrequency);
@@ -361,7 +363,7 @@ foreach ($allNGOResults as $result) {
     $partyDailyCounts[$result['party']][$dateKey]++;
 }
 
-// Get all unique dates sorted
+// Get all unique dates sorted chronologically by timestamp
 $allDates = [];
 foreach ($allNGOResults as $result) {
     $dateKey = $result['date_obj']->format('Y-m-d');
@@ -369,7 +371,10 @@ foreach ($allNGOResults as $result) {
         $allDates[$dateKey] = $result['date_obj'];
     }
 }
-ksort($allDates);
+// Sort by DateTime object value (chronological order)
+uasort($allDates, function($a, $b) {
+    return $a <=> $b;
+});
 
 // Calculate cumulative sums for each party
 foreach (['S', 'V', 'F', 'G', 'N', 'OTHER'] as $party) {

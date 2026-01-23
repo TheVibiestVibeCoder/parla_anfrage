@@ -104,16 +104,15 @@ try {
 ?>
 
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de" prefix="og: https://ogp.me/ns#">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Newsletter | "NGO Business" Tracker</title>
 
+    <title>Newsletter | "NGO Business" Tracker</title>
     <meta name="description" content="Erhalten Sie täglich Updates über neue parlamentarische Anfragen zum Thema NGO-Business. Bleiben Sie informiert über die neuesten Entwicklungen.">
     <meta name="robots" content="index, follow">
 
-    <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:title" content="Newsletter | NGO Business Tracker">
     <meta property="og:description" content="Erhalten Sie täglich Updates über neue parlamentarische Anfragen zum Thema NGO-Business.">
@@ -121,258 +120,263 @@ try {
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+    
+    <link rel="preload" href="https://fonts.gstatic.com/s/bebasneue/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuI6fMZhrib2Bg-4.woff2" as="font" type="font/woff2" crossorigin fetchpriority="high">
+    <link rel="preload" href="https://fonts.gstatic.com/s/inter/v24/tDbv2o-flEEny0FZhsfKu5WU5zr3E_BX0zS8.woff2" as="font" type="font/woff2" crossorigin fetchpriority="high">
+
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-
+    
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        'bebas': ['"Bebas Neue"', 'cursive'],
-                        'sans': ['"Inter"', 'sans-serif'],
-                        'mono': ['"JetBrains Mono"', 'monospace'],
-                    },
-                    colors: {
-                        'brand-black': '#050505',
-                        'brand-gray': '#1a1a1a',
-                    }
-                }
-            }
-        }
-    </script>
-
-    <style>
+    <link rel="stylesheet" href="styles.css"> <style>
+        /* Essential styles copied/adapted to match index.php look even without external css */
         :root {
-            --bg-color: #000000;
+            --bg-color: #050505;
             --text-color: #ffffff;
-            --border-color: #333333;
         }
 
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
+            font-family: 'Inter', sans-serif;
+        }
+
+        h1, h2, h3, h4, .font-bebas {
+            font-family: 'Bebas Neue', sans-serif;
+        }
+
+        .font-mono {
+            font-family: 'JetBrains Mono', monospace;
         }
 
         .container-custom {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 0 1rem;
+            padding: 0 1.5rem;
         }
 
-        .form-input {
+        /* Input styling to match the raw/investigative look */
+        .investigative-input {
             width: 100%;
+            background-color: transparent;
+            border: 1px solid #333;
+            color: #fff;
             padding: 1rem;
-            background-color: #111;
-            border: 1px solid var(--border-color);
-            color: var(--text-color);
-            border-radius: 4px;
-            font-family: 'Inter', sans-serif;
-            font-size: 1rem;
-            transition: all 0.3s ease;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            transition: border-color 0.3s ease;
         }
 
-        .form-input:focus {
+        .investigative-input:focus {
             outline: none;
-            border-color: #3B82F6;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            border-color: #fff;
         }
 
-        .form-checkbox {
-            width: 1.25rem;
-            height: 1.25rem;
-            border: 2px solid var(--border-color);
-            background-color: #111;
-            cursor: pointer;
-            accent-color: #3B82F6;
-        }
-
-        .btn-primary {
-            background-color: #3B82F6;
-            color: white;
+        .investigative-btn {
+            background-color: #fff;
+            color: #000;
+            border: 1px solid #fff;
             padding: 1rem 2rem;
-            border: none;
-            border-radius: 4px;
-            font-family: 'Bebas Neue', cursive;
-            font-size: 1.25rem;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.5rem;
+            text-transform: uppercase;
             letter-spacing: 0.05em;
             cursor: pointer;
             transition: all 0.3s ease;
-            text-transform: uppercase;
+            width: 100%;
         }
 
-        .btn-primary:hover {
-            background-color: #2563EB;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        .investigative-btn:hover {
+            background-color: transparent;
+            color: #fff;
         }
 
-        .btn-primary:active {
-            transform: translateY(0);
+        /* Checkbox custom styling */
+        .investigative-checkbox {
+            appearance: none;
+            background-color: transparent;
+            margin: 0;
+            font: inherit;
+            color: currentColor;
+            width: 1.25rem;
+            height: 1.25rem;
+            border: 1px solid #fff;
+            display: grid;
+            place-content: center;
+            cursor: pointer;
         }
 
-        .alert {
-            padding: 1rem;
-            border-radius: 4px;
-            margin-bottom: 1.5rem;
-            font-family: 'Inter', sans-serif;
+        .investigative-checkbox::before {
+            content: "";
+            width: 0.65em;
+            height: 0.65em;
+            transform: scale(0);
+            transition: 120ms transform ease-in-out;
+            box-shadow: inset 1em 1em white;
         }
 
-        .alert-success {
-            background-color: rgba(34, 197, 94, 0.1);
-            border: 1px solid #22C55E;
-            color: #22C55E;
+        .investigative-checkbox:checked::before {
+            transform: scale(1);
         }
 
-        .alert-error {
-            background-color: rgba(239, 68, 68, 0.1);
-            border: 1px solid #EF4444;
-            color: #EF4444;
+        .stat-value {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 3rem;
+            line-height: 1;
+            color: #fff;
         }
 
-        .stats-badge {
-            display: inline-block;
-            background: linear-gradient(135deg, #3B82F6, #2563EB);
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
+        .stat-label {
             font-family: 'JetBrains Mono', monospace;
-            font-size: 0.875rem;
-            font-weight: bold;
-        }
-
-        .info-box {
-            background-color: rgba(59, 130, 246, 0.05);
-            border-left: 4px solid #3B82F6;
-            padding: 1.5rem;
-            margin-top: 2rem;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #9ca3af;
         }
     </style>
 </head>
-<body>
-    <!-- Header -->
-    <header class="bg-black border-b border-white py-6">
-        <div class="container-custom">
-            <div class="flex items-center justify-between">
-                <a href="index.php" class="text-2xl font-bebas tracking-wider hover:text-gray-300 transition-colors">
-                    "NGO BUSINESS" TRACKER
-                </a>
-                <nav class="flex gap-6">
-                    <a href="index.php" class="text-sm font-mono text-gray-400 hover:text-white transition-colors">Dashboard</a>
-                    <a href="kontakt.php" class="text-sm font-mono text-gray-400 hover:text-white transition-colors">Kontakt</a>
-                    <a href="impressum.php" class="text-sm font-mono text-gray-400 hover:text-white transition-colors">Impressum</a>
-                </nav>
-            </div>
+<body class="flex flex-col min-h-screen bg-black">
+
+    <header class="w-full absolute top-0 z-50 bg-transparent">
+        <div class="container mx-auto px-6 h-16 flex justify-between items-center">
+            <a href="index.php" class="flex items-center gap-3 group">
+                <div class="w-3 h-3 bg-white group-hover:bg-green-500 transition-colors duration-300"></div>
+                
+                <span class="font-bebas text-xl md:text-2xl tracking-widest text-white mt-1">
+                    <span class="md:hidden">NBT</span>
+                    <span class="hidden md:inline">NGO-Business Tracker</span>
+                </span>
+            </a>
+            
+            <nav class="hidden md:flex gap-8">
+                <a href="index.php" class="text-xs font-mono text-gray-400 hover:text-white uppercase tracking-widest transition-colors">Dashboard</a>
+            </nav>
         </div>
     </header>
 
-    <!-- Main Content -->
-    <main class="flex-1 py-12 md:py-20">
-        <div class="container-custom">
-            <div class="max-w-2xl mx-auto">
-                <!-- Hero Section -->
-                <div class="text-center mb-12">
-                    <h1 class="text-5xl md:text-6xl font-bebas tracking-wider mb-4 uppercase">
-                        Newsletter Anmeldung
-                    </h1>
-                    <p class="text-lg text-gray-400 font-sans mb-6">
-                        Erhalten Sie täglich Updates über neue parlamentarische Anfragen zum Thema NGO-Business.
-                    </p>
-                    <div class="stats-badge">
-                        <?php echo number_format($subscriberCount, 0, ',', '.'); ?> Abonnent:innen
-                    </div>
+    <section class="flex flex-col justify-center items-center text-center bg-black border-b border-white px-4 py-6 md:px-6 md:py-8 lg:py-12 pt-32 pb-16">
+        <div class="max-w-4xl mx-auto w-full">
+            <span class="inline-block border-b border-gray-600 pb-1 mb-4 md:mb-6 text-[10px] md:text-xs font-mono text-gray-400 uppercase tracking-[0.2em]">Service</span>
+            <h1 class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-white leading-[0.9] mb-4 md:mb-6 break-words tracking-tight font-bebas">
+                Newsletter<br>Alert
+            </h1>
+            <p class="text-sm md:text-base lg:text-lg text-gray-300 font-sans leading-relaxed max-w-2xl mx-auto mt-6">
+                Erhalten Sie täglich Updates über neue parlamentarische Anfragen zum Thema NGO-Business.
+            </p>
+        </div>
+    </section>
+
+    <main class="container-custom py-16 md:py-24">
+        
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
+            
+            <div class="lg:col-span-4 flex flex-col gap-10">
+                
+                <div class="border-l-4 border-white pl-6 py-2">
+                    <div class="stat-label">Aktive Abonnent:innen</div>
+                    <div class="stat-value"><?php echo number_format($subscriberCount, 0, ',', '.'); ?></div>
+                    <div class="text-sm font-sans text-gray-400 mt-2 italic">Personen werden bereits informiert.</div>
                 </div>
 
-                <!-- Success/Error Messages -->
-                <?php if ($success): ?>
-                    <div class="alert alert-success">
-                        <?php if ($reactivated): ?>
-                            <strong>Willkommen zurück!</strong><br>
-                            Sie haben sich erfolgreich wieder angemeldet und erhalten ab heute täglich um 20:00 Uhr eine E-Mail mit den neuesten Anfragen – falls vorhanden.
-                        <?php else: ?>
-                            <strong>Erfolgreich angemeldet!</strong><br>
-                            Sie erhalten ab heute täglich um 20:00 Uhr eine E-Mail mit den neuesten Anfragen – falls vorhanden.
-                        <?php endif; ?>
-                        Sollte die FPÖ mal faul sein, erhalten Sie eine unterhaltsame Nachricht von uns. 😄
-                    </div>
-                <?php endif; ?>
-
-                <?php if ($error): ?>
-                    <div class="alert alert-error">
-                        <strong>Fehler</strong><br>
-                        <?php echo htmlspecialchars($errorMessage); ?>
-                    </div>
-                <?php endif; ?>
-
-                <!-- Signup Form -->
-                <form method="POST" class="bg-brand-gray border border-gray-800 rounded-lg p-8 shadow-2xl">
-                    <div class="mb-6">
-                        <label for="email" class="block text-sm font-mono text-gray-400 mb-2 uppercase tracking-wider">
-                            E-Mail-Adresse
-                        </label>
-                        <input
-                            type="email"
-                            id="email"
-                            name="email"
-                            class="form-input"
-                            placeholder="ihre.email@beispiel.at"
-                            value="<?php echo htmlspecialchars($email ?? ''); ?>"
-                            required
-                        >
-                    </div>
-
-                    <!-- GDPR Consent -->
-                    <div class="mb-8">
-                        <label class="flex items-start gap-3 cursor-pointer">
-                            <input
-                                type="checkbox"
-                                name="gdpr_consent"
-                                value="1"
-                                class="form-checkbox mt-1"
-                                required
-                            >
-                            <span class="text-sm text-gray-300 font-sans leading-relaxed">
-                                Ich stimme zu, dass meine E-Mail-Adresse zum Versand des täglichen Newsletters
-                                gespeichert und verarbeitet wird. Ich kann mich jederzeit wieder abmelden.
-                                <span class="text-red-400">*</span>
-                            </span>
-                        </label>
-                    </div>
-
-                    <button type="submit" class="btn-primary w-full">
-                        Jetzt anmelden
-                    </button>
-                </form>
-
-                <!-- Information Box -->
-                <div class="info-box">
-                    <h3 class="text-lg font-bebas tracking-wider mb-3 text-blue-400">
-                        ℹ️ Was Sie erwartet:
-                    </h3>
-                    <ul class="space-y-2 text-sm text-gray-300 font-sans">
-                        <li><strong>Täglich um 20:00 Uhr</strong> erhalten Sie eine E-Mail</li>
-                        <li><strong>Neue Anfragen</strong> werden übersichtlich zusammengefasst</li>
-                        <li><strong>Keine neuen Anfragen?</strong> Dann gibt's eine lustige Nachricht</li>
-                        <li><strong>Ihre Daten sind sicher</strong> – kein Spam, keine Weitergabe</li>
-                        <li><strong>Jederzeit abmelden</strong> – Link in jeder E-Mail</li>
+                <div class="border border-gray-800 p-6 bg-gray-900/30">
+                    <h3 class="font-bebas text-2xl mb-4 text-white">Das Protokoll</h3>
+                    <ul class="space-y-4">
+                        <li class="flex gap-3 items-start">
+                            <span class="font-mono text-xs text-gray-500 mt-1">01</span>
+                            <span class="text-sm text-gray-300 font-sans"><strong>Täglicher Scan:</strong> Das System prüft täglich um 20:00 Uhr auf neue Anfragen.</span>
+                        </li>
+                        <li class="flex gap-3 items-start">
+                            <span class="font-mono text-xs text-gray-500 mt-1">02</span>
+                            <span class="text-sm text-gray-300 font-sans"><strong>Report:</strong> Neue Treffer werden zusammengefasst zugesendet.</span>
+                        </li>
+                        <li class="flex gap-3 items-start">
+                            <span class="font-mono text-xs text-gray-500 mt-1">03</span>
+                            <span class="text-sm text-gray-300 font-sans"><strong>Zero Spam:</strong> Keine Anfragen = Keine E-Mail (oder eine kurze Statusmeldung).</span>
+                        </li>
                     </ul>
                 </div>
+            </div>
 
-                <!-- Security Note -->
-                <div class="mt-8 text-center">
-                    <p class="text-xs text-gray-600 font-mono">
-                        Diese Seite ist zur Sicherheit mit einem Rate-Limiting ausgestattet<br>
-                        Max. 3 Anmeldeversuche pro Stunde
-                    </p>
+            <div class="lg:col-span-8">
+                
+                <div class="border-t-2 border-white pt-8">
+                    <div class="flex items-start mb-8">
+                        <h2 class="text-3xl md:text-4xl text-white font-bebas leading-none">Anmeldung<br><span class="text-gray-500 text-lg font-sans font-normal tracking-normal">Tragen Sie sich in den Verteiler ein</span></h2>
+                    </div>
+
+                    <?php if ($success): ?>
+                        <div class="mb-8 border border-green-900 bg-green-900/10 p-4 flex gap-4 items-start">
+                            <div class="text-green-500 font-mono text-xl">✓</div>
+                            <div>
+                                <h3 class="text-green-500 font-bold font-mono text-sm uppercase tracking-wider mb-1">
+                                    <?php echo $reactivated ? 'REAKTIVIERT' : 'ERFOLGREICH'; ?>
+                                </h3>
+                                <p class="text-gray-300 text-sm font-sans">
+                                    Sie erhalten ab heute täglich um 20:00 Uhr Updates.
+                                </p>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if ($error): ?>
+                        <div class="mb-8 border border-red-900 bg-red-900/10 p-4 flex gap-4 items-start">
+                            <div class="text-red-500 font-mono text-xl">!</div>
+                            <div>
+                                <h3 class="text-red-500 font-bold font-mono text-sm uppercase tracking-wider mb-1">FEHLER</h3>
+                                <p class="text-gray-300 text-sm font-sans"><?php echo htmlspecialchars($errorMessage); ?></p>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+
+                    <form method="POST" class="space-y-6 max-w-xl">
+                        <div>
+                            <label for="email" class="block text-[10px] font-mono text-gray-500 mb-2 uppercase tracking-widest">
+                                E-Mail-Adresse
+                            </label>
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                class="investigative-input"
+                                placeholder="name@beispiel.at"
+                                value="<?php echo htmlspecialchars($email ?? ''); ?>"
+                                required
+                            >
+                        </div>
+
+                        <div class="pt-4">
+                            <label class="flex items-start gap-4 cursor-pointer group">
+                                <input
+                                    type="checkbox"
+                                    name="gdpr_consent"
+                                    value="1"
+                                    class="investigative-checkbox mt-1 group-hover:border-gray-400 transition-colors"
+                                    required
+                                >
+                                <span class="text-xs text-gray-400 font-sans leading-relaxed group-hover:text-gray-300 transition-colors">
+                                    Ich stimme zu, dass meine E-Mail-Adresse zum Versand des täglichen Newsletters gespeichert und verarbeitet wird. Ich kann mich jederzeit über den Link im Newsletter wieder abmelden.
+                                </span>
+                            </label>
+                        </div>
+
+                        <div class="pt-6">
+                            <button type="submit" class="investigative-btn">
+                                Aufnahme in Verteiler
+                            </button>
+                        </div>
+
+                        <div class="text-center pt-4">
+                            <p class="text-[10px] text-gray-600 font-mono uppercase tracking-widest">
+                                RATE LIMIT ACTIVE: MAX 3 REQUESTS/HOUR
+                            </p>
+                        </div>
+                    </form>
+
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- Footer -->
     <footer class="bg-black border-t border-white py-8 md:py-12 mt-auto">
         <div class="container-custom">
             <div class="flex flex-col md:flex-row justify-between items-start gap-8">
@@ -392,13 +396,13 @@ try {
                     <div class="mt-2 space-x-4">
                         <a href="impressum.php" class="text-xs font-mono text-gray-500 hover:text-white transition-colors underline">Impressum</a>
                         <a href="kontakt.php" class="text-xs font-mono text-gray-500 hover:text-white transition-colors underline">Kontakt</a>
-                        <a href="index.php" class="text-xs font-mono text-gray-500 hover:text-white transition-colors underline">Dashboard</a>
+                        <a href="index.php" class="text-xs font-mono text-blue-400 hover:text-blue-300 transition-colors underline">Dashboard</a>
                     </div>
                 </div>
 
                 <div class="text-left md:text-right w-full md:w-auto">
-                    <div class="text-xs font-mono text-gray-500 mb-2">NEWSLETTER SERVICE</div>
-                    <div class="text-xs font-mono text-gray-500 mb-2">DAILY DELIVERY: 20:00</div>
+                    <div class="text-xs font-mono text-gray-500 mb-2">SERVICE: NEWSLETTER</div>
+                    <div class="text-xs font-mono text-gray-500 mb-2">DELIVERY: 20:00 CET</div>
                     <div class="flex items-center justify-start md:justify-end gap-2 mt-4">
                         <div class="w-2 h-2 bg-green-600 rounded-full"></div>
                         <span class="text-xs font-mono text-green-600">SYSTEM OPERATIONAL</span>
@@ -407,5 +411,6 @@ try {
             </div>
         </div>
     </footer>
+
 </body>
 </html>

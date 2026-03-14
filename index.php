@@ -1059,6 +1059,18 @@ $partyMap = [
                 </div>
             </div>
 
+            <div class="akten-info-box mb-6 md:mb-8" role="note" aria-label="Hinweis zur Titeldarstellung">
+                <div class="akten-info-kicker">Transparenz-Hinweis</div>
+                <h3 class="akten-info-title">Warum sehe ich keine Titel?</h3>
+                <p class="akten-info-text">
+                    Gute Frage. Wir wuerden hier gerne die vollstaendigen Betreff-Titel anzeigen, duerfen das laut Lizenzbedingungen des Parlaments aber nicht.
+                    Deshalb werden die Titel in dieser Uebersicht bewusst geschwaerzt dargestellt.
+                </p>
+                <p class="akten-info-text">
+                    Wichtig: Jeder geschwaerzte Titel bleibt anklickbar bzw. antippbar und fuehrt direkt zur Original-Anfrage auf parlament.gv.at.
+                </p>
+            </div>
+
             <?php if (empty($displayResults)): ?>
                 <div class="py-20 text-center border-b border-gray-800">
                     <h3 class="text-gray-500 font-sans italic text-xl">Keine Daten in diesem Bereich gefunden.</h3>

@@ -522,6 +522,57 @@ select:focus { outline: none; border-color: var(--text-muted); }
     background: #161616;
 }
 
+/* DIE AKTEN INFO BOX */
+.akten-info-box {
+    border: 1px solid #303030;
+    border-left: 3px solid #777;
+    background: linear-gradient(180deg, #0f0f0f 0%, #090909 100%);
+    padding: 0.9rem 1rem;
+}
+
+.akten-info-kicker {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #9ca3af;
+    margin-bottom: 0.25rem;
+}
+
+.akten-info-title {
+    font-family: var(--font-head);
+    font-size: 1.55rem;
+    line-height: 1;
+    color: #fff;
+    margin: 0 0 0.45rem 0;
+}
+
+.akten-info-text {
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    line-height: 1.55;
+    color: #c8c8c8;
+    margin: 0;
+}
+
+.akten-info-text + .akten-info-text {
+    margin-top: 0.5rem;
+}
+
+@media (min-width: 768px) {
+    .akten-info-box {
+        padding: 1rem 1.2rem;
+    }
+
+    .akten-info-title {
+        font-size: 1.8rem;
+    }
+
+    .akten-info-text {
+        font-size: 0.95rem;
+    }
+}
+
 /* TITLE REDACTION */
 .redaction-defs {
     position: absolute;

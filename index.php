@@ -120,6 +120,55 @@ function extractAnswerInfo($rowTitle) {
     return ['answered' => false, 'answer_number' => null];
 }
 
+function seededRandomValue($seed) {
+    return ((float) sprintf('%u', crc32((string) $seed))) / 4294967295;
+}
+
+function seededRandomRange($seed, $min, $max) {
+    return $min + seededRandomValue($seed) * ($max - $min);
+}
+
+function renderRedactedTitle($title) {
+    $fallback = '<span class="rw"><span class="rw-ghost">nnnn</span><span class="rw-ink"><span class="rw-l1"></span><span class="rw-l2"></span></span></span>';
+
+    if (!is_string($title) || $title === '') {
+        return $fallback;
+    }
+
+    if (!preg_match_all('/(\S+)(\s*)/u', $title, $matches, PREG_SET_ORDER)) {
+        return $fallback;
+    }
+
+    $filters = ['rf1', 'rf2', 'rf3', 'rf4', 'rf5'];
+    $html = '';
+
+    foreach ($matches as $index => $token) {
+        $word = $token[1];
+        $spaceSuffix = $token[2] ?? '';
+        $ghostToken = str_repeat('n', max(1, (int) mb_strlen($word))) . $spaceSuffix;
+        $escapedGhost = htmlspecialchars($ghostToken, ENT_QUOTES, 'UTF-8');
+
+        $primaryFilter = $filters[$index % count($filters)];
+        $secondaryFilter = $filters[($index + 2) % count($filters)];
+
+        $r1 = number_format(seededRandomRange($title . '|r1|' . $index, -0.9, 0.9), 2, '.', '');
+        $r2 = number_format(seededRandomRange($title . '|r2|' . $index, -0.4, 0.4), 2, '.', '');
+        $sy1 = number_format(seededRandomRange($title . '|sy1|' . $index, 1.10, 1.25), 2, '.', '');
+        $sy2 = number_format(seededRandomRange($title . '|sy2|' . $index, 0.75, 0.90), 2, '.', '');
+        $tx = number_format(seededRandomRange($title . '|tx|' . $index, -1.5, 1.5), 1, '.', '');
+
+        $html .= '<span class="rw">'
+            . '<span class="rw-ghost" aria-hidden="true">' . $escapedGhost . '</span>'
+            . '<span class="rw-ink" aria-hidden="true">'
+            . '<span class="rw-l1" style="filter:url(#' . $primaryFilter . ');transform:rotate(' . $r1 . 'deg) scaleY(' . $sy1 . ') translateX(' . $tx . 'px);"></span>'
+            . '<span class="rw-l2" style="filter:url(#' . $secondaryFilter . ');transform:rotate(' . $r2 . 'deg) scaleY(' . $sy2 . ');"></span>'
+            . '</span>'
+            . '</span>';
+    }
+
+    return $html;
+}
+
 function fetchAllRows($gpCodes) {
     $payload = [
         "GP_CODE" => $gpCodes,
@@ -791,6 +840,31 @@ $partyMap = [
 </head>
 <body class="flex flex-col min-h-screen">
 
+<svg class="redaction-defs" aria-hidden="true" focusable="false">
+    <defs>
+        <filter id="rf1" x="-12%" y="-55%" width="124%" height="210%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.04 0.08" numOctaves="4" seed="3"/>
+            <feDisplacementMap in="SourceGraphic" scale="4.5" xChannelSelector="R" yChannelSelector="G"/>
+        </filter>
+        <filter id="rf2" x="-12%" y="-55%" width="124%" height="210%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.06 0.11" numOctaves="3" seed="17"/>
+            <feDisplacementMap in="SourceGraphic" scale="3.8" xChannelSelector="R" yChannelSelector="G"/>
+        </filter>
+        <filter id="rf3" x="-12%" y="-55%" width="124%" height="210%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.03 0.07" numOctaves="5" seed="41"/>
+            <feDisplacementMap in="SourceGraphic" scale="5.2" xChannelSelector="R" yChannelSelector="G"/>
+        </filter>
+        <filter id="rf4" x="-12%" y="-55%" width="124%" height="210%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.05 0.13" numOctaves="3" seed="29"/>
+            <feDisplacementMap in="SourceGraphic" scale="4.0" xChannelSelector="R" yChannelSelector="G"/>
+        </filter>
+        <filter id="rf5" x="-12%" y="-55%" width="124%" height="210%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.035 0.09" numOctaves="4" seed="57"/>
+            <feDisplacementMap in="SourceGraphic" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+        </filter>
+    </defs>
+</svg>
+
 <header class="w-full absolute top-0 z-50 bg-transparent">
     <div class="container mx-auto px-6 h-16 flex justify-between items-center">
         <a href="index.php" class="flex items-center gap-3 group">
@@ -1021,8 +1095,9 @@ $partyMap = [
                             </div>
 
                             <div class="md:col-span-7">
-                                <a href="<?php echo htmlspecialchars($result['link']); ?>" target="_blank" class="text-base md:text-lg text-white font-sans leading-snug hover:underline decoration-1 underline-offset-4 decoration-gray-500 block">
-                                    <?php echo htmlspecialchars($result['title']); ?>
+                                <a href="<?php echo htmlspecialchars($result['link']); ?>" target="_blank" rel="noopener noreferrer" class="redact-field" aria-label="Titel geschwaerzt. Anfrage auf parlament.gv.at oeffnen.">
+                                    <span class="redacted-title" aria-hidden="true"><?php echo renderRedactedTitle($result['title']); ?></span>
+                                    <span class="redact-hint">Titel nicht lizenziert &middot; parlament.gv.at</span>
                                 </a>
                             </div>
 

@@ -522,6 +522,99 @@ select:focus { outline: none; border-color: var(--text-muted); }
     background: #161616;
 }
 
+/* TITLE REDACTION */
+.redaction-defs {
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+}
+
+.redact-field {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+}
+
+.redact-field:focus-visible {
+    outline: 1px solid #666;
+    outline-offset: 4px;
+}
+
+.redacted-title {
+    display: block;
+}
+
+.rw {
+    display: inline;
+    position: relative;
+    line-height: 1.95;
+}
+
+.rw-ghost {
+    visibility: hidden;
+    user-select: none;
+    font-size: clamp(1rem, 2.8vw, 1.125rem);
+    font-weight: 600;
+}
+
+.rw-ink {
+    position: absolute;
+    top: 2px;
+    left: -3px;
+    right: -3px;
+    bottom: 2px;
+    pointer-events: none;
+    overflow: visible;
+}
+
+.rw-l1,
+.rw-l2 {
+    position: absolute;
+    border-radius: 2px 1px 2px 1px;
+}
+
+.rw-l1 {
+    inset: 0;
+    background: #070707;
+}
+
+.rw-l2 {
+    top: 2px;
+    left: 3px;
+    right: 3px;
+    bottom: 1px;
+    background: #151515;
+    opacity: 0.55;
+}
+
+.redact-hint {
+    display: inline-block;
+    margin-top: 0.45rem;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #6b7280;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.result-item:hover .redact-hint,
+.redact-field:focus-visible .redact-hint {
+    opacity: 1;
+}
+
+@media (max-width: 767px) {
+    .redact-hint {
+        opacity: 0.9;
+    }
+
+    .rw {
+        line-height: 1.8;
+    }
+}
+
 /* PAGINATION */
 .pag-btn {
     font-family: var(--font-body);

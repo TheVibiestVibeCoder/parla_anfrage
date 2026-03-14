@@ -93,6 +93,38 @@ function matchesNGOKeywords($text) {
     return false;
 }
 
+function seededRandomValue($seed) {
+    return ((float) sprintf('%u', crc32((string) $seed))) / 4294967295;
+}
+
+function renderEmailRedactedTitle($title) {
+    if (!is_string($title) || $title === '') {
+        return '<span style="display:inline-block;width:72px;height:12px;background-color:#0a0a0a;border-radius:2px;"></span>';
+    }
+
+    if (!preg_match_all('/\S+/u', $title, $matches)) {
+        return '<span style="display:inline-block;width:72px;height:12px;background-color:#0a0a0a;border-radius:2px;"></span>';
+    }
+
+    $bars = '';
+    foreach ($matches[0] as $index => $word) {
+        $len = max(1, (int) mb_strlen($word));
+        $baseWidth = 14 + ($len * 7.2);
+        $widthJitter = (seededRandomValue($title . '|w|' . $index) - 0.5) * 6;
+        $heightJitter = seededRandomValue($title . '|h|' . $index) * 3;
+        $shadeOffset = (int) round(seededRandomValue($title . '|o|' . $index));
+
+        $width = (int) max(18, min(180, round($baseWidth + $widthJitter)));
+        $height = (int) max(11, min(15, round(11 + $heightJitter)));
+
+        $bars .= '<span style="display:inline-block;vertical-align:middle;position:relative;width:' . $width . 'px;height:' . $height . 'px;margin:0 6px 7px 0;background-color:#0a0a0a;border-radius:2px;">'
+            . '<span style="position:absolute;top:' . $shadeOffset . 'px;left:3px;right:3px;bottom:1px;background-color:#151515;opacity:0.58;border-radius:1px;"></span>'
+            . '</span>';
+    }
+
+    return '<span style="display:block;line-height:0;font-size:0;">' . $bars . '</span>';
+}
+
 function fetchAllRows($gpCodes) {
     $payload = [
         "GP_CODE" => $gpCodes,
@@ -303,11 +335,11 @@ function generateEmailHTML($entries, $recipientEmail) {
                                                     <tr>
                                                         <td style="padding: 15px;">
                                                             <a href="<?php echo htmlspecialchars($entry['link']); ?>" style="text-decoration: none; display: block;">
-                                                                <span style="display: block; font-family: 'Inter', Helvetica, Arial, sans-serif; font-size: 15px; font-weight: 600; color: #ffffff; line-height: 1.4; margin-bottom: 10px;">
-                                                                    <?php echo htmlspecialchars($entry['title']); ?>
-                                                                </span>
+                                                                <div style="display: block; margin-bottom: 10px;">
+                                                                    <?php echo renderEmailRedactedTitle($entry['title']); ?>
+                                                                </div>
                                                                 <span style="display: inline-block; font-family: 'JetBrains Mono', 'Courier New', Courier, monospace; font-size: 11px; color: #999999; text-transform: uppercase; border-bottom: 1px solid #333333;">
-                                                                    ZUR ANFRAGE &rarr;
+                                                                    TITEL GESCHWAERZT &middot; ZUR ANFRAGE &rarr;
                                                                 </span>
                                                             </a>
                                                         </td>

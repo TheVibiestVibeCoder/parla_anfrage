@@ -1061,7 +1061,7 @@ $partyMap = [
 
             <div class="akten-info-box mb-6 md:mb-8" role="note" aria-label="Hinweis zur Titeldarstellung">
                 <div class="akten-info-kicker"></div>
-                <h3 class="akten-info-title">Warum seh die Titel der Anfragen nicht?</h3>
+                <h3 class="akten-info-title">Warum seh ich die Titel der Anfragen nicht?</h3>
                 <p class="akten-info-text">
                     Gute Frage! Wir würden dir tatsächlich gern die vollständigen Titel anzeigen, dürfen das aber laut Lizenzbedingungen des Parlaments leider nicht.
                     Deshalb werden die Titel in dieser Übersicht geschwärzt dargestellt.

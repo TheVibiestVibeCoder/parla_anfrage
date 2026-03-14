@@ -229,6 +229,36 @@ if ($cachedData !== null) {
 
     // Log cache hit for debugging
     error_log("Cache HIT for key: $cacheKey");
+
+    // Fill in missing time periods even for cached data to ensure even spacing
+    $useDays = in_array($timeRange, ['1week', '1month']);
+    $filledMonthlyData = [];
+    $currentDate = clone $cutoffDate;
+    $now = new DateTime();
+
+    while ($currentDate <= $now) {
+        $timeKey = $useDays ? $currentDate->format('Y-m-d') : $currentDate->format('Y-m');
+
+        if (isset($monthlyData[$timeKey])) {
+            // Use existing data
+            $filledMonthlyData[$timeKey] = $monthlyData[$timeKey];
+        } else {
+            // Add missing period with count 0
+            $filledMonthlyData[$timeKey] = [
+                'count' => 0,
+                'label' => $useDays ? $currentDate->format('d.m.') : $currentDate->format('m.Y'),
+                'timestamp' => $currentDate->getTimestamp()
+            ];
+        }
+
+        // Increment by 1 day or 1 month depending on granularity
+        if ($useDays) {
+            $currentDate->modify('+1 day');
+        } else {
+            $currentDate->modify('+1 month');
+        }
+    }
+    $monthlyData = $filledMonthlyData;
 } else {
     // Cache miss - fetch and process data, then cache the result
     error_log("Cache MISS for key: $cacheKey - fetching fresh data");
@@ -280,7 +310,7 @@ if ($cachedData !== null) {
         if (!isset($monthlyData[$timeKey])) {
             $monthlyData[$timeKey] = [
                 'count' => 0,
-                'label' => $useDays ? $rowDate->format('d.m.') : $rowDate->format('M Y'),
+                'label' => $useDays ? $rowDate->format('d.m.') : $rowDate->format('m.Y'),
                 'timestamp' => $rowDate->getTimestamp()
             ];
         }
@@ -323,8 +353,40 @@ if ($cachedData !== null) {
         return $b['date_obj'] <=> $a['date_obj'];
     });
 
-    // Sort monthly data
-    ksort($monthlyData);
+    // Sort monthly data by timestamp (chronological order)
+    uasort($monthlyData, function($a, $b) {
+        return $a['timestamp'] <=> $b['timestamp'];
+    });
+
+    // Fill in missing time periods to ensure even spacing on X-axis
+    $useDays = in_array($timeRange, ['1week', '1month']);
+    $filledMonthlyData = [];
+    $currentDate = clone $cutoffDate;
+    $now = new DateTime();
+
+    while ($currentDate <= $now) {
+        $timeKey = $useDays ? $currentDate->format('Y-m-d') : $currentDate->format('Y-m');
+
+        if (isset($monthlyData[$timeKey])) {
+            // Use existing data
+            $filledMonthlyData[$timeKey] = $monthlyData[$timeKey];
+        } else {
+            // Add missing period with count 0
+            $filledMonthlyData[$timeKey] = [
+                'count' => 0,
+                'label' => $useDays ? $currentDate->format('d.m.') : $currentDate->format('m.Y'),
+                'timestamp' => $currentDate->getTimestamp()
+            ];
+        }
+
+        // Increment by 1 day or 1 month depending on granularity
+        if ($useDays) {
+            $currentDate->modify('+1 day');
+        } else {
+            $currentDate->modify('+1 month');
+        }
+    }
+    $monthlyData = $filledMonthlyData;
 
     // Sort word frequency
     arsort($wordFrequency);
@@ -361,7 +423,7 @@ foreach ($allNGOResults as $result) {
     $partyDailyCounts[$result['party']][$dateKey]++;
 }
 
-// Get all unique dates sorted
+// Get all unique dates sorted chronologically by timestamp
 $allDates = [];
 foreach ($allNGOResults as $result) {
     $dateKey = $result['date_obj']->format('Y-m-d');
@@ -369,7 +431,27 @@ foreach ($allNGOResults as $result) {
         $allDates[$dateKey] = $result['date_obj'];
     }
 }
-ksort($allDates);
+// Sort by DateTime object value (chronological order)
+uasort($allDates, function($a, $b) {
+    return $a <=> $b;
+});
+
+// Fill in missing dates to ensure even spacing on X-axis
+// Use full date range from cutoffDate to now for consistent timeline
+$filledDates = [];
+$currentDate = clone $cutoffDate;
+$now = new DateTime();
+
+while ($currentDate <= $now) {
+    $dateKey = $currentDate->format('Y-m-d');
+    if (isset($allDates[$dateKey])) {
+        $filledDates[$dateKey] = $allDates[$dateKey];
+    } else {
+        $filledDates[$dateKey] = clone $currentDate;
+    }
+    $currentDate->modify('+1 day');
+}
+$allDates = $filledDates;
 
 // Calculate cumulative sums for each party
 foreach (['S', 'V', 'F', 'G', 'N', 'OTHER'] as $party) {

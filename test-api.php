@@ -427,32 +427,121 @@ printTest("H2 — EXACT send-daily-emails.php call (GP=XXVIII+XXVII+XXVI+XXV)", 
     "This is the ACTUAL production call. Should give the ~380 rows you remember.");
 
 // ============================================================
+// SECTION I — VHG FILTER DEEP DIVE
+// ============================================================
+// CONTEXT: XXVII had 16000+ Anfragen over 5 years but only returns 2 results.
+// Something about VHG="J_JPR_M" is wrong. We need to find what filter gives
+// back the full dataset. The parliament web URL uses JMAB=J_JPR_M&VHG2=JMIN
+// which suggests VHG might need to be a different value now.
+// ============================================================
+echo "\n\n" . str_repeat('*', 70) . "\n";
+echo "*** SECTION I: VHG FILTER DEEP DIVE — THIS IS THE KEY ***\n";
+echo "*** XXVII returned 2 results. It had 16000+ Anfragen. VHG is WRONG. ***\n";
+echo str_repeat('*', 70) . "\n";
+
+// I1 — XXVII with ZERO filters (GP only) — how many total entries exist?
+$p = ["GP_CODE" => ["XXVII"]];
+[$r, $c, $e, $ms] = callApi($BASE_URL, $p);
+printTest("I1 — GP=XXVII, NO other filters at all (pure baseline)", $BASE_URL, $p, $r, $c, $e, $ms,
+    "CRITICAL: How many XXVII entries does the endpoint know about with zero filtering?");
+
+// I2 — XXVII with DOKTYP=J but NO VHG
+$p = ["GP_CODE" => ["XXVII"], "DOKTYP" => ["J"]];
+[$r, $c, $e, $ms] = callApi($BASE_URL, $p);
+printTest("I2 — GP=XXVII + DOKTYP=J, NO VHG filter", $BASE_URL, $p, $r, $c, $e, $ms,
+    "Remove VHG entirely. If count jumps, VHG=J_JPR_M is the broken filter");
+
+// I3 — XXVII with VHG=J (just the letter, not J_JPR_M)
+$p = ["GP_CODE" => ["XXVII"], "VHG" => ["J"], "DOKTYP" => ["J"]];
+[$r, $c, $e, $ms] = callApi($BASE_URL, $p);
+printTest("I3 — GP=XXVII + VHG=J (just J, not J_JPR_M)", $BASE_URL, $p, $r, $c, $e, $ms,
+    "Maybe VHG accepts the short form 'J' instead of 'J_JPR_M'");
+
+// I4 — XXVII with VHG=JMIN (subtype seen in parliament web URL: VHG2=JMIN)
+$p = ["GP_CODE" => ["XXVII"], "VHG" => ["JMIN"], "DOKTYP" => ["J"]];
+[$r, $c, $e, $ms] = callApi($BASE_URL, $p);
+printTest("I4 — GP=XXVII + VHG=JMIN (from web URL: VHG2=JMIN)", $BASE_URL, $p, $r, $c, $e, $ms,
+    "Parliament web uses JMAB=J_JPR_M&VHG2=JMIN. Maybe JMIN is the right VHG value?");
+
+// I5 — JMAB instead of VHG (the web UI parameter name)
+$p = ["GP_CODE" => ["XXVII"], "JMAB" => ["J_JPR_M"], "DOKTYP" => ["J"]];
+[$r, $c, $e, $ms] = callApi($BASE_URL, $p);
+printTest("I5 — GP=XXVII + JMAB=J_JPR_M (web uses JMAB, not VHG)", $BASE_URL, $p, $r, $c, $e, $ms,
+    "Web URL uses ?JMAB=J_JPR_M. Maybe the API body key changed from VHG to JMAB?");
+
+// I6 — Try the NRBR filter (NR = Nationalrat) without VHG
+$p = ["GP_CODE" => ["XXVII"], "NRBR" => ["NR"], "DOKTYP" => ["J"]];
+[$r, $c, $e, $ms] = callApi($BASE_URL, $p);
+printTest("I6 — GP=XXVII + NRBR=NR (Nationalrat), no VHG", $BASE_URL, $p, $r, $c, $e, $ms,
+    "NRBR=NR filters for Nationalrat. Does this unlock more data without VHG?");
+
+// I7 — All GP codes, NO VHG, NO DOKTYP (maximum possible result set)
+$p = ["GP_CODE" => ["XXVIII","XXVII","XXVI","XXV","XXIV","XXIII","XXII","XXI","XX"]];
+[$r, $c, $e, $ms] = callApi($BASE_URL, $p);
+printTest("I7 — ALL GP codes, NO VHG, NO DOKTYP (absolute maximum)", $BASE_URL, $p, $r, $c, $e, $ms,
+    "If this returns 28, the ENDPOINT ITSELF (101) is topic-limited. If many more, VHG is the bug.");
+
+// I8 — Try a DIFFERENT endpoint number (102, 100) — maybe 101 is topic-specific
+$url_100 = 'https://www.parlament.gv.at/Filter/api/filter/data/100?js=eval&showAll=true';
+$p = ["GP_CODE" => ["XXVII"], "DOKTYP" => ["J"]];
+[$r, $c, $e, $ms] = callApi($url_100, $p);
+printTest("I8 — ENDPOINT 100 (not 101), GP=XXVII", $url_100, $p, $r, $c, $e, $ms,
+    "Maybe 101 is a topic-specific saved filter. Try adjacent endpoint numbers.");
+
+// I9 — Endpoint 102
+$url_102 = 'https://www.parlament.gv.at/Filter/api/filter/data/102?js=eval&showAll=true';
+[$r, $c, $e, $ms] = callApi($url_102, $p);
+printTest("I9 — ENDPOINT 102 (not 101), GP=XXVII", $url_102, $p, $r, $c, $e, $ms);
+
+// I10 — Endpoint 50 (Anträge is another common dataset)
+$url_50 = 'https://www.parlament.gv.at/Filter/api/filter/data/50?js=eval&showAll=true';
+[$r, $c, $e, $ms] = callApi($url_50, ["GP_CODE" => ["XXVII"]]);
+printTest("I10 — ENDPOINT 50 (Anträge dataset?), GP=XXVII", $url_50, ["GP_CODE" => ["XXVII"]], $r, $c, $e, $ms,
+    "Probe different endpoint numbers. Different numbers = different datasets.");
+
+// I11 — All GP + VHG=J_JPR_M but NO DOKTYP — does removing DOKTYP unlock XXVII data?
+$p = ["GP_CODE" => ["XXVII"], "VHG" => ["J_JPR_M"]];
+[$r, $c, $e, $ms] = callApi($BASE_URL, $p);
+printTest("I11 — GP=XXVII + VHG=J_JPR_M, NO DOKTYP (C1 repeat for clarity)", $BASE_URL, $p, $r, $c, $e, $ms,
+    "C1 already showed 3 results. Confirming VHG=J_JPR_M+XXVII = tiny dataset regardless of DOKTYP");
+
+// I12 — XXVIII with NO VHG, NO DOKTYP (compare to I1 approach)
+$p = ["GP_CODE" => ["XXVIII"]];
+[$r, $c, $e, $ms] = callApi($BASE_URL, $p);
+printTest("I12 — GP=XXVIII, NO other filters (how many XXVIII entries total?)", $BASE_URL, $p, $r, $c, $e, $ms,
+    "Compare with B1 (25 with VHG+DOKTYP). Does removing filters unlock more XXVIII data?");
+
+// I13 — Try XXVII with a KNOWN good Anfrage number to see if it's in the dataset at all
+// 16172/J was found, let's try 1000/J which should definitely exist in XXVII
+$p = ["GP_CODE" => ["XXVII"], "INRNUM" => ["1000"]];
+[$r, $c, $e, $ms] = callApi($BASE_URL, $p);
+printTest("I13 — GP=XXVII + INRNUM=1000 (does Anfrage 1000/J exist in this endpoint?)", $BASE_URL, $p, $r, $c, $e, $ms,
+    "Anfrage 1000 from XXVII definitely exists in parliament. Can this endpoint find it?");
+
+// I14 — Confirm: is endpoint 101 pre-filtered for a specific TOPIC?
+// Try removing ALL filters and see what comes back
+$p = [];
+[$r, $c, $e, $ms] = callApi($BASE_URL, $p);
+printTest("I14 — EMPTY payload (what does endpoint 101 return with zero filters?)", $BASE_URL, $p, $r, $c, $e, $ms,
+    "MOST IMPORTANT TEST: bare endpoint with no body at all. Reveals the true base dataset of endpoint 101.");
+
+// ============================================================
 // SUMMARY
 // ============================================================
 echo "\n\n" . str_repeat('#', 70) . "\n";
 echo "# DIAGNOSTIC COMPLETE — " . $testNum . " tests run\n";
 echo "# Finished at: " . date('Y-m-d H:i:s') . "\n";
 echo "#\n";
-echo "# KEY THINGS TO LOOK FOR:\n";
+echo "# KEY FINDINGS SO FAR:\n";
+echo "# - Production payload returns only 28 rows across all GP periods\n";
+echo "# - XXVII (5-year period, 16000+ Anfragen) returns only 2 rows\n";
+echo "# - DATUM_VON does NOT filter on the answered-date (row[4])\n";
+echo "# - showAll=true/false makes no difference to the count\n";
+echo "# - No pagination method unlocks more data\n";
 echo "#\n";
-echo "# 1. PAGINATION BROKEN?\n";
-echo "#    Compare F1 vs F3: if rows are DIFFERENT on page=2,\n";
-echo "#    showAll=true is broken and we need to loop pages.\n";
-echo "#\n";
-echo "# 2. GP CODE IS THE ISSUE?\n";
-echo "#    Compare H1 (25 rows) vs H2 (~380 rows expected).\n";
-echo "#    The old test-api.php only queried XXVIII (new, sparse period).\n";
-echo "#\n";
-echo "# 3. DOKTYP FILTERING TOO MUCH?\n";
-echo "#    Compare C1 (no DOKTYP) vs C2 (DOKTYP=J).\n";
-echo "#    If C1 >> C2, DOKTYP=J is hiding a lot of data.\n";
-echo "#\n";
-echo "# 4. DATE FILTER WORKS?\n";
-echo "#    Check D1 (today) and D2 (yesterday) counts.\n";
-echo "#    If they work, the email sender can use DATUM_VON instead\n";
-echo "#    of fetching ALL data and filtering in PHP.\n";
-echo "#\n";
-echo "# 5. SW KEYWORD FILTER WORKS?\n";
-echo "#    Check E1 (SW=NGO). If it returns results, we can ask\n";
-echo "#    the API for NGO inquiries directly instead of scanning everything.\n";
+echo "# SECTION I TELLS US:\n";
+echo "# - If I7 (no filters, all GP) still returns ~28 → endpoint 101 is topic-limited\n";
+echo "# - If I2 (no VHG) returns many more → VHG=J_JPR_M is the broken filter\n";
+echo "# - If I14 (empty payload) returns something → reveals true base dataset\n";
+echo "# - If I13 (INRNUM=1000) returns 0 → endpoint 101 can't find general Anfragen\n";
 echo str_repeat('#', 70) . "\n";

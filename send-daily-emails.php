@@ -100,26 +100,53 @@ function fetchAllRows($gpCodes) {
         "DOKTYP" => ["J"]
     ];
 
-    $ch = curl_init(PARL_API_URL);
-    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, [
-        'Content-Type: application/json',
-        'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-    ]);
-    curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+    $allRows = [];
+    $firstResponse = null;
+    $page = 1;
+    $pageSize = 25; // API default page size
 
-    $response = curl_exec($ch);
-    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    curl_close($ch);
+    do {
+        $url = PARL_API_URL . '&page=' . $page;
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Content-Type: application/json',
+            'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+        ]);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 30);
 
-    if ($httpCode !== 200) {
-        error_log("API request failed with HTTP code: $httpCode");
-        return null;
-    }
+        $response = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
 
-    return json_decode($response, true);
+        if ($httpCode !== 200) {
+            error_log("API request failed with HTTP code: $httpCode on page $page");
+            break;
+        }
+
+        $data = json_decode($response, true);
+        if (!$data || !isset($data['rows'])) break;
+
+        if ($firstResponse === null) {
+            $firstResponse = $data;
+        }
+
+        $rows = $data['rows'];
+        $allRows = array_merge($allRows, $rows);
+
+        // Stop if we got fewer rows than a full page (last page reached)
+        if (count($rows) < $pageSize) break;
+
+        $page++;
+    } while (true);
+
+    if ($firstResponse === null) return null;
+
+    // Return the structure of the first response but with all rows combined
+    $firstResponse['rows'] = $allRows;
+    return $firstResponse;
 }
 
 function getNewEntries() {

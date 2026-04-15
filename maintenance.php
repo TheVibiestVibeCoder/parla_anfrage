@@ -128,11 +128,9 @@
 
             <p class="message">
                 Der <strong>API-Endpoint des Parlaments</strong> liefert derzeit fehlerhafte
-                Ergebnisse. Statt der erwarteten 300+ Schriftlichen Anfragen werden nur
-                wenige Einträge zurückgegeben.
+                Ergebnisse.
                 <br><br>
-                Wir haben das Problem identifiziert, den Fehler beim Open-Data-Team des
-                Parlaments gemeldet und warten auf eine Behebung auf deren Seite.
+                Wir haben das Problem identifiziert, den Fehler gemeldet und warten auf eine Behebung auf deren Seite.
                 <br><br>
                 Das Dashboard steht wieder vollständig zur Verfügung, sobald die Daten
                 korrekt ausgeliefert werden.
@@ -140,7 +138,6 @@
 
             <div class="meta">
                 <div class="meta__item">Gemeldet&nbsp;<span>15.04.2026 / 09:00</span></div>
-                <div class="meta__item">Ursache&nbsp;<span>Parlament API / Endpoint 101</span></div>
                 <div class="meta__item">Status&nbsp;<span>In Bearbeitung</span></div>
             </div>
         </div>

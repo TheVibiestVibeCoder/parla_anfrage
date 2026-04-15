@@ -1,5 +1,12 @@
 <?php
 // ==========================================
+// MAINTENANCE MODE — remove this block to restore normal operation
+// ==========================================
+require __DIR__ . '/maintenance.php';
+exit;
+// ==========================================
+
+// ==========================================
 // NGO ANFRAGEN TRACKER
 // Single Purpose: Track NGO-related parliamentary inquiries
 // ==========================================
